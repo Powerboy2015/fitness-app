@@ -3,73 +3,40 @@ use tauri::Manager;
 use std::sync::Mutex;
 
 mod api;
-mod logic;
-mod models;
-mod endpoints;
-mod services;
+mod infrastructures;
 
-struct Db {
+struct ctx {
     conn: Mutex<Connection>,
+    session: String,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-
-    // FIXME THIS CONNECTION IS USED BY EVERY SINGLE QUERY. IT ALLOWS US TO EASILY CHANGE QUERIES.
-    // IT NEEDS TO BE LIKE THIS TO EASILY CHANGE IT.
+    // Tauri building process
 
     // sets up the default structure of the database.
-    
-
-    // Tauri building process
     tauri::Builder::default()
         .setup(|app| {
-            // Creates database file in appdata, allows it to be mutable
-            let dbpath = services::database::instantiate(app);
             
-            //Connects to database.
-            let conn = services::database::establish_connection(&dbpath);
-            
-            // Adds all the required tables.
-            services::database::migrate(&conn);
+            // moves the database file to the right location
+            // and sets up additional tables.
+            infrastructures::sqlite::build_database(app);
 
-            app.manage(Db {
+            let conn = infrastructures::sqlite::get_connection(&app);
+
+
+
+            app.manage(ctx {
                 conn: Mutex::new(conn),
+                session: "Placeholder".to_string()
             });
             
             Ok(())
         })
-
-        //Used for future state management.
-        .manage(Mutex::new( models::Session{
-            session_uuid: String::new(),
-            workout_uuid: String::new(),
-            workout_name: String::new(),
-            start_time: String::new(),
-            end_time:String::new(),
-            exercises: Vec::new(),
-        }))
-
-
         .plugin(tauri_plugin_opener::init())
 
         // Add all frontend functions here
-        .invoke_handler(tauri::generate_handler![
-            endpoints::get_exercise_by_id::return_exercise,
-            endpoints::get_all_exercises::get_all_exercises,
-            endpoints::workout::get_workout,
-            endpoints::workout::create_workout,
-            endpoints::workout::list_workouts,
-            endpoints::workout::link_exercise,
-            endpoints::session::start_session,
-            endpoints::get_exercises_by_muscle::get_exercises_by_muscle,
-            endpoints::session::get_session,
-            endpoints::session::update_set,
-            endpoints::session::complete_session
-        ])
+        .invoke_handler(tauri::generate_handler![])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-
-
-

@@ -1,10 +1,19 @@
-
 use std::path::PathBuf;
 
 use rusqlite::Connection;
-use tauri::{App, Manager};
+use tauri::{App,Manager};
 
-pub fn instantiate(app: &mut App) -> PathBuf {
+
+
+pub fn build_database(app: &mut App) {
+    let db_path = instantiate(app);
+    let conn = establish_connection(&db_path);
+    migrate(&conn);
+    conn.close();
+}
+
+
+fn instantiate(app: &mut App) -> PathBuf {
             let db_path = app.path().resolve(
                 "workoutbase.sqlite",
                 tauri::path::BaseDirectory::AppLocalData,
@@ -18,7 +27,7 @@ pub fn instantiate(app: &mut App) -> PathBuf {
                 }
 
                 // Embed and write the template database
-                let template_bytes = include_bytes!("../resources/workoutbase.sqlite");
+                let template_bytes = include_bytes!("../../resources/workoutbase.sqlite");
                 std::fs::write(&db_path, template_bytes)
                     .expect("Failed to write database template");
             }
@@ -27,14 +36,13 @@ pub fn instantiate(app: &mut App) -> PathBuf {
 }
 
 // Logic for establishing a connection.
-pub fn establish_connection(dbpath: &PathBuf) -> Connection {
+fn establish_connection(dbpath: &PathBuf) -> Connection {
     Connection::open(dbpath)
         .expect("Failed to open or create database")
 }
 
-
 // Creates all the default structure for the database (for workouts and connecting exercises to workouts.)
-pub fn migrate(conn: &Connection) {
+fn migrate(conn: &Connection) {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS Workouts (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -91,5 +99,17 @@ pub fn migrate(conn: &Connection) {
         weight FLOAT,
         FOREIGN KEY (ID) REFERENCES completedExercises(ID)
     )",[]).unwrap();
+
+}
+
+
+pub fn get_connection(app: &App) -> Connection {
+    let db_path = app.path().resolve(
+        "workoutbase.sqlite",
+        tauri::path::BaseDirectory::AppLocalData,
+    ).expect("pathbuf not found");
+
+    Connection::open(db_path)
+        .expect("Failed to open or create database")
 
 }
