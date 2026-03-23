@@ -1,12 +1,11 @@
-use rusqlite::Connection;
 use tauri::Manager;
-use std::sync::Mutex;
-
 mod api;
 mod infrastructures;
 
-struct ctx {
-    conn: Mutex<Connection>,
+use infrastructures::sqlite::Db;
+
+struct Ctx {
+    db: infrastructures::sqlite::Db,
     session: String,
 }
 
@@ -22,12 +21,13 @@ pub fn run() {
             // and sets up additional tables.
             infrastructures::sqlite::build_database(app);
 
+            //creates an connection to the database.
             let conn = infrastructures::sqlite::get_connection(&app);
 
 
 
-            app.manage(ctx {
-                conn: Mutex::new(conn),
+            app.manage(Ctx {
+                db: Db::new(conn),
                 session: "Placeholder".to_string()
             });
             
@@ -36,7 +36,9 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
 
         // Add all frontend functions here
-        .invoke_handler(tauri::generate_handler![])
+        .invoke_handler(tauri::generate_handler![
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
+
