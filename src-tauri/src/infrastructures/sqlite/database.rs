@@ -15,8 +15,10 @@ impl Db {
         }
     }
 
-    //This function is like an foreach, F is the function we're passing and 
+    //This function is like a foreach, F is the function we're passing and
     //T is the return type of that function.
+    // Basically, write you function like you do a map function in Rust, and just put the executions in there.
+    // it helps so 1. we always have transactions 2. keeps database connections singular.
     pub fn use_conn<F,T>(&self, f: F) -> Result<T,Error>
     //the were explains what kind of function F is.
     // it's a function that fires once, has a transaction struct and returns the type of the func.

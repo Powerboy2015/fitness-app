@@ -34,6 +34,7 @@ pub enum ApiError {
 
 impl From<ApiError> for ApiErrorResponse {
     fn from(err: ApiError) -> Self {
+        println!("{:?}", err);
         ApiErrorResponse {
             ok: false,
             error_type: format!("{:?}", err),
