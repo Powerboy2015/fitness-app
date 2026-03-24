@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import API from "../classes/api.ts";
 
 
@@ -29,8 +29,8 @@ export type muscleGroups = "pectorals"|
  * Encapsulated version of Lars's filter function.
  * @constructor
  * @returns sortedExercises -- A list of exercises sorted according to the filter
- * @returns muscleGroup -- the currently selected muscle group, is require in order to highlight selected.
- * @returns setMucle -- a function to change the currently selected muscle. Passing the same muscle twice unsets it.
+ * @returns muscleGroup -- the currently selected muscle group, is required in order to highlight selected.
+ * @returns setMuscle -- a function to change the currently selected muscle. Passing the same muscle twice unsets it.
  */
 export default function UseMuscleFilters(): ReturnProps {
     const [muscleGroup,setMuscleGroup] = useState<muscleGroups>(null);
@@ -45,15 +45,21 @@ export default function UseMuscleFilters(): ReturnProps {
 
     // Fetch exercises once
     useEffect(() => {
-        // TODO reimplement Lars's query filter. Currently temporary hold.
         API.exercises.list().then(setExercises);
     }, []);
 
-    // Update sortedExercises when muscleGroup or exercises change
-    const sortedExercises = useMemo(() => {
-        if (!muscleGroup) return exercises;
-        return exercises.filter(exercise => exercise.target_muscles.includes(muscleGroup));
-    }, [muscleGroup, exercises]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!muscleGroup) {
+                const data = await API.exercises.list();
+                setExercises(data);
+            } else {
+                const data = await API.exercises.filter(muscleGroup);
+                setExercises(data);
+            }
+        };
+        fetchData();
+    }, [muscleGroup]);
 
-    return {sortedExercises, muscleGroup,setMuscle}
+    return {sortedExercises: exercises, muscleGroup,setMuscle}
 }
