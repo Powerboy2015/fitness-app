@@ -1,4 +1,4 @@
-use tauri::{Manager, State};
+use tauri::{Manager};
 mod api;
 mod infrastructures;
 mod repository;

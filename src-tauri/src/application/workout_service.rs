@@ -1,7 +1,7 @@
 use serde::Serialize;
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
-use crate::interface::dto::{CreateWorkoutDTO, CreateWorkoutInput, ExerciseListDTO, ExerciseRecordDTO, WorkoutListDTO, WorkoutRecordDTO};
+use crate::interface::dto::{CreateWorkoutDTO, CreateWorkoutInput, DetailedWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, WorkoutListDTO, WorkoutRecordDTO};
 use crate::repository::exercise_repository::{ExerciseRepository, ExerciseRows};
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_repository::WorkoutRepository;

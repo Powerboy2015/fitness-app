@@ -1,7 +1,7 @@
 use tauri::State;
 use crate::api::{ApiErrorResponse, ApiResponse};
 use crate::Ctx;
-use crate::interface::dto::{ CreateWorkoutInput, ExerciseListDTO, WorkoutListDTO};
+use crate::interface::dto::{CreateWorkoutInput, DetailedWorkoutDTO, ExerciseListDTO, WorkoutListDTO};
 
 #[tauri::command]
 pub fn list_workouts(ctx: State<Ctx>) -> Result<ApiResponse<WorkoutListDTO>, ApiErrorResponse> {

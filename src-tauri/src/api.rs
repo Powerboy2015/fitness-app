@@ -25,9 +25,6 @@ pub enum ApiError {
     #[error("database error")]
     DatabaseError,
 
-    #[error("connection is poised or connection isn't set")]
-    FailedDbConnection,
-
     #[error(transparent)]
     Sqlite(#[from] rusqlite::Error),
 }

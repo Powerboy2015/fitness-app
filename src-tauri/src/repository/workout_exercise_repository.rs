@@ -1,6 +1,8 @@
 use rusqlite::{params, params_from_iter, Error};
 use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
+use crate::repository::exercise_repository::{ExerciseRecord, ExerciseRows};
+use crate::repository::workout_repository::{WorkoutRecord};
 
 pub struct WorkoutExerciseRepository {
     db: infrastructures::sqlite::Db,
