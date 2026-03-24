@@ -22,9 +22,7 @@ pub fn run() {
             infrastructures::sqlite::build_database(app);
 
             //creates an connection to the database.
-            let conn = infrastructures::sqlite::get_connection(&app);
-
-
+            let conn = infrastructures::sqlite::get_connection(app);
 
             app.manage(Ctx {
                 db: Db::new(conn),
