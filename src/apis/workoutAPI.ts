@@ -65,7 +65,7 @@ export default class workoutAPI {
             return err;
         }
 
-        const resp = await ApiClient.send<IdetailedWorkoutDTO>("get_workout", { workoutUuid: _workoutUuid });
+        const resp = await ApiClient.send<IdetailedWorkoutDTO>("get_workout", { request: _workoutUuid });
         return ApiClient.assertOk(resp);
     }
 }
