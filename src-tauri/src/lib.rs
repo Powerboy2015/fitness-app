@@ -58,7 +58,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             interface::tauri_commands::list_workouts,
             interface::tauri_commands::create_workout,
-            interface::tauri_commands::get_all_exercises
+            interface::tauri_commands::get_all_exercises,
+            interface::tauri_commands::get_exercises_by_muscle
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

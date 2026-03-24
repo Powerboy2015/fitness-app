@@ -17,3 +17,8 @@ pub fn create_workout(ctx: State<Ctx>,create_workout_dto: CreateWorkoutDTO) -> R
 pub fn get_all_exercises(ctx: State<Ctx>) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
     ctx.service.workout.list_exercises()
 }
+
+#[tauri::command]
+pub fn get_exercises_by_muscle(ctx: State<Ctx>, muscle_id: String) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
+    ctx.service.workout.filter_exercises(muscle_id)
+}
