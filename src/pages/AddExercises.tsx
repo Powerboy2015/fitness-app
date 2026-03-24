@@ -154,12 +154,12 @@ export default function AddExercises() {
             <ExerciseWidget
               key={exercise.id}
               name={exercise.name}
-              gif={exercise.data}
+              gif={exercise.gif_url}
               onSelect={() => {
                 addExercise({
                   id: exercise.id,
                   name: exercise.name,
-                  gif: exercise.data,
+                  gif: exercise.gif_url,
                 });
                 navigate(-1);
               }}
