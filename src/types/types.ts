@@ -10,7 +10,8 @@ type backendFunctions =
   | "get_session"
   | "complete_session"
   | "update_set"
-  | "get_exercises_by_muscle";
+  | "get_exercises_by_muscle"
+  | "create_workout_with_exercises";
 
 interface WorkoutDTO {
   uuid: string;
