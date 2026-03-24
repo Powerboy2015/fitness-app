@@ -9,7 +9,7 @@ pub fn build_database(app: &mut App) {
     let db_path = instantiate(app);
     let conn = establish_connection(&db_path);
     migrate(&conn);
-    conn.close();
+    conn.close().expect("Couldnt close Connection");
 }
 
 

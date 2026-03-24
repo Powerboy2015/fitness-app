@@ -1,4 +1,4 @@
-use rusqlite::{params, params_from_iter, Error};
+use rusqlite::{params_from_iter, Error};
 use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
 use crate::repository::exercise_repository::{ExerciseRecord, ExerciseRows};
@@ -8,9 +8,56 @@ pub struct WorkoutExerciseRepository {
     db: infrastructures::sqlite::Db,
 }
 
+pub struct WorkoutOverviewEntity {
+    pub workout: WorkoutRecord,
+    pub exercise: ExerciseRows,
+}
+
 impl WorkoutExerciseRepository {
     pub fn new(db:Db) -> Self {
         Self { db }
+    }
+
+    pub fn get_detailed(&self,workout_id: &str) -> Result<WorkoutOverviewEntity, Error> {
+        self.db.use_conn(|tx| {
+            let mut workout_stmt = tx.prepare("SELECT Uuid,Name,Desc FROM Workouts WHERE Uuid = ?")?;
+
+            let workout_row = workout_stmt.query_map([workout_id], |row| {
+                Ok(WorkoutRecord {
+                    uuid: row.get(0)?,
+                    name: row.get(1)?,
+                    desc: row.get(2)?,
+                })
+            })?;
+
+            let workout_vec: Vec<WorkoutRecord> = workout_row.collect::<Result<Vec<_>, _>>()?;
+            let workout = workout_vec
+                .get(0)
+                .cloned()
+                .ok_or(rusqlite::Error::InvalidQuery)?;
+
+            let mut exercises_stmt = tx.prepare("SELECT e.* FROM Exercises e
+                                                               INNER JOIN WorkoutExercises we ON e.exerciseid = we.ExerciseId
+                                                               WHERE we.WorkoutId = ?")?;
+            let exercise_rows = exercises_stmt.query_map([workout_id], |row| {
+                Ok(ExerciseRecord{
+                    exercise_id: row.get(0)?,
+                    name: row.get(1)?,
+                    gif_url: row.get(2)?,
+                    target_muscles: row.get(3)?,
+                    body_parts: row.get(4)?,
+                    equipments: row.get(5)?,
+                    secondary_muscles: row.get(6)?,
+                    instructions: row.get(7)?,
+                })
+            })?;
+
+            Ok(WorkoutOverviewEntity{
+                workout,
+                exercise: exercise_rows.collect::<Result<Vec<_>, _>>()?,
+            })
+
+        })
     }
 
     // links exercises in a single bulk query.
@@ -32,7 +79,7 @@ impl WorkoutExerciseRepository {
             }
 
             tx.execute(&query, params_from_iter(params_vec))?;
-            
+
             Ok(())
 
         })?;

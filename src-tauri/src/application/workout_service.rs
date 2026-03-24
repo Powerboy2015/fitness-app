@@ -1,4 +1,3 @@
-use serde::Serialize;
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
 use crate::interface::dto::{CreateWorkoutDTO, CreateWorkoutInput, DetailedWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, WorkoutListDTO, WorkoutRecordDTO};
@@ -13,6 +12,7 @@ pub struct WorkoutService {
 }
 
 impl WorkoutService {
+
     pub fn new(workout_repo: WorkoutRepository, exercise_repository: ExerciseRepository, workout_exercise_repository: WorkoutExerciseRepository) -> Self {
         Self {
             workout: workout_repo,
@@ -21,9 +21,42 @@ impl WorkoutService {
         }
     }
 
+
+
+    // gets the workout and connected exercises and maps it.
+    pub fn get_detailed_workout(&self,workout_id: String) -> Result<ApiResponse<DetailedWorkoutDTO>,ApiErrorResponse> {
+        let record = self.workout_exercises.get_detailed(&workout_id).map_err(|_| ApiError::DatabaseError)?;
+
+        // Remapping exercises to the DTO.
+        let exercise_list = record.exercise.iter().map(|exercise| {
+            ExerciseRecordDTO {
+                exercise_id: exercise.exercise_id.clone(),
+                name: exercise.name.clone(),
+                gif_url: exercise.gif_url.clone(),
+                target_muscles: exercise.target_muscles.clone(),
+                body_parts: exercise.body_parts.clone(),
+                equipments: exercise.equipments.clone(),
+                secondary_muscles: exercise.secondary_muscles.clone(),
+                instructions: exercise.instructions.clone().unwrap_or_else(||"".to_string())
+            }
+        });
+
+        let dto = DetailedWorkoutDTO {
+            uuid: record.workout.uuid,
+            name: record.workout.name,
+            desc: record.workout.desc.unwrap_or_else(|| "".to_string()),
+            exercises: exercise_list.collect(),
+        };
+
+        Ok(ApiResponse {
+            ok: true,
+            data: dto,
+        })
+    }
+
     pub fn list_workouts(&self) -> Result<ApiResponse<WorkoutListDTO>, ApiErrorResponse> {
         //gets the raw records from the database
-        let workout_records = self.workout.list().map_err(|e| ApiError::DatabaseError)?;
+        let workout_records = self.workout.list().map_err(|_| ApiError::DatabaseError)?;
 
         //remap to DTO
         let workout_list: WorkoutListDTO = workout_records
@@ -74,7 +107,7 @@ impl WorkoutService {
             desc: create_workout_dto.desc.unwrap_or_else(||"".to_string()),
         };
 
-        let response = self.workout.create(workout_dto).map_err(|e| ApiError::DatabaseError)?;
+        let response = self.workout.create(workout_dto).map_err(|_| ApiError::DatabaseError)?;
 
         Ok(ApiResponse {
             ok: response,
@@ -85,7 +118,7 @@ impl WorkoutService {
     //creates a new workout with exercises if there are any.
     pub fn create_workout_with_exercises(&self, create_workout_dto: CreateWorkoutInput) -> Result<ApiResponse<String>, ApiErrorResponse> {
         // creates the list of exercises if they are there.
-        // other wise returns invalidInput error early.
+        // otherwise returns invalidInput error early.
         let exercises = create_workout_dto
             .exercises
             .clone()

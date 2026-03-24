@@ -33,3 +33,11 @@ pub struct ExerciseRecordDTO {
     pub instructions: String,
 }
 pub type ExerciseListDTO = Vec<ExerciseRecordDTO>;
+
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+pub struct DetailedWorkoutDTO {
+    pub uuid: String,
+    pub name: String,
+    pub desc: String,
+    pub exercises: ExerciseListDTO,
+}

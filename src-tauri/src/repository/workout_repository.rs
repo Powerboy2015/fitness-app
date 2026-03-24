@@ -1,11 +1,10 @@
 use rusqlite::Error;
-use uuid::Uuid;
 use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
 use crate::interface::dto::CreateWorkoutDTO;
 
+#[derive(Clone)]
 pub struct WorkoutRecord {
-    id: i32,
     pub(crate) uuid: String,
     pub(crate) name: String,
     pub(crate) desc: Option<String>
@@ -24,6 +23,7 @@ impl WorkoutRepository {
             db
         }
     }
+
     pub fn list(&self) -> Result<WorkoutRows, Error> {
         self.db.use_conn(|tx| {
             let mut stmt = tx.prepare(
@@ -32,7 +32,6 @@ impl WorkoutRepository {
 
             let rows = stmt.query_map([], |row| {
                 Ok(WorkoutRecord {
-                    id: row.get(0)?,
                     uuid: row.get(1)?,
                     name: row.get(2)?,
                     desc: row.get(3)?,
@@ -44,8 +43,8 @@ impl WorkoutRepository {
     }
 
     pub fn create(&self,create_workout_dto: CreateWorkoutDTO) -> Result<bool, Error> {
-        
-        let resp = self.db.use_conn(|tx| {
+
+        self.db.use_conn(|tx| {
             tx.execute("INSERT INTO Workouts(Uuid,Name,Desc) VALUES (?, ?, ?)",
                        [create_workout_dto.uuid,
                                create_workout_dto.name,
