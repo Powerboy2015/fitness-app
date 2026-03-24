@@ -46,7 +46,7 @@ fn migrate(conn: &Connection) {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS Workouts (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        Uuid TEXT NOT NULL,
+        Uuid TEXT NOT NULL UNIQUE,
         Name TEXT NOT NULL,
         Desc TEXT
         );",
@@ -62,10 +62,10 @@ fn migrate(conn: &Connection) {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS WorkoutExercises (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        WorkoutId INTEGER NOT NULL,
-        ExerciseId INTEGER NOT NULL,
-        FOREIGN KEY (WorkoutId) REFERENCES Workouts(ID),
-        FOREIGN KEY (ExerciseId) REFERENCES exercises(exerciseId)
+        WorkoutId TEXT NOT NULL,
+        ExerciseId TEXT NOT NULL,
+        FOREIGN KEY (WorkoutId) REFERENCES Workouts(Uuid),
+        FOREIGN KEY (ExerciseId) REFERENCES exercises(exerciseid)
         )",
         [],
     )
@@ -105,7 +105,7 @@ fn migrate(conn: &Connection) {
 
 pub fn get_connection(app: &App) -> Connection {
     let db_path = app.path().resolve(
-        "workoutbase.sqlite",
+        "workoutbase.db",
         tauri::path::BaseDirectory::AppLocalData,
     ).expect("pathbuf not found");
 
