@@ -4,6 +4,7 @@ mod infrastructures;
 mod repository;
 mod interface;
 mod application;
+mod domain;
 
 use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
@@ -50,7 +51,6 @@ pub fn run() {
                     )
                 }
             });
-
             //finish
             Ok(())
         })

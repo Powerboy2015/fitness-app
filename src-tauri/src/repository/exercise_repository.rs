@@ -1,18 +1,8 @@
 use rusqlite::{Error};
+use crate::domain::Exercise::Exercise;
 use crate::infrastructures::sqlite::Db;
 
-pub struct ExerciseRecord {
-    pub exercise_id: String,
-    pub name: String,
-    pub gif_url: String,
-    pub target_muscles: String,
-    pub body_parts: String,
-    pub equipments: String,
-    pub secondary_muscles: String,
-    pub instructions: Option<String>,
-}
-
-pub type ExerciseRows = Vec<ExerciseRecord>;
+type Exercises = Vec<Exercise>;
 
 pub struct ExerciseRepository {
     db: Db,
@@ -25,7 +15,7 @@ impl ExerciseRepository {
     }
 
     // queries database and returns a list of all exercises.
-    pub fn list(&self) -> Result<ExerciseRows, Error> {
+    pub fn list(&self) -> Result<Exercises, Error> {
         self.db.use_conn(|tx| {
             let mut stmt = tx.prepare(
                 "SELECT * FROM exercises"
@@ -37,7 +27,7 @@ impl ExerciseRepository {
     }
 
     // returns a filtered list based on the muscle group given.
-    pub fn filtered_list(&self, muscle_group: &str) -> Result<ExerciseRows, Error> {
+    pub fn filtered_list(&self, muscle_group: &str) -> Result<Exercises, Error> {
         let query = format!(
             "SELECT * FROM exercises WHERE targetMuscles = '[\"{}\"]'",
             muscle_group
@@ -54,8 +44,8 @@ impl ExerciseRepository {
 
 
 // removing duplication
-fn map_records(row: &rusqlite::Row) -> Result<ExerciseRecord, Error> {
-    Ok(ExerciseRecord {
+fn map_records(row: &rusqlite::Row) -> Result<Exercise, Error> {
+    Ok(Exercise {
         exercise_id: row.get(0)?,
         name: row.get(1)?,
         gif_url: row.get(2)?,

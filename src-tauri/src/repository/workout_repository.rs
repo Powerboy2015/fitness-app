@@ -1,22 +1,15 @@
 use rusqlite::Error;
+use crate::domain::Workout::Workout;
 use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
 use crate::interface::dto::CreateWorkoutDTO;
 
-#[derive(Clone)]
-pub struct WorkoutRecord {
-    pub(crate) uuid: String,
-    pub(crate) name: String,
-    pub(crate) desc: Option<String>
-}
-
-
+type Workouts = Vec<Workout>;
 
 pub struct WorkoutRepository {
     db: infrastructures::sqlite::Db,
 }
 
-pub type WorkoutRows = Vec<WorkoutRecord>;
 impl WorkoutRepository {
     pub fn new(db : Db) -> Self {
         Self {
@@ -24,17 +17,18 @@ impl WorkoutRepository {
         }
     }
 
-    pub fn list(&self) -> Result<WorkoutRows, Error> {
+    pub fn list(&self) -> Result<Workouts, Error> {
         self.db.use_conn(|tx| {
             let mut stmt = tx.prepare(
                 "SELECT * FROM Workouts"
             )?;
 
             let rows = stmt.query_map([], |row| {
-                Ok(WorkoutRecord {
+                Ok(Workout {
                     uuid: row.get(1)?,
                     name: row.get(2)?,
                     desc: row.get(3)?,
+                    exercises: Vec::new()
                 })
             })?;
 

@@ -1,16 +1,17 @@
 use rusqlite::{params_from_iter, Error};
+use crate::domain::Exercise::Exercise;
+use crate::domain::Workout::Workout;
 use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
-use crate::repository::exercise_repository::{ExerciseRecord, ExerciseRows};
-use crate::repository::workout_repository::{WorkoutRecord};
-
 pub struct WorkoutExerciseRepository {
     db: infrastructures::sqlite::Db,
 }
 
+type Exercises = Vec<Exercise>;
+
 pub struct WorkoutOverviewEntity {
-    pub workout: WorkoutRecord,
-    pub exercise: ExerciseRows,
+    pub workout: Workout,
+    pub exercise: Exercises,
 }
 
 impl WorkoutExerciseRepository {
@@ -23,14 +24,15 @@ impl WorkoutExerciseRepository {
             let mut workout_stmt = tx.prepare("SELECT Uuid,Name,Desc FROM Workouts WHERE Uuid = ?")?;
 
             let workout_row = workout_stmt.query_map([workout_id], |row| {
-                Ok(WorkoutRecord {
+                Ok(Workout {
                     uuid: row.get(0)?,
                     name: row.get(1)?,
                     desc: row.get(2)?,
+                    exercises: Vec::new(),
                 })
             })?;
 
-            let workout_vec: Vec<WorkoutRecord> = workout_row.collect::<Result<Vec<_>, _>>()?;
+            let workout_vec: Vec<Workout> = workout_row.collect::<Result<Vec<_>, _>>()?;
             let workout = workout_vec
                 .get(0)
                 .cloned()
@@ -40,7 +42,7 @@ impl WorkoutExerciseRepository {
                                                                INNER JOIN WorkoutExercises we ON e.exerciseid = we.ExerciseId
                                                                WHERE we.WorkoutId = ?")?;
             let exercise_rows = exercises_stmt.query_map([workout_id], |row| {
-                Ok(ExerciseRecord{
+                Ok(Exercise{
                     exercise_id: row.get(0)?,
                     name: row.get(1)?,
                     gif_url: row.get(2)?,

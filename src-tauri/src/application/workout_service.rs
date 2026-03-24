@@ -1,7 +1,8 @@
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
+use crate::domain::Exercise::Exercise;
 use crate::interface::dto::{CreateWorkoutDTO, CreateWorkoutInput, DetailedWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, WorkoutListDTO, WorkoutRecordDTO};
-use crate::repository::exercise_repository::{ExerciseRepository, ExerciseRows};
+use crate::repository::exercise_repository::ExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_repository::WorkoutRepository;
 
@@ -20,9 +21,7 @@ impl WorkoutService {
             workout_exercises: workout_exercise_repository
         }
     }
-
-
-
+    
     // gets the workout and connected exercises and maps it.
     pub fn get_detailed_workout(&self,workout_id: String) -> Result<ApiResponse<DetailedWorkoutDTO>,ApiErrorResponse> {
         let record = self.workout_exercises.get_detailed(&workout_id).map_err(|_| ApiError::DatabaseError)?;
@@ -140,7 +139,7 @@ impl WorkoutService {
 
 // This function converts the incoming exerciseRows from the database into DTO's
 // Current there is not change, but if there's ever a day in which we decide to drop these, we can :)
-fn records_to_dto(rows: ExerciseRows) -> Result<ExerciseListDTO, ApiErrorResponse> {
+fn records_to_dto(rows: Vec<Exercise>) -> Result<ExerciseListDTO, ApiErrorResponse> {
     let remapped = rows
         .iter()
         .map(|exercise| ExerciseRecordDTO {
