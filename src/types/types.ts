@@ -18,11 +18,14 @@ interface WorkoutDTO {
 }
 
 interface ExerciseDTO {
-  instanceId: number;
-  id: string;
-  name: string;
-  data: string;
-  gif_url: string;
+    exercise_id: string;
+    name: string;
+    gif_url: string;
+    target_muscles: string;
+    body_parts: string;
+    equipments: string;
+    secondary_muscles: string;
+    instructions: string;
 }
 
 interface linkExerciseDTO {
