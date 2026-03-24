@@ -9,6 +9,7 @@ use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
 use crate::application::workout_service::WorkoutService;
 use crate::repository::exercise_repository::ExerciseRepository;
+use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 
 struct Ctx {
     service: Service,
@@ -40,11 +41,12 @@ pub fn run() {
                 service: Service {
                     // creates a new workout service
                     workout: WorkoutService::new(
-                        
+
                         //these are repositories that use the databases.
                         //All functions that are used with the database are in here.
                         WorkoutRepository::new(db.clone()),
                         ExerciseRepository::new(db.clone()),
+                        WorkoutExerciseRepository::new(db.clone()),
                     )
                 }
             });
@@ -59,7 +61,8 @@ pub fn run() {
             interface::tauri_commands::list_workouts,
             interface::tauri_commands::create_workout,
             interface::tauri_commands::get_all_exercises,
-            interface::tauri_commands::get_exercises_by_muscle
+            interface::tauri_commands::get_exercises_by_muscle,
+            interface::tauri_commands::create_workout_with_exercises
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

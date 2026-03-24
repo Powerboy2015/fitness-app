@@ -1,19 +1,23 @@
 use serde::Serialize;
+use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
-use crate::interface::dto::{CreateWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, WorkoutListDTO, WorkoutRecordDTO};
+use crate::interface::dto::{CreateWorkoutDTO, CreateWorkoutInput, ExerciseListDTO, ExerciseRecordDTO, WorkoutListDTO, WorkoutRecordDTO};
 use crate::repository::exercise_repository::{ExerciseRepository, ExerciseRows};
+use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_repository::WorkoutRepository;
 
 pub struct WorkoutService {
     workout: WorkoutRepository,
-    exercises: ExerciseRepository
+    exercises: ExerciseRepository,
+    workout_exercises: WorkoutExerciseRepository
 }
 
 impl WorkoutService {
-    pub fn new(workout_repo: WorkoutRepository, exercise_repository: ExerciseRepository) -> Self {
+    pub fn new(workout_repo: WorkoutRepository, exercise_repository: ExerciseRepository, workout_exercise_repository: WorkoutExerciseRepository) -> Self {
         Self {
             workout: workout_repo,
-            exercises: exercise_repository
+            exercises: exercise_repository,
+            workout_exercises: workout_exercise_repository
         }
     }
 
@@ -62,12 +66,41 @@ impl WorkoutService {
         })
     }
 
-    pub fn create_workout(&self, create_workout_dto: CreateWorkoutDTO) -> Result<ApiResponse<String>, ApiErrorResponse> {
-        let response = self.workout.create(create_workout_dto).map_err(|e| ApiError::DatabaseError)?;
+    pub fn create_workout(&self, create_workout_dto: CreateWorkoutInput) -> Result<ApiResponse<String>, ApiErrorResponse> {
+        let uuid = Uuid::new_v4().to_string();
+        let workout_dto = CreateWorkoutDTO {
+            uuid: uuid.clone(),
+            name: create_workout_dto.name,
+            desc: create_workout_dto.desc.unwrap_or_else(||"".to_string()),
+        };
+
+        let response = self.workout.create(workout_dto).map_err(|e| ApiError::DatabaseError)?;
 
         Ok(ApiResponse {
             ok: response,
-            data: String::from("Workout has been created"),
+            data: uuid.to_string(),
+        })
+    }
+
+    //creates a new workout with exercises if there are any.
+    pub fn create_workout_with_exercises(&self, create_workout_dto: CreateWorkoutInput) -> Result<ApiResponse<String>, ApiErrorResponse> {
+        // creates the list of exercises if they are there.
+        // other wise returns invalidInput error early.
+        let exercises = create_workout_dto
+            .exercises
+            .clone()
+            .ok_or(ApiError::InvalidInput)?;
+
+        let response = self.create_workout(create_workout_dto.clone()).map_err(|_| ApiError::DatabaseError)?;
+
+        self.workout_exercises.link(response.data, exercises.clone()).map_err(|e| {
+            println!("{:?}", e);
+            ApiError::DatabaseError
+        })?;
+
+        Ok(ApiResponse {
+            ok: true,
+            data: "workout Created".to_string(),
         })
     }
 }

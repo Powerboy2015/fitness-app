@@ -1,7 +1,5 @@
 use rusqlite::{Error};
-use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
-
 
 pub struct ExerciseRecord {
     pub exercise_id: String,

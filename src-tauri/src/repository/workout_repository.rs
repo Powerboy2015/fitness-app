@@ -44,10 +44,10 @@ impl WorkoutRepository {
     }
 
     pub fn create(&self,create_workout_dto: CreateWorkoutDTO) -> Result<bool, Error> {
-        let uuid = Uuid::new_v4().to_string();
+        
         let resp = self.db.use_conn(|tx| {
-            tx.execute("INSERT INTO Workouts(uuid,name,desc) VALUES (?, ?, ?)",
-                       [uuid,
+            tx.execute("INSERT INTO Workouts(Uuid,Name,Desc) VALUES (?, ?, ?)",
+                       [create_workout_dto.uuid,
                                create_workout_dto.name,
                                create_workout_dto.desc
                                ])

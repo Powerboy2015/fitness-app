@@ -1,7 +1,7 @@
 use tauri::State;
 use crate::api::{ApiErrorResponse, ApiResponse};
 use crate::Ctx;
-use crate::interface::dto::{CreateWorkoutDTO, ExerciseListDTO, WorkoutListDTO, WorkoutRecordDTO};
+use crate::interface::dto::{ CreateWorkoutInput, ExerciseListDTO, WorkoutListDTO};
 
 #[tauri::command]
 pub fn list_workouts(ctx: State<Ctx>) -> Result<ApiResponse<WorkoutListDTO>, ApiErrorResponse> {
@@ -9,8 +9,13 @@ pub fn list_workouts(ctx: State<Ctx>) -> Result<ApiResponse<WorkoutListDTO>, Api
 }
 
 #[tauri::command]
-pub fn create_workout(ctx: State<Ctx>,create_workout_dto: CreateWorkoutDTO) -> Result<ApiResponse<String>, ApiErrorResponse> {
-    ctx.service.workout.create_workout(create_workout_dto)
+pub fn create_workout(ctx: State<Ctx>,request: CreateWorkoutInput) -> Result<ApiResponse<String>, ApiErrorResponse> {
+    ctx.service.workout.create_workout(request)
+}
+
+#[tauri::command]
+pub fn create_workout_with_exercises(ctx: State<Ctx>, request: CreateWorkoutInput) -> Result<ApiResponse<String>, ApiErrorResponse> {
+    ctx.service.workout.create_workout_with_exercises(request)
 }
 
 #[tauri::command]
@@ -19,6 +24,6 @@ pub fn get_all_exercises(ctx: State<Ctx>) -> Result<ApiResponse<ExerciseListDTO>
 }
 
 #[tauri::command]
-pub fn get_exercises_by_muscle(ctx: State<Ctx>, muscle_id: String) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
-    ctx.service.workout.filter_exercises(muscle_id)
+pub fn get_exercises_by_muscle(ctx: State<Ctx>, request: String) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
+    ctx.service.workout.filter_exercises(request)
 }

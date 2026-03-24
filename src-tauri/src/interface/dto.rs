@@ -8,8 +8,17 @@ pub type WorkoutListDTO = Vec<WorkoutRecordDTO>;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct CreateWorkoutDTO {
+    pub uuid: String,
     pub name: String,
     pub desc: String
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug,Clone)]
+pub struct CreateWorkoutInput {
+    pub uuid: String,
+    pub name: String,
+    pub desc: Option<String>,
+    pub exercises: Option<Vec<String>>
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
