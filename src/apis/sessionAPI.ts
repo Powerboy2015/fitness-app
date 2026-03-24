@@ -59,7 +59,7 @@ export default  class sessionAPI {
             return {ok: false, msg:"no workout active to save."}
 
 
-        const resp = await ApiClient.send<string>("complete_session");
+        await ApiClient.send<string>("complete_session");
 
         localStorage.removeItem("workoutSessionId");
         return {

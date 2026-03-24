@@ -1,9 +1,11 @@
 use std::sync::Mutex;
-use rusqlite::{Connection, Transaction};
+use rusqlite::{Connection, Error, Transaction};
 use std::sync::Arc;
 
+#[derive(Clone)]
 pub struct Db {
     conn: Arc<Mutex<Connection>>
+    
 }
 
 impl Db {
@@ -15,19 +17,19 @@ impl Db {
 
     //This function is like an foreach, F is the function we're passing and 
     //T is the return type of that function.
-    pub fn use_conn<F,T>(&self, f: F) -> T
+    pub fn use_conn<F,T>(&self, f: F) -> Result<T,Error>
     //the were explains what kind of function F is.
     // it's a function that fires once, has a transaction struct and returns the type of the func.
-    where F: FnOnce(&Transaction) -> T
+    where F: FnOnce(&Transaction) -> Result<T, Error>
      {
         let mut conn = self.conn.lock().expect("lock is contaminated");
 
-        let tx = conn.transaction().unwrap();
+        let tx = conn.transaction()?;
 
         //we then here fire said function. and grab the result aka T.
-        let result = f(&tx);
+        let result = f(&tx)?;
         
-        tx.commit().unwrap();
-        result
+        tx.commit()?;
+        Ok(result)
     }
 }

@@ -1,12 +1,20 @@
-use tauri::Manager;
+use tauri::{Manager, State};
 mod api;
 mod infrastructures;
+mod repository;
+mod interface;
+mod application;
 
 use infrastructures::sqlite::Db;
+use repository::workout_repository::WorkoutRepository;
+use crate::application::workout_service::WorkoutService;
 
 struct Ctx {
-    db: infrastructures::sqlite::Db,
-    session: String,
+    service: Service,
+}
+
+struct Service {
+    workout: WorkoutService,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -24,19 +32,25 @@ pub fn run() {
             //creates an connection to the database.
             let conn = infrastructures::sqlite::get_connection(app);
 
+            let db = Db::new(conn);
+            let service = Service {
+                workout: WorkoutService::new(WorkoutRepository::new(db.clone())),
+            };
+
             app.manage(Ctx {
-                db: Db::new(conn),
-                session: "Placeholder".to_string()
+                service
             });
-            
+
+            //finish
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
 
         // Add all frontend functions here
         .invoke_handler(tauri::generate_handler![
+            interface::tauri_commands::list_workouts,
+            interface::tauri_commands::create_workout,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-
