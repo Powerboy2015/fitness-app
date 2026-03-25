@@ -27,6 +27,9 @@ pub enum ApiError {
 
     #[error(transparent)]
     Sqlite(#[from] rusqlite::Error),
+    
+    #[error("Lock is poisoned")]
+    PoisonedLock,
 }
 
 impl From<ApiError> for ApiErrorResponse {

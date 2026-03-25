@@ -1,3 +1,4 @@
+use std::sync::Mutex;
 use tauri::{Manager};
 mod api;
 mod infrastructures;
@@ -8,6 +9,7 @@ mod domain;
 
 use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
+use crate::application::session_service::SessionService;
 use crate::domain::{ExerciseRepo, WorkoutExerciseRepo, WorkoutRepo};
 use crate::application::workout_service::WorkoutService;
 use crate::repository::exercise_repository::ExerciseRepository;
@@ -19,6 +21,7 @@ struct Ctx {
 
 struct Service {
     workout: WorkoutService,
+    session: Mutex<SessionService>,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -49,7 +52,11 @@ pub fn run() {
                         WorkoutRepository::new(db.clone()),
                         ExerciseRepository::new(db.clone()),
                         WorkoutExerciseRepository::new(db.clone()),
-                    )
+                    ),
+                    //adds the new sessionService
+                    session: Mutex::new(SessionService::new(
+                        WorkoutExerciseRepository::new(db.clone()),
+                    ))
                 }
             });
             //finish
