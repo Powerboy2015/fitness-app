@@ -16,7 +16,7 @@ pub struct WorkoutService {
 pub struct CreateWorkoutRequest {
     pub uuid: String,
     pub name: String,
-    pub desc: String,
+    pub desc: Option<String>,
     pub exercises: Option<Vec<String>>,
 }
 
@@ -65,7 +65,7 @@ impl WorkoutService {
         let request = CreateWorkoutParams{
             uuid: uuid.clone(),
             name: dto.name,
-            desc: dto.desc,
+            desc: dto.desc.unwrap_or_else(|| "".to_string()),
         };
 
         self.workout.create(request).map_err(|_| ApiError::DatabaseError)?;

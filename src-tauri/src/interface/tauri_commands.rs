@@ -26,7 +26,7 @@ pub fn create_workout(ctx: State<Ctx>,req: CreateWorkoutDTO) -> Result<ApiRespon
     let req = CreateWorkoutRequest {
         uuid: req.uuid,
         name: req.name,
-        desc: Option::from(req.desc).expect("Option broke in create_workout"),
+        desc: Option::from(req.desc),
         exercises: None,
     };
 
@@ -80,7 +80,6 @@ pub fn get_exercises_by_muscle(ctx: State<Ctx>, req: String) -> Result<ApiRespon
 }
 
 #[tauri::command]
-
 pub fn get_workout(ctx: State<Ctx>,req: String) -> Result<ApiResponse<WorkoutDTO>, ApiErrorResponse> {
     let detailed_workout = ctx.service.workout.get_detailed_workout(req)?;
 
