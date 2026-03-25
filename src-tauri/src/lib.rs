@@ -1,4 +1,4 @@
-use std::sync::Mutex;
+use std::sync::{Mutex, MutexGuard};
 use tauri::{Manager};
 mod api;
 mod infrastructures;
@@ -9,6 +9,7 @@ mod domain;
 
 use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
+use crate::api::{ApiError, ApiErrorResponse};
 use crate::application::session_service::SessionService;
 use crate::domain::{ExerciseRepo, WorkoutExerciseRepo, WorkoutRepo};
 use crate::application::workout_service::WorkoutService;
@@ -22,6 +23,12 @@ struct Ctx {
 struct Service {
     workout: WorkoutService,
     session: Mutex<SessionService>,
+}
+
+impl Service {
+    pub fn session(&'_ self) -> Result<MutexGuard<'_, SessionService>,ApiErrorResponse> {
+        self.session.lock().map_err(|_|ApiError::PoisonedLock.into())
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -74,6 +81,7 @@ pub fn run() {
             interface::tauri_commands::get_workout,
             interface::tauri_commands::start_session,
             interface::tauri_commands::get_session,
+            interface::tauri_commands::update_session_set
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

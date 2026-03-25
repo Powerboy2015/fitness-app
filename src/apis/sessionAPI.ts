@@ -47,7 +47,7 @@ export default  class sessionAPI {
             return { success: false, resp: error };
         }
 
-        const resp = await ApiClient.send<string>("update_set", { setUpdate });
+        const resp = await ApiClient.send<string>("update_session_set", { req: setUpdate });
         const data = ApiClient.assertOk(resp);
 
         console.log(`updated ${setUpdate.type} set:`, data);

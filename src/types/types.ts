@@ -9,7 +9,7 @@ type backendFunctions =
   | "start_session"
   | "get_session"
   | "complete_session"
-  | "update_set"
+  | "update_session_set"
   | "get_exercises_by_muscle"
   | "create_workout_with_exercises";
 

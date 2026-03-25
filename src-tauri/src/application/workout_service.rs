@@ -20,6 +20,8 @@ pub struct CreateWorkoutRequest {
     pub exercises: Option<Vec<String>>,
 }
 
+
+
 impl WorkoutService {
 
     pub fn new(workout_repo: WorkoutRepository, exercise_repository: ExerciseRepository, workout_exercise_repository: WorkoutExerciseRepository) -> Self {

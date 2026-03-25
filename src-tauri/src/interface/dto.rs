@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use crate::application::session_service::UpdateSessionSetRequest;
 use crate::domain::{Exercise, Session, SessionExercise, Set, Workout};
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
@@ -140,6 +141,56 @@ impl From<Set> for SetDTO {
                 time,
                 time_completed
             },
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "type")]
+pub enum UpdateSessionSetReq {
+    Weighted {
+        exercise_id: String,
+        set_nr: usize,
+        reps: i64,
+        weight: f64,
+    },
+    Timed {
+        exercise_id: String,
+        set_nr: usize,
+        distance: f64,
+        time: f64,
+    },
+}
+
+impl UpdateSessionSetReq {
+    pub fn to_service_request(self) -> UpdateSessionSetRequest {
+        match self {
+            UpdateSessionSetReq::Timed {
+                exercise_id,
+                set_nr,
+                time,
+                distance,
+            } => {
+                UpdateSessionSetRequest::Timed {
+                    exercise_id,
+                    time,
+                    distance,
+                    set_nr,
+                }
+            },
+            UpdateSessionSetReq::Weighted {
+                exercise_id,
+                set_nr,
+                reps,
+                weight,
+            } => {
+                UpdateSessionSetRequest::Weighted {
+                    exercise_id,
+                    set_nr,
+                    reps,
+                    weight,
+                }
+            }
         }
     }
 }
