@@ -17,6 +17,10 @@ impl SessionService {
         }
     }
 
+    pub fn get_session(&self) -> Option<Session> {
+        self.current_session.clone()
+    }
+
     pub fn start_session(&mut self, workout_id: String) -> Result<String,ApiErrorResponse> {
         //gets detailed workout
         let workout_details = self.workout_exercise.get_detailed(&workout_id).map_err(|_|ApiError::DatabaseError)?;

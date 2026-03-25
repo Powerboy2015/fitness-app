@@ -71,7 +71,9 @@ pub fn run() {
             interface::tauri_commands::get_all_exercises,
             interface::tauri_commands::get_exercises_by_muscle,
             interface::tauri_commands::create_workout_with_exercises,
-            interface::tauri_commands::get_workout
+            interface::tauri_commands::get_workout,
+            interface::tauri_commands::start_session,
+            interface::tauri_commands::get_session,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

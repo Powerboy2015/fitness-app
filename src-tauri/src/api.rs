@@ -30,6 +30,9 @@ pub enum ApiError {
     
     #[error("Lock is poisoned")]
     PoisonedLock,
+    
+    #[error("No session has been found")]
+    SessionNotFound,
 }
 
 impl From<ApiError> for ApiErrorResponse {

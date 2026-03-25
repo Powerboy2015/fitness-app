@@ -1,7 +1,7 @@
 use tauri::State;
 use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
 use crate::application::workout_service::CreateWorkoutRequest;
-use crate::interface::dto::{CreateWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, WorkoutDTO, WorkoutsDTO};
+use crate::interface::dto::{CreateWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, SessionDTO, WorkoutDTO, WorkoutsDTO};
 use crate::Ctx;
 
 #[tauri::command]
@@ -108,15 +108,21 @@ pub fn start_session(ctx: State<Ctx>, req:String) -> Result<ApiResponse<String>,
 
 #[tauri::command]
 pub fn get_session(ctx: State<Ctx>) -> Result<ApiResponse<SessionDTO>, ApiErrorResponse> {
+    let session_service =  ctx.service.session.lock().map_err(|_|ApiError::PoisonedLock)?;
+    let current_session = session_service.get_session().ok_or(ApiError::SessionNotFound)?;
     
+    Ok(ApiResponse {
+        ok: true,
+        data: SessionDTO::from(current_session),
+    })
 }
 
-#[tauri::command]
-pub fn update_session_set(ctx: State<Ctx>) -> Result<ApiResponse<String>, ApiErrorResponse> {
-    
-}
-
-#[tauri::command]
-pub fn complete_session(ctx: State<Ctx>) -> Result<ApiResponse<String>, ApiErrorResponse> {
-    
-}
+// #[tauri::command]
+// pub fn update_session_set(ctx: State<Ctx>) -> Result<ApiResponse<String>, ApiErrorResponse> {
+//     
+// }
+// 
+// #[tauri::command]
+// pub fn complete_session(ctx: State<Ctx>) -> Result<ApiResponse<String>, ApiErrorResponse> {
+//     
+// }
