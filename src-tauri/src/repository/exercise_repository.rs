@@ -1,21 +1,21 @@
 use rusqlite::{Error};
-use crate::domain::Exercise::Exercise;
+use crate::domain::{Exercise, ExerciseRepo};
+use crate::domain::Exercises;
 use crate::infrastructures::sqlite::Db;
 
-type Exercises = Vec<Exercise>;
 
 pub struct ExerciseRepository {
     db: Db,
 }
-impl ExerciseRepository {
-    pub fn new(db: Db) -> Self {
+impl ExerciseRepo for ExerciseRepository {
+    fn new(db: Db) -> Self {
         Self {
             db
         }
     }
 
     // queries database and returns a list of all exercises.
-    pub fn list(&self) -> Result<Exercises, Error> {
+    fn list(&self) -> Result<Exercises, Error> {
         self.db.use_conn(|tx| {
             let mut stmt = tx.prepare(
                 "SELECT * FROM exercises"
@@ -27,7 +27,7 @@ impl ExerciseRepository {
     }
 
     // returns a filtered list based on the muscle group given.
-    pub fn filtered_list(&self, muscle_group: &str) -> Result<Exercises, Error> {
+    fn filtered_list(&self, muscle_group: &str) -> Result<Exercises, Error> {
         let query = format!(
             "SELECT * FROM exercises WHERE targetMuscles = '[\"{}\"]'",
             muscle_group

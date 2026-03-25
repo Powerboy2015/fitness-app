@@ -10,4 +10,6 @@ pub struct Exercise {
     pub instructions: Option<String>,
 }
 
+pub type Exercises = Vec<Exercise>;
+
 impl Exercise {}

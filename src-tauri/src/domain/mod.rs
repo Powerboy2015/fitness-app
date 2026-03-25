@@ -1,5 +1,7 @@
-pub mod Workout;
-pub mod Exercise;
+mod workout;
+mod exercise;
+mod ports;
 
-pub use Workout::*;
-pub use Exercise::*;
+pub use workout::*;
+pub use exercise::*;
+pub use ports::*;

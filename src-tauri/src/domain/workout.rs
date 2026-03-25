@@ -1,4 +1,4 @@
-use crate::domain::Exercise::Exercise;
+use crate::domain::exercise::Exercise;
 
 #[derive(Clone)]
 pub struct Workout {
@@ -7,4 +7,7 @@ pub struct Workout {
     pub desc: Option<String>,
     pub exercises: Vec<Exercise>,
 }
+
+pub type Workouts = Vec<Workout>;
+
 impl Workout {}

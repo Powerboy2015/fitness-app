@@ -8,6 +8,7 @@ mod domain;
 
 use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
+use crate::domain::{ExerciseRepo, WorkoutExerciseRepo, WorkoutRepo};
 use crate::application::workout_service::WorkoutService;
 use crate::repository::exercise_repository::ExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;

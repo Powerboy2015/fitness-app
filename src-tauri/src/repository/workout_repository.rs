@@ -1,23 +1,22 @@
 use rusqlite::Error;
-use crate::domain::Workout::Workout;
+use crate::domain::{CreateWorkoutParams, Workout};
+use crate::domain::{WorkoutRepo, Workouts};
 use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
-use crate::interface::dto::CreateWorkoutDTO;
 
-type Workouts = Vec<Workout>;
 
 pub struct WorkoutRepository {
     db: infrastructures::sqlite::Db,
 }
 
-impl WorkoutRepository {
-    pub fn new(db : Db) -> Self {
+impl WorkoutRepo for WorkoutRepository {
+    fn new(db : Db) -> Self {
         Self {
             db
         }
     }
 
-    pub fn list(&self) -> Result<Workouts, Error> {
+    fn list(&self) -> Result<Workouts, Error> {
         self.db.use_conn(|tx| {
             let mut stmt = tx.prepare(
                 "SELECT * FROM Workouts"
@@ -36,7 +35,7 @@ impl WorkoutRepository {
         })
     }
 
-    pub fn create(&self,create_workout_dto: CreateWorkoutDTO) -> Result<bool, Error> {
+    fn create(&self, create_workout_dto: CreateWorkoutParams) -> Result<bool, Error> {
 
         self.db.use_conn(|tx| {
             tx.execute("INSERT INTO Workouts(Uuid,Name,Desc) VALUES (?, ?, ?)",

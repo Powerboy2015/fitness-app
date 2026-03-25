@@ -1,25 +1,18 @@
 use rusqlite::{params_from_iter, Error};
-use crate::domain::Exercise::Exercise;
-use crate::domain::Workout::Workout;
+use crate::domain::{Exercise, WorkoutExerciseRepo};
+use crate::domain::Workout;
 use crate::infrastructures;
 use crate::infrastructures::sqlite::Db;
 pub struct WorkoutExerciseRepository {
     db: infrastructures::sqlite::Db,
 }
 
-type Exercises = Vec<Exercise>;
-
-pub struct WorkoutOverviewEntity {
-    pub workout: Workout,
-    pub exercise: Exercises,
-}
-
-impl WorkoutExerciseRepository {
-    pub fn new(db:Db) -> Self {
+impl WorkoutExerciseRepo for WorkoutExerciseRepository {
+    fn new(db:Db) -> Self {
         Self { db }
     }
 
-    pub fn get_detailed(&self,workout_id: &str) -> Result<WorkoutOverviewEntity, Error> {
+    fn get_detailed(&self,workout_id: &str) -> Result<Workout, Error> {
         self.db.use_conn(|tx| {
             let mut workout_stmt = tx.prepare("SELECT Uuid,Name,Desc FROM Workouts WHERE Uuid = ?")?;
 
@@ -54,16 +47,18 @@ impl WorkoutExerciseRepository {
                 })
             })?;
 
-            Ok(WorkoutOverviewEntity{
-                workout,
-                exercise: exercise_rows.collect::<Result<Vec<_>, _>>()?,
+            Ok(Workout{
+                uuid: workout.uuid,
+                name: workout.name,
+                desc: workout.desc,
+                exercises: exercise_rows.collect::<Result<Vec<_>, _>>()?,
             })
 
         })
     }
 
     // links exercises in a single bulk query.
-    pub fn link(&self,workout_id:String,exercise_ids: Vec<String>) -> Result<bool, Error> {
+    fn link(&self,workout_id:String,exercise_ids: Vec<String>) -> Result<bool, Error> {
         self.db.use_conn(|tx| {
             let mut query = String::from(
                 "INSERT INTO WorkoutExercises (WorkoutId, ExerciseId) VALUES "

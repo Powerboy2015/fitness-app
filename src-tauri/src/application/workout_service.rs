@@ -1,7 +1,7 @@
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
-use crate::domain::Exercise::Exercise;
-use crate::interface::dto::{CreateWorkoutDTO, CreateWorkoutInput, DetailedWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, WorkoutListDTO, WorkoutRecordDTO};
+use crate::api::{ApiError, ApiErrorResponse};
+use crate::domain::{WorkoutRepo, Workouts, Workout, WorkoutExerciseRepo, Exercises, ExerciseRepo, CreateWorkoutParams};
 use crate::repository::exercise_repository::ExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_repository::WorkoutRepository;
@@ -10,6 +10,14 @@ pub struct WorkoutService {
     workout: WorkoutRepository,
     exercises: ExerciseRepository,
     workout_exercises: WorkoutExerciseRepository
+}
+
+#[derive(Clone,Serialize,Deserialize)]
+pub struct CreateWorkoutRequest {
+    pub uuid: String,
+    pub name: String,
+    pub desc: String,
+    pub exercises: Option<Vec<String>>,
 }
 
 impl WorkoutService {
@@ -21,138 +29,66 @@ impl WorkoutService {
             workout_exercises: workout_exercise_repository
         }
     }
-    
+
     // gets the workout and connected exercises and maps it.
-    pub fn get_detailed_workout(&self,workout_id: String) -> Result<ApiResponse<DetailedWorkoutDTO>,ApiErrorResponse> {
+    pub fn get_detailed_workout(&self,workout_id: String) -> Result<Workout,ApiErrorResponse> {
         let record = self.workout_exercises.get_detailed(&workout_id).map_err(|_| ApiError::DatabaseError)?;
 
-        // Remapping exercises to the DTO.
-        let exercise_list = record.exercise.iter().map(|exercise| {
-            ExerciseRecordDTO {
-                exercise_id: exercise.exercise_id.clone(),
-                name: exercise.name.clone(),
-                gif_url: exercise.gif_url.clone(),
-                target_muscles: exercise.target_muscles.clone(),
-                body_parts: exercise.body_parts.clone(),
-                equipments: exercise.equipments.clone(),
-                secondary_muscles: exercise.secondary_muscles.clone(),
-                instructions: exercise.instructions.clone().unwrap_or_else(||"".to_string())
-            }
-        });
-
-        let dto = DetailedWorkoutDTO {
-            uuid: record.workout.uuid,
-            name: record.workout.name,
-            desc: record.workout.desc.unwrap_or_else(|| "".to_string()),
-            exercises: exercise_list.collect(),
-        };
-
-        Ok(ApiResponse {
-            ok: true,
-            data: dto,
-        })
+        Ok(record)
     }
 
-    pub fn list_workouts(&self) -> Result<ApiResponse<WorkoutListDTO>, ApiErrorResponse> {
+    pub fn list_workouts(&self) -> Result<Workouts, ApiErrorResponse> {
         //gets the raw records from the database
         let workout_records = self.workout.list().map_err(|_| ApiError::DatabaseError)?;
 
-        //remap to DTO
-        let workout_list: WorkoutListDTO = workout_records
-            .iter()
-            .map(|workout| WorkoutRecordDTO {
-                uuid: workout.uuid.clone(),
-                name: workout.name.clone(),
-                desc: workout.desc.clone(),
-            })
-            .collect();
-
-        // Return response
-        Ok(ApiResponse {
-            ok: true,
-            data: workout_list,
-        })
+        Ok(workout_records)
     }
-    pub fn list_exercises(&self) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
+    pub fn list_exercises(&self) -> Result<Exercises, ApiErrorResponse> {
         let exercise_records = self.exercises.list().map_err(|e| {
             println!("{:?}", e);
             ApiError::DatabaseError
         })?;
 
-        let exercise_list: ExerciseListDTO = records_to_dto(exercise_records).map_err(|_| ApiError::DatabaseError)?;
-
-        Ok(ApiResponse {
-            ok: true,
-            data: exercise_list,
-        })
+        Ok(exercise_records)
     }
 
-    pub fn filter_exercises(&self,muscle_group: String) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
+    pub fn filter_exercises(&self,muscle_group: String) -> Result<Exercises, ApiErrorResponse> {
         let filtered_exercises = self.exercises.filtered_list(&muscle_group).map_err(|_| ApiError::DatabaseError)?;
 
-        let exercise_list: ExerciseListDTO = records_to_dto(filtered_exercises).map_err(|_| ApiError::DatabaseError)?;
 
-        Ok(ApiResponse {
-            ok: true,
-            data: exercise_list,
-        })
+        Ok(filtered_exercises)
     }
 
-    pub fn create_workout(&self, create_workout_dto: CreateWorkoutInput) -> Result<ApiResponse<String>, ApiErrorResponse> {
+    pub fn create_workout(&self, dto: CreateWorkoutRequest) -> Result<String, ApiErrorResponse> {
         let uuid = Uuid::new_v4().to_string();
-        let workout_dto = CreateWorkoutDTO {
+
+        let request = CreateWorkoutParams{
             uuid: uuid.clone(),
-            name: create_workout_dto.name,
-            desc: create_workout_dto.desc.unwrap_or_else(||"".to_string()),
+            name: dto.name,
+            desc: dto.desc,
         };
 
-        let response = self.workout.create(workout_dto).map_err(|_| ApiError::DatabaseError)?;
+        self.workout.create(request).map_err(|_| ApiError::DatabaseError)?;
 
-        Ok(ApiResponse {
-            ok: response,
-            data: uuid.to_string(),
-        })
+        Ok(uuid)
     }
 
     //creates a new workout with exercises if there are any.
-    pub fn create_workout_with_exercises(&self, create_workout_dto: CreateWorkoutInput) -> Result<ApiResponse<String>, ApiErrorResponse> {
+    pub fn create_workout_with_exercises(&self, dto: CreateWorkoutRequest) -> Result<String, ApiErrorResponse> {
         // creates the list of exercises if they are there.
         // otherwise returns invalidInput error early.
-        let exercises = create_workout_dto
+        let exercises = dto
             .exercises
             .clone()
             .ok_or(ApiError::InvalidInput)?;
 
-        let response = self.create_workout(create_workout_dto.clone()).map_err(|_| ApiError::DatabaseError)?;
+        let uuid = self.create_workout(dto.clone()).map_err(|_| ApiError::DatabaseError)?;
 
-        self.workout_exercises.link(response.data, exercises.clone()).map_err(|e| {
+        self.workout_exercises.link(uuid.clone(), exercises.clone()).map_err(|e| {
             println!("{:?}", e);
             ApiError::DatabaseError
         })?;
 
-        Ok(ApiResponse {
-            ok: true,
-            data: "workout Created".to_string(),
-        })
+        Ok(uuid)
     }
-}
-
-// This function converts the incoming exerciseRows from the database into DTO's
-// Current there is not change, but if there's ever a day in which we decide to drop these, we can :)
-fn records_to_dto(rows: Vec<Exercise>) -> Result<ExerciseListDTO, ApiErrorResponse> {
-    let remapped = rows
-        .iter()
-        .map(|exercise| ExerciseRecordDTO {
-            exercise_id: exercise.exercise_id.clone(),
-            name: exercise.name.clone(),
-            gif_url: exercise.gif_url.clone(),
-            target_muscles: exercise.target_muscles.clone(),
-            body_parts: exercise.body_parts.clone(),
-            equipments: exercise.equipments.clone(),
-            secondary_muscles: exercise.secondary_muscles.clone(),
-            instructions: exercise.instructions.clone().unwrap_or_else(|| "empty instructions".into())
-        })
-        .collect();
-
-    Ok(remapped)
 }

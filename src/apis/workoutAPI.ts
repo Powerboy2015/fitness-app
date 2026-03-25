@@ -16,21 +16,21 @@ export default class workoutAPI {
 
         let result: ApiError | ApiSucess<string>;
         if (!dto.exercises) {
-            const request = {
+            const req = {
                 uuid: "",
                 name: dto.name,
                 desc: dto.desc,
 
             };
-            result = await ApiClient.send<string>("create_workout", { request });
+            result = await ApiClient.send<string>("create_workout", { req });
         } else {
-            const request = {
+            const req = {
                 uuid: "",
                 name: dto.name,
                 desc: dto.desc,
                 exercises: dto.exercises
             };
-            result = await ApiClient.send<string>("create_workout_with_exercises",{ request });
+            result = await ApiClient.send<string>("create_workout_with_exercises",{ req });
 
         }
         return ApiClient.assertOk(result);
@@ -65,7 +65,7 @@ export default class workoutAPI {
             return err;
         }
 
-        const resp = await ApiClient.send<IdetailedWorkoutDTO>("get_workout", { request: _workoutUuid });
+        const resp = await ApiClient.send<IdetailedWorkoutDTO>("get_workout", { req: _workoutUuid });
         return ApiClient.assertOk(resp);
     }
 }
