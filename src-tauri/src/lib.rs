@@ -11,10 +11,11 @@ use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
 use crate::api::{ApiError, ApiErrorResponse};
 use crate::application::session_service::SessionService;
-use crate::domain::{ExerciseRepo, WorkoutExerciseRepo, WorkoutRepo};
+use crate::domain::{ExerciseRepo, WorkoutExerciseRepo, WorkoutHistoryRepo, WorkoutRepo};
 use crate::application::workout_service::WorkoutService;
 use crate::repository::exercise_repository::ExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
+use crate::repository::workout_history_repository::WorkoutHistoryRepository;
 
 struct Ctx {
     service: Service,
@@ -63,6 +64,7 @@ pub fn run() {
                     //adds the new sessionService
                     session: Mutex::new(SessionService::new(
                         WorkoutExerciseRepository::new(db.clone()),
+                        WorkoutHistoryRepository::new(db.clone())
                     ))
                 }
             });
@@ -81,7 +83,8 @@ pub fn run() {
             interface::tauri_commands::get_workout,
             interface::tauri_commands::start_session,
             interface::tauri_commands::get_session,
-            interface::tauri_commands::update_session_set
+            interface::tauri_commands::update_session_set,
+            interface::tauri_commands::complete_session
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

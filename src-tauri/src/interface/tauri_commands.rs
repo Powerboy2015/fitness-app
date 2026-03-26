@@ -133,8 +133,15 @@ pub fn update_session_set(ctx: State<Ctx>, req: UpdateSessionSetReq) -> Result<A
         data: resp,
     })
 }
-// 
-// #[tauri::command]
-// pub fn complete_session(ctx: State<Ctx>) -> Result<ApiResponse<String>, ApiErrorResponse> {
-//     
-// }
+
+#[tauri::command]
+pub fn complete_session(ctx: State<Ctx>) -> Result<ApiResponse<String>, ApiErrorResponse> {
+    let resp = ctx
+        .service
+        .session()?
+        .save_session()?;
+
+    Ok(ApiResponse { 
+        ok: true,
+        data: resp.to_string() })
+}

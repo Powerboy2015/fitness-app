@@ -2,8 +2,10 @@ use serde::{Deserialize, Serialize};
 use tauri::webview::cookie::time::UtcDateTime;
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse};
-use crate::domain::{Session, SessionExercise, Set, WorkoutExerciseRepo};
+use crate::domain::{SaveSessionParams, Session, SessionExercise, Set, WorkoutExerciseRepo, WorkoutHistoryRepo};
+use crate::repository::completed_exercise_repository::CompletedExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
+use crate::repository::workout_history_repository::WorkoutHistoryRepository;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "type")]
@@ -24,6 +26,7 @@ pub enum UpdateSessionSetRequest {
 
 impl UpdateSessionSetRequest {
     pub fn apply(self, session: &mut Session) -> Result<(), ApiErrorResponse> {
+        //TODO implement this for adding new rows of sets too.
         match self {
             UpdateSessionSetRequest::Weighted { exercise_id, set_nr, reps, weight } => {
                 let set = get_exercise_set(session, exercise_id, set_nr)?;
@@ -71,22 +74,45 @@ fn get_exercise_set(session: &mut Session, exercise_id: String, set_nr: usize) -
     let set = exercise
         .sets
         .get_mut(set_nr)
-        .unwrap();
+        .ok_or(ApiError::InvalidInput)?;
 
     Ok(set)
 }
 
 pub struct SessionService {
     current_session: Option<Session>,
-    workout_exercise: WorkoutExerciseRepository
+    workout_exercise: WorkoutExerciseRepository,
+    workout_history: WorkoutHistoryRepository,
+    completed_exercise: CompletedExerciseRepository
 }
 
 impl SessionService {
-    pub fn new(workout_exercise: WorkoutExerciseRepository) -> Self {
+    pub fn new(workout_exercise: WorkoutExerciseRepository, workout_history: WorkoutHistoryRepository,completed_exercise:CompletedExerciseRepository) -> Self {
         Self{
             current_session: None,
-            workout_exercise
+            workout_exercise,
+            workout_history,
+            completed_exercise
         }
+    }
+
+    pub fn save_session(&mut self) -> Result<String,ApiErrorResponse> {
+        let mut session = self.current_session.clone().ok_or(ApiError::SessionNotFound)?;
+        
+        let params = SaveSessionParams {
+            session_id: session.session_uuid,
+            workout_id: session.workout_uuid,
+            started_at: session.start_time,
+            completed_at: UtcDateTime::now().to_string()
+        };
+        
+        self.workout_history.add(params).map_err(|_| ApiError::DatabaseError)?;
+
+        for exercise in session.exercises.iter() {
+            
+        }
+
+        Ok("updated".to_string())
     }
 
     // gets the currently active session and updates it using the UpdateSessionSetRequest.
@@ -94,6 +120,7 @@ impl SessionService {
         let mut session = self.current_session.clone().ok_or(ApiError::SessionNotFound)?;
 
         //applies the set onto the session
+
         set_update.apply(&mut session)?;
 
         // sets the copied session(with updates) back into memory
