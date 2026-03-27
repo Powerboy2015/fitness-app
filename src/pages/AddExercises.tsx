@@ -1,5 +1,5 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import { useState } from "react";
+import {useMemo, useState} from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
@@ -19,26 +19,29 @@ import Filter from "../components/Filter";
 import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
 
 export default function AddExercises() {
-  // const [allExercises, setAllExercise] = useState<ExerciseDTO[]>([]);
   const [searchText, setSearchText] = useState("");
-  const [activeQuery, setActiveQuery] = useState("");
-  // const [muscle, setMuscle] = useState<string>("");
   const { addExercise } = useWorkout();
   const navigate = useNavigate();
 
 
   const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
 
-  const filteredExercises = sortedExercises.filter((exercise) =>
-    exercise.name.toLowerCase().includes(activeQuery.toLowerCase()),
-  );
+  const filteredExercises = useMemo(() => {
+    const searchQuery = searchText.toLowerCase();
+    return sortedExercises.filter(exercise =>
+        exercise.name
+            .toLowerCase()
+            .includes(searchQuery)
+    );
+  }, [sortedExercises, searchText]);
+
 
   return (
     <>
       <SearchBar
         value={searchText}
         onChange={setSearchText}
-        onSearch={() => setActiveQuery(searchText)}
+        onSearch={() => {}}
       />
       <div>
         <div
