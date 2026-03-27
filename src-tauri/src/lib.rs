@@ -86,7 +86,8 @@ pub fn run() {
             interface::tauri_commands::start_session,
             interface::tauri_commands::get_session,
             interface::tauri_commands::update_session_set,
-            interface::tauri_commands::complete_session
+            interface::tauri_commands::complete_session,
+            interface::tauri_commands::workout_history
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

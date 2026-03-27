@@ -1,7 +1,7 @@
 use tauri::State;
 use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
 use crate::application::workout_service::CreateWorkoutRequest;
-use crate::interface::dto::{CreateWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, SessionDTO, UpdateSessionSetReq, WorkoutDTO, WorkoutsDTO};
+use crate::interface::dto::{CreateWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, SessionDTO, UpdateSessionSetReq, WorkoutDTO, WorkoutHistoryDTO, WorkoutsDTO};
 use crate::Ctx;
 
 #[tauri::command]
@@ -144,4 +144,20 @@ pub fn complete_session(ctx: State<Ctx>) -> Result<ApiResponse<String>, ApiError
     Ok(ApiResponse { 
         ok: true,
         data: resp.to_string() })
+}
+
+#[tauri::command]
+pub fn workout_history(ctx: State<Ctx>) -> Result<ApiResponse<Vec<WorkoutHistoryDTO>>, ApiErrorResponse> {
+    let history = ctx.service.session()?.workout_history()?;
+
+    let history_dtos: Vec<WorkoutHistoryDTO> = history
+        .into_iter()
+        .map(WorkoutHistoryDTO::from)
+        .collect();
+
+    Ok(ApiResponse{
+        ok: true,
+        data: history_dtos,
+    })
+
 }

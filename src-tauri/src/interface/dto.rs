@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use crate::application::session_service::UpdateSessionSetRequest;
-use crate::domain::{Exercise, Session, SessionExercise, Set, Workout};
+use crate::domain::{CompletedWorkout, Exercise, Session, SessionExercise, Set, Workout};
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct WorkoutDTO {
@@ -194,3 +194,23 @@ impl UpdateSessionSetReq {
         }
     }
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct WorkoutHistoryDTO {
+    pub workout_name: String,
+    pub session_uuid: String,
+    pub start_date: String,
+    pub end_date: String,
+}
+
+impl From<CompletedWorkout> for WorkoutHistoryDTO {
+    fn from(cw: CompletedWorkout) -> Self {
+        Self{
+            workout_name: cw.workout_name,
+            session_uuid: cw.session_uuid,
+            start_date: cw.start_date,
+            end_date: cw.end_date
+        }
+    }
+}
+
