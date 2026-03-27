@@ -14,7 +14,7 @@ impl CompletedExerciseRepo for CompletedExerciseRepository {
 
     fn add_timed_set(&self,req: AddTimedSetParams) -> Result<String,Error> {
         self.db.use_conn(|tx| {
-            tx.execute("INSERT INTO completedCardioExercises(id,time,distance) VALUES(?1,?2,?3)",[
+            tx.execute("INSERT INTO completedCardioExercises(completedExerciseId,time,distance) VALUES(?1,?2,?3)",[
                 req.completed_exercise_id,
                 req.time.to_string(),
                 req.distance.to_string()
@@ -26,7 +26,7 @@ impl CompletedExerciseRepo for CompletedExerciseRepository {
 
     fn add_weighted_set(&self,req: AddWeighedSetParams) -> Result<String,Error> {
         self.db.use_conn(|tx| {
-            tx.execute("INSERT INTO completedWeightExercises(id,reps,weight) VALUES(?1,?2,?3)",[
+            tx.execute("INSERT INTO completedWeightExercises(completedExerciseId,reps,weight) VALUES(?1,?2,?3)",[
                 req.completed_exercise_id,
                 req.reps.to_string(),
                 req.weight.to_string()
@@ -40,7 +40,7 @@ impl CompletedExerciseRepo for CompletedExerciseRepository {
         let history_id = Uuid::new_v4().to_string();
 
         self.db.use_conn(|tx| {
-            tx.execute("INSERT INTO completedExercises(id,sessionId,ExerciseID) VALUES(?1,?2,?3)", [&history_id,&req.session_id.clone(),&req.exercise_id.clone()])
+            tx.execute("INSERT INTO completedExercises(ID,sessionId,ExerciseID) VALUES(?1,?2,?3)", [&history_id,&req.session_id.clone(),&req.exercise_id.clone()])
         })?;
 
         Ok(history_id)

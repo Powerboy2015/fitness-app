@@ -16,8 +16,6 @@ impl WorkoutHistoryRepo for WorkoutHistoryRepository {
                 tx.execute("INSERT INTO workoutHistory(SessionId,WorkoutId,Started_at,Completed_at) VALUES (?1,?2,?3,?4)",
             [params.session_id,params.workout_id,params.started_at,params.completed_at])
             })?;
-
-            
         Ok(true)
     } 
 }

@@ -33,6 +33,15 @@ pub enum ApiError {
     
     #[error("No session has been found")]
     SessionNotFound,
+
+    #[error("session could not be saved")]
+    SessionNotSaved,
+
+    #[error("Could not save exercise")]
+    ExerciseNotSaved,
+
+    #[error("Could not save set")]
+    SetNotSaved,
 }
 
 impl From<ApiError> for ApiErrorResponse {

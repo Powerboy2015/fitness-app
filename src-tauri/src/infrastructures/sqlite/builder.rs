@@ -7,8 +7,8 @@ use tauri::{App,Manager};
 
 pub fn build_database(app: &mut App) {
     let db_path = instantiate(app);
-    let conn = establish_connection(&db_path);
-    migrate(&conn);
+    let mut conn = establish_connection(&db_path);
+    migrate(&mut conn);
     conn.close().expect("Couldnt close Connection");
 }
 
@@ -42,8 +42,9 @@ fn establish_connection(dbpath: &PathBuf) -> Connection {
 }
 
 // Creates all the default structure for the database (for workouts and connecting exercises to workouts.)
-fn migrate(conn: &Connection) {
-    conn.execute(
+fn migrate(conn: &mut Connection) {
+    let tx = conn.transaction().unwrap();
+    tx.execute(
         "CREATE TABLE IF NOT EXISTS Workouts (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         Uuid TEXT NOT NULL UNIQUE,
@@ -56,10 +57,10 @@ fn migrate(conn: &Connection) {
 
     //Workout exercises table
     // NOTE PRAGMA foreign_keys = ON; is required, otherwise foreign keys won't work.
-    conn.execute("PRAGMA foreign_keys = ON", [])
+    tx.execute("PRAGMA foreign_keys = ON", [])
         .expect("foreign keys disabled");
 
-    conn.execute(
+    tx.execute(
         "CREATE TABLE IF NOT EXISTS WorkoutExercises (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         WorkoutId TEXT NOT NULL,
@@ -71,14 +72,16 @@ fn migrate(conn: &Connection) {
     )
         .expect("failed to initialize schema WorkoutExercises");
 
-    conn.execute("CREATE TABLE IF NOT EXISTS workoutHistory (
+    tx.execute("CREATE TABLE IF NOT EXISTS workoutHistory (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         sessionId TEXT UNIQUE NOT NULL,
+        workoutId TEXT NOT NULL,
         started_at TEXT NOT NULL,
-        completed_at TEXT NOT NULL
+        completed_at TEXT NOT NULL,
+        FOREIGN KEY (workoutId) REFERENCES Workouts(Uuid)
     )",[]).unwrap();
 
-    conn.execute("CREATE TABLE IF NOT EXISTS completedExercises (
+    tx.execute("CREATE TABLE IF NOT EXISTS completedExercises (
         ID TEXT NOT NULL PRIMARY KEY,
         sessionId TEXT NOT NULL,
         exerciseId TEXT NOT NULL,
@@ -86,20 +89,23 @@ fn migrate(conn: &Connection) {
         FOREIGN KEY (sessionId) REFERENCES workoutHistory(sessionId)
     )", []).unwrap();
 
-    conn.execute("CREATE TABLE IF NOT EXISTS completedCardioExercises (
-        ID TEXT NOT NULL PRIMARY KEY,
+    tx.execute("CREATE TABLE IF NOT EXISTS completedCardioExercises (
+        ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        completedExerciseId TEXT NOT NULL ,
         time FLOAT,
         distance FLOAT,
-        FOREIGN KEY (ID) REFERENCES completedExercises(ID)
+        FOREIGN KEY (completedExerciseId) REFERENCES completedExercises(ID) ON DELETE CASCADE
     )",[]).unwrap();
 
-    conn.execute("CREATE TABLE IF NOT EXISTS completedWeightExercises (
-        ID TEXT NOT NULL PRIMARY KEY,
+    tx.execute("CREATE TABLE IF NOT EXISTS completedWeightExercises (
+        ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        completedExerciseId TEXT NOT NULL,
         reps FLOAT,
         weight FLOAT,
-        FOREIGN KEY (ID) REFERENCES completedExercises(ID)
+        FOREIGN KEY (completedExerciseId) REFERENCES completedExercises(ID) ON DELETE CASCADE
     )",[]).unwrap();
 
+    tx.commit().unwrap();
 }
 
 
@@ -111,5 +117,4 @@ pub fn get_connection(app: &App) -> Connection {
 
     Connection::open(db_path)
         .expect("Failed to open or create database")
-
 }

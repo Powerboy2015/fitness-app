@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use tauri::webview::cookie::time::UtcDateTime;
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse};
-use crate::domain::{AddExerciseParams, CompletedExerciseRepo, SaveSessionParams, Session, SessionExercise, Set, WorkoutExerciseRepo, WorkoutHistoryRepo};
+use crate::domain::{AddExerciseParams, AddTimedSetParams, AddWeighedSetParams, CompletedExerciseRepo, SaveSessionParams, Session, SessionExercise, Set, WorkoutExerciseRepo, WorkoutHistoryRepo};
 use crate::repository::completed_exercise_repository::CompletedExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_history_repository::WorkoutHistoryRepository;
@@ -98,27 +98,56 @@ impl SessionService {
 
     pub fn save_session(&mut self) -> Result<String,ApiErrorResponse> {
         let session = self.current_session.clone().ok_or(ApiError::SessionNotFound)?;
-        
-        let params = SaveSessionParams {
-            session_id: session.session_uuid,
+
+        //Creating the required SaveSessionParams for the add function.
+        self.workout_history.add(SaveSessionParams {
+            session_id: session.session_uuid.clone(),
             workout_id: session.workout_uuid,
             started_at: session.start_time,
             completed_at: UtcDateTime::now().to_string()
-        };
-        
-        self.workout_history.add(params).map_err(|_| ApiError::DatabaseError)?;
+        })
+            .map_err(|_| ApiError::SessionNotSaved)?;
 
+        // Looping through each exercise to add it's completed version to the database.
         for exercise in session.exercises.iter() {
 
-            let params = AddExerciseParams {
+            //Creating the required AddExerciseParams struct for the add_exercise function.
+            let exercise_id = self.completed_exercise.add_exercise(AddExerciseParams {
                 exercise_id: exercise.exercise_id.clone(),
-                session_id: &session.session_uuid
-            };
+                session_id: session.session_uuid.clone()
+            })
+                .map_err(|e| { 
+                    println!("Error adding exercise {}", e);
+                    ApiError::ExerciseNotSaved
+                })?;
 
-            self.completed_exercise.add_exercise(params).map_err(|_| ApiError::DatabaseError)?;
+            for set in exercise.sets.iter() {
+                match set {
+                    Set::Weighted { reps, weight, time_completed } => {
+                        self.completed_exercise.add_weighted_set(AddWeighedSetParams {
+                            completed_exercise_id: exercise_id.clone(),
+                            reps: *reps,
+                            weight: *weight,
+                            time_completed: time_completed.clone(),
+                        })
+                    }
+                    Set::Timed { distance, time, time_completed } => {
+                        self.completed_exercise.add_timed_set(AddTimedSetParams{
+                            completed_exercise_id: exercise_id.clone(),
+                            distance: *distance,
+                            time: *time,
+                            time_completed: time_completed.clone(),
+                        })
+                    }
+                }.map_err(|e| {
+                    println!("{:?}", e);
+                    ApiError::SetNotSaved
+                })?;
+            }
+
         }
 
-        Ok("updated".to_string())
+        Ok("Workout has been saved.".to_string())
     }
 
     // gets the currently active session and updates it using the UpdateSessionSetRequest.
