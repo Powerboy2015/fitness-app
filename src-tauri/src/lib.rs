@@ -11,8 +11,9 @@ use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
 use crate::api::{ApiError, ApiErrorResponse};
 use crate::application::session_service::SessionService;
-use crate::domain::{ExerciseRepo, WorkoutExerciseRepo, WorkoutHistoryRepo, WorkoutRepo};
+use crate::domain::{CompletedExerciseRepo, ExerciseRepo, WorkoutExerciseRepo, WorkoutHistoryRepo, WorkoutRepo};
 use crate::application::workout_service::WorkoutService;
+use crate::repository::completed_exercise_repository::CompletedExerciseRepository;
 use crate::repository::exercise_repository::ExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_history_repository::WorkoutHistoryRepository;
@@ -64,7 +65,8 @@ pub fn run() {
                     //adds the new sessionService
                     session: Mutex::new(SessionService::new(
                         WorkoutExerciseRepository::new(db.clone()),
-                        WorkoutHistoryRepository::new(db.clone())
+                        WorkoutHistoryRepository::new(db.clone()),
+                        CompletedExerciseRepository::new(db.clone())
                     ))
                 }
             });

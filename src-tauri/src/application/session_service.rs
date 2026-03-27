@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use tauri::webview::cookie::time::UtcDateTime;
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse};
-use crate::domain::{SaveSessionParams, Session, SessionExercise, Set, WorkoutExerciseRepo, WorkoutHistoryRepo};
+use crate::domain::{AddExerciseParams, CompletedExerciseRepo, SaveSessionParams, Session, SessionExercise, Set, WorkoutExerciseRepo, WorkoutHistoryRepo};
 use crate::repository::completed_exercise_repository::CompletedExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_history_repository::WorkoutHistoryRepository;
@@ -97,7 +97,7 @@ impl SessionService {
     }
 
     pub fn save_session(&mut self) -> Result<String,ApiErrorResponse> {
-        let mut session = self.current_session.clone().ok_or(ApiError::SessionNotFound)?;
+        let session = self.current_session.clone().ok_or(ApiError::SessionNotFound)?;
         
         let params = SaveSessionParams {
             session_id: session.session_uuid,
@@ -109,7 +109,13 @@ impl SessionService {
         self.workout_history.add(params).map_err(|_| ApiError::DatabaseError)?;
 
         for exercise in session.exercises.iter() {
-            
+
+            let params = AddExerciseParams {
+                exercise_id: exercise.exercise_id.clone(),
+                session_id: &session.session_uuid
+            };
+
+            self.completed_exercise.add_exercise(params).map_err(|_| ApiError::DatabaseError)?;
         }
 
         Ok("updated".to_string())

@@ -38,21 +38,27 @@ pub trait WorkoutHistoryRepo {
     fn add(&self,session: SaveSessionParams) -> Result<bool,Error>;
 }
 
-pub struct AddWeighedExerciseParams{
+pub struct AddWeighedSetParams{
     pub completed_exercise_id: String,
     pub reps: i64, 
     pub weight: f64, 
     pub time_completed: String
 }
-pub struct AddTimedExerciseParams{
+pub struct AddTimedSetParams{
     pub completed_exercise_id: String,
     pub time: f64,
     pub distance: f64, 
     pub time_completed: String
 }
 
+pub struct AddExerciseParams {
+    pub exercise_id: String,
+    pub session_id: String 
+}
+
 pub trait CompletedExerciseRepo {
     fn new (db: Db) -> Self;
-    fn add_weighted_exercise(&self,params: AddWeighedExerciseParams) -> Result<String,Error>;
-    fn add_timed_exercise(&self,params: AddTimedExerciseParams) -> Result<String,Error>;
+    fn add_weighted_set(&self,req: AddWeighedSetParams) -> Result<String,Error>;
+    fn add_timed_set(&self,req: AddTimedSetParams) -> Result<String,Error>;
+    fn add_exercise(&self, req: AddExerciseParams) -> Result<String,Error>;
 }
