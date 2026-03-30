@@ -8,7 +8,14 @@ export default class ExercisesAPI {
     }
 
     public async filter(muscle: muscleGroups): Promise<ExerciseDTO[]> {
-        const result = await ApiClient.send<ExerciseDTO[]>("get_exercises_by_muscle",{request: muscle});
+        const result = await ApiClient.send<ExerciseDTO[]>("get_exercises_by_muscle",{req: muscle});
+        return ApiClient.assertOk(result);
+
+    }
+
+    public async get(id: string): Promise<ExerciseDTO> {
+        const result = await ApiClient.send<ExerciseDTO>("get_exercise_by_id",{exerciseId: id});
+
         return ApiClient.assertOk(result);
     }
 }

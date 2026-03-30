@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct Db {
-    conn: Arc<Mutex<Connection>>
+    pub conn: Arc<Mutex<Connection>>
     
 }
 

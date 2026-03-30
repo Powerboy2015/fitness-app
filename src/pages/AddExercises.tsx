@@ -117,6 +117,7 @@ export default function AddExercises() {
               key={exercise.exercise_id}
               name={exercise.name}
               gif={exercise.gif_url}
+              id={exercise.exercise_id}
               onSelect={() => {
                 addExercise({
                   id: exercise.exercise_id,

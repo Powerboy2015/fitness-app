@@ -6,6 +6,7 @@ mod repository;
 mod interface;
 mod application;
 mod domain;
+mod lars;
 
 use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
@@ -20,6 +21,7 @@ use crate::repository::workout_history_repository::WorkoutHistoryRepository;
 
 struct Ctx {
     service: Service,
+    db: Db
 }
 
 struct Service {
@@ -52,6 +54,7 @@ pub fn run() {
             let db = Db::new(conn);
 
             app.manage(Ctx {
+                db: db.clone(),
                 service: Service {
                     // creates a new workout service
                     workout: WorkoutService::new(
@@ -87,7 +90,9 @@ pub fn run() {
             interface::tauri_commands::get_session,
             interface::tauri_commands::update_session_set,
             interface::tauri_commands::complete_session,
-            interface::tauri_commands::workout_history
+            interface::tauri_commands::workout_history,
+            lars::get_exercise_by_id
+            
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
