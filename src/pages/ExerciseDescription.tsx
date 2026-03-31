@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
+import API from "../classes/api";
 
 export default function ExerciseDescription() {
   const [id, setId] = useState<string>("");
@@ -35,16 +36,14 @@ export default function ExerciseDescription() {
   async function getExerciseById() {
     if (id !== "") {
       try {
-        const res = await invoke<ExerciseResponse>("get_exercise_by_id", {
-          exerciseId: id,
-        });
+        const res = await API.exercises.get(id);
 
-        setEquipments(JSON.parse(res.data.equipments));
-        setgif(res.data.gif_url);
-        setInstructions(JSON.parse(res.data.instructions));
-        setName(res.data.name);
-        setSecondaryMuscles(JSON.parse(res.data.secondary_muscles));
-        setTargetMuscle(JSON.parse(res.data.target_muscles));
+        setEquipments(JSON.parse(res.equipments));
+        setgif(res.gif_url);
+        setInstructions(JSON.parse(res.instructions));
+        setName(res.name);
+        setSecondaryMuscles(JSON.parse(res.secondary_muscles));
+        setTargetMuscle(JSON.parse(res.target_muscles));
       } catch (err) {
         console.error(err);
         setError(true);
