@@ -76,79 +76,82 @@ export default function AddExercises() {
 
   return (
     <>
-      <SearchBar
-        value={searchText}
-        onChange={setSearchText}
-        onSearch={() => setActiveQuery(searchText)}
-      />
-      <div>
-        <div
-          className="overflow-x-scroll flex
-                [&::-webkit-scrollbar-thumb]:bg-neutral-500
-                [&::-webkit-scrollbar]:bg-neutral-700"
-        >
-          <Filter
-            gif={chest}
-            isSelected={muscle === "pectorals"}
-            onClick={() => handleFilterClick("pectorals")}
-          />
-
-          <Filter
-            gif={bicep}
-            isSelected={muscle === "biceps"}
-            onClick={() => handleFilterClick("biceps")}
-          />
-          <Filter
-            gif={tricep}
-            isSelected={muscle === "triceps"}
-            onClick={() => handleFilterClick("triceps")}
-          />
-          <Filter
-            gif={lats}
-            isSelected={muscle === "lats"}
-            onClick={() => handleFilterClick("lats")}
-          />
-          <Filter
-            gif={back}
-            isSelected={muscle === "upper back"}
-            onClick={() => handleFilterClick("upper back")}
-          />
-          <Filter
-            gif={shoulders}
-            isSelected={muscle === "delts"}
-            onClick={() => handleFilterClick("delts")}
-          />
-          <Filter
-            gif={forearms}
-            isSelected={muscle === "forearms"}
-            onClick={() => handleFilterClick("forearms")}
-          />
-          <Filter
-            gif={abs}
-            isSelected={muscle === "abs"}
-            onClick={() => handleFilterClick("abs")}
-          />
-          <Filter
-            gif={quads}
-            isSelected={muscle === "quads"}
-            onClick={() => handleFilterClick("quads")}
-          />
-          <Filter
-            gif={hamstrings}
-            isSelected={muscle === "hamstrings"}
-            onClick={() => handleFilterClick("hamstrings")}
-          />
-          <Filter
-            gif={glutes}
-            isSelected={muscle === "glutes"}
-            onClick={() => handleFilterClick("glutes")}
-          />
-          <Filter
-            gif={calves}
-            isSelected={muscle === "calves"}
-            onClick={() => handleFilterClick("calves")}
-          />
+    <div className="overflow-hidden">
+      <div className="">
+        <SearchBar
+          value={searchText}
+          onChange={setSearchText}
+          onSearch={() => setActiveQuery(searchText)}
+        />
+          <div
+            className="overflow-x-scroll flex
+                  [&::-webkit-scrollbar-thumb]:bg-neutral-500
+                  [&::-webkit-scrollbar]:bg-neutral-700"
+          >
+            <Filter
+              gif={chest}
+              isSelected={muscle === "pectorals"}
+              onClick={() => handleFilterClick("pectorals")}
+            />
+            <Filter
+              gif={bicep}
+              isSelected={muscle === "biceps"}
+              onClick={() => handleFilterClick("biceps")}
+            />
+            <Filter
+              gif={tricep}
+              isSelected={muscle === "triceps"}
+              onClick={() => handleFilterClick("triceps")}
+            />
+            <Filter
+              gif={lats}
+              isSelected={muscle === "lats"}
+              onClick={() => handleFilterClick("lats")}
+            />
+            <Filter
+              gif={back}
+              isSelected={muscle === "upper back"}
+              onClick={() => handleFilterClick("upper back")}
+            />
+            <Filter
+              gif={shoulders}
+              isSelected={muscle === "delts"}
+              onClick={() => handleFilterClick("delts")}
+            />
+            <Filter
+              gif={forearms}
+              isSelected={muscle === "forearms"}
+              onClick={() => handleFilterClick("forearms")}
+            />
+            <Filter
+              gif={abs}
+              isSelected={muscle === "abs"}
+              onClick={() => handleFilterClick("abs")}
+            />
+            <Filter
+              gif={quads}
+              isSelected={muscle === "quads"}
+              onClick={() => handleFilterClick("quads")}
+            />
+            <Filter
+              gif={hamstrings}
+              isSelected={muscle === "hamstrings"}
+              onClick={() => handleFilterClick("hamstrings")}
+            />
+            <Filter
+              gif={glutes}
+              isSelected={muscle === "glutes"}
+              onClick={() => handleFilterClick("glutes")}
+            />
+            <Filter
+              gif={calves}
+              isSelected={muscle === "calves"}
+              onClick={() => handleFilterClick("calves")}
+            />
+          </div>
         </div>
+        
+      <div>
         {filteredExercises.map((exercise) => {
           return (
             <ExerciseWidget
@@ -167,6 +170,7 @@ export default function AddExercises() {
           );
         })}
       </div>
+    </div>
     </>
   );
 }
