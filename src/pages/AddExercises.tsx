@@ -1,4 +1,8 @@
 import ExerciseWidget from "../components/ExerciseWidget";
+import {useMemo, useState} from "react";
+import { useWorkout } from "../context/WorkoutContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
 import { useMemo ,useEffect, useState } from "react";
@@ -22,8 +26,7 @@ import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
-  const { addExercise,selectedIds } = useWorkout();
-  const navigate = useNavigate();
+  const { addExercise } = useWorkout();
 
 
   const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
