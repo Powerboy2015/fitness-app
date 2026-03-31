@@ -31,7 +31,7 @@ export default function NewWorkout() {
             );
           })}
         </ul>
-          <div className="fixed bottom-20 left-0 right-0 flex justify-center z-20">
+          <div className="fixed bottom-20 left-0 right-0 flex justify-center z-30">
               <AddExerciseButton to="/add-exercises" />
           </div>
       </div>

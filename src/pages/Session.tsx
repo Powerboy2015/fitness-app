@@ -161,7 +161,7 @@ export default function Session() {
                     })
                 )}
 
-                <div className="fixed bottom-24 left-1/2 z-40 w-87 -translate-x-1/2">
+                <div className="fixed bottom-24 left-1/2 z-30 w-87 -translate-x-1/2">
                     <button
                         type="button"
                         onClick={handleFinishWorkout}
