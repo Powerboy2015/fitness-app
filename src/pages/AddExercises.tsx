@@ -1,10 +1,7 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import {useMemo, useState} from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useWorkout } from "../context/WorkoutContext";
-import API from "../classes/api";
+import { useMemo ,useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
