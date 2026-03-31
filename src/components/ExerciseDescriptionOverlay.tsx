@@ -86,7 +86,18 @@ export default function ExerciseDescriptionOverlay({
         </div>
       </li>
       <div className={toggle ? "block" : "hidden"}>
-        <div className="flex w-screen fixed top-0 bottom-0 bg-[#1E1E1E] z-10000 overflow-scroll">
+        <div
+          className="
+    fixed inset-0 
+    top-15
+    bottom-15
+    bg-[#1E1E1E] 
+    z-1000
+    overflow-y-auto
+    pt-[env(safe-area-inset-top)]
+    pb-[env(safe-area-inset-bottom)]
+  "
+        >
           <div className="grid grid-cols-2 gap-4 py-4 w-[90%] mx-auto">
             <div className="col-span-2 bg-[#1E1E1E] border border-[#414141] rounded-xl p-6 font-bold flex flex-col ">
               <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto">
