@@ -1,6 +1,6 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import {useMemo, useState} from "react";
-import { useWorkout } from "../context/WorkoutContext";
+import {ReactElement, ReactNode, useMemo, useState} from "react";
+import { Iworkout, useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
@@ -18,11 +18,20 @@ import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
 import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
+import { List, RowComponentProps, } from "react-window";
+
+export const ZINDEX = {
+  default: 1,
+  UI: 2,
+  POPUPS: 3,
+  NAVIGATION:4
+};
+
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
-  const { addExercise,selectedIds } = useWorkout();
-  const navigate = useNavigate();
+
+  
 
 
   const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
@@ -112,26 +121,39 @@ export default function AddExercises() {
             onClick={() => setMuscle("calves")}
           />
         </div>
-        {filteredExercises.map((exercise) => {
-          return (
-            <ExerciseWidget
-              key={exercise.exercise_id}
-              name={exercise.name}
-              gif={exercise.gif_url}
-              id={exercise.exercise_id}
-              onSelect={() => {
-                addExercise({
-                  id: exercise.exercise_id,
-                  name: exercise.name,
-                  gif: exercise.gif_url,
-                });
-              }}
-              selected={selectedIds.has(exercise.exercise_id)}
-            />
-          );
-        })}
+        <List
+        rowComponent={exerciseRow}
+        rowCount={filteredExercises.length}
+        rowHeight={300}
+        rowProps={{exercises: filteredExercises}}
+        >
+
+
+        </List>
       </div>
       <SelectedExerciseModal/>
     </>
   );
 }
+
+
+
+function exerciseRow({exercises,index}:RowComponentProps<{exercises: ExerciseDTO[]}>): ReactElement {
+  const { addExercise, selectedIds } = useWorkout();
+  const exercise = exercises[index];
+  return <>
+    <ExerciseWidget
+    name={exercise.name}
+    id={exercise.exercise_id}
+    gif={exercise.gif_url}
+    onSelect={() => {
+      addExercise({
+        id: exercise.exercise_id,
+        name: exercise.name,
+        gif: exercise.gif_url,
+      });
+      }}
+      selected={selectedIds.has(exercise.exercise_id)}
+    />
+  </>;
+  }
