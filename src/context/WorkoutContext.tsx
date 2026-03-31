@@ -5,6 +5,7 @@ import {
   useState,
   ReactNode,
   SetStateAction,
+  useMemo,
 } from "react";
 
 interface WorkoutContextProps {
@@ -16,6 +17,7 @@ interface WorkoutContextProps {
   clearWorkout: () => void;
   selectedWorkout: string;
   setSelectedWorkout: (value: SetStateAction<string>) => void;
+  selectedIds: Set<string>;
 }
 
 const WorkoutContext = createContext<WorkoutContextProps | undefined>(
@@ -46,6 +48,11 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     setExercises([]);
   };
 
+  const selectedIds = useMemo(
+  () => new Set(exercises.map(e => e.id)),
+  [exercises]
+);
+
   return (
     <WorkoutContext.Provider
       value={{
@@ -57,6 +64,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         clearWorkout,
         selectedWorkout,
         setSelectedWorkout,
+        selectedIds
       }}
     >
       {children}

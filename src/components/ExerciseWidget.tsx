@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from '@mui/icons-material/Check';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ExerciseWidgetProps {
   name: string;
   gif: string;
   id: string;
   onSelect?: () => void;
+  selected: boolean;
 }
 
 export default function ExerciseWidget({
@@ -15,6 +16,7 @@ export default function ExerciseWidget({
   gif,
   id,
   onSelect,
+  selected
 }: ExerciseWidgetProps) {
   const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ export default function ExerciseWidget({
 
 
   return (
-    <div className="bg-[#1E1E1E] border-[#414141] border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-[#252525] active:bg-[#252525] cursor-pointer mt-2">
+    <div className={`bg-[#1E1E1E] ${selected ? "border-[#F67631]" : "border-[#414141]"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-[#252525] active:bg-[#252525] cursor-pointer mt-2`}>
       <button
         className="flex w-full h-full py-4"
         onClick={() =>

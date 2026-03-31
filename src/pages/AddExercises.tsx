@@ -21,7 +21,7 @@ import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
-  const { addExercise } = useWorkout();
+  const { addExercise,selectedIds } = useWorkout();
   const navigate = useNavigate();
 
 
@@ -126,6 +126,7 @@ export default function AddExercises() {
                   gif: exercise.gif_url,
                 });
               }}
+              selected={selectedIds.has(exercise.exercise_id)}
             />
           );
         })}
