@@ -17,6 +17,7 @@ import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
 import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
+import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
@@ -124,12 +125,12 @@ export default function AddExercises() {
                   name: exercise.name,
                   gif: exercise.gif_url,
                 });
-                navigate(-1);
               }}
             />
           );
         })}
       </div>
+      <SelectedExerciseModal/>
     </>
   );
 }
