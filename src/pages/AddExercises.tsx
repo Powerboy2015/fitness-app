@@ -2,6 +2,9 @@ import ExerciseWidget from "../components/ExerciseWidget";
 import {useMemo, useState} from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useWorkout } from "../context/WorkoutContext";
+import API from "../classes/api";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
@@ -18,6 +21,7 @@ import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
 import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
+import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
@@ -112,6 +116,7 @@ export default function AddExercises() {
             onClick={() => setMuscle("calves")}
           />
         </div>
+
         {filteredExercises.map((exercise) => {
           return (
             <ExerciseWidget
