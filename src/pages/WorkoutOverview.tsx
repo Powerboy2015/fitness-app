@@ -72,7 +72,7 @@ export default function WorkoutOverview() {
     bg-[#1E1E1E] 
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
-    pb-[env(safe-area-inset-bottom)]
+ pb-20
   "
       >
         <DragDropProvider

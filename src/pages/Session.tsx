@@ -118,7 +118,9 @@ export default function Session() {
     bg-[#1E1E1E] 
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
-    pb-[env(safe-area-inset-bottom)]"
+pb-30
+    
+    "
       >
         <div className="relative mb-6 mt-5">
           {selectedTimer === "countdown" && (

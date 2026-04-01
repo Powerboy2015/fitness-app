@@ -40,7 +40,7 @@ export default function Exercises() {
     bg-[#1E1E1E] 
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
-    pb-[env(safe-area-inset-bottom)]
+pb-30
 
   "
       >
