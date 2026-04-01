@@ -7,6 +7,15 @@ interface createWorkoutInput {
 }
 
 export default class workoutAPI {
+    public async delete(workoutId: string): Promise<string> {
+        if (!workoutId.trim()) return "not found";
+        return "fake positive response";
+
+        let response = await ApiClient.send<string>("delete_workout");
+
+        return ApiClient.assertOk(response);
+    }
+
     public async create(dto: createWorkoutInput): Promise<string> {
         if (!dto.name.trim()) {
             const errMessage = "Workout requires a name"
