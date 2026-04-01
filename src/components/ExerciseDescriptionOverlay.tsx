@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import { invoke } from "@tauri-apps/api/core";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ExerciseDescriptionOverlay({
@@ -85,7 +85,38 @@ export default function ExerciseDescriptionOverlay({
           </button>
         </div>
       </li>
-      <div className={toggle ? "block" : "hidden"}>
+      <Overlay
+      active={toggle}
+      name={name}
+      gif={gif}
+      targetMuscle={targetMuscle}
+      secondaryMuscles={secondaryMuscles}
+      equipments={equipments}
+      instructions={instructions}
+      handleAddClick={handleAddClick}
+      disableOverlay={() =>{setToggle(false)}}
+      />
+    </div>
+  );
+}
+
+
+interface OverlayProps {
+  active: boolean;
+  name: string;
+  gif: string;
+  targetMuscle: string[];
+  secondaryMuscles: string[];
+  equipments: string[];
+  instructions: string[];
+  handleAddClick: () => void;
+  disableOverlay: () => void;
+}
+function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instructions,handleAddClick,disableOverlay}:OverlayProps): ReactElement {
+  
+  if (!active) return <></>;
+
+  return <div>
         <div className="flex w-screen fixed top-0 bottom-0 bg-[#1E1E1E] z-10000 overflow-scroll">
           <div className="grid grid-cols-2 gap-4 py-4 w-[90%] mx-auto">
             <div className="col-span-2 bg-[#1E1E1E] border border-[#414141] rounded-xl p-6 font-bold flex flex-col ">
@@ -108,7 +139,7 @@ export default function ExerciseDescriptionOverlay({
                       className="border-[#F67631] border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 "
                     >
                       {muscle}
-                    </div>
+                   </div>
                   );
                 })}
               </div>
@@ -133,7 +164,7 @@ export default function ExerciseDescriptionOverlay({
                 );
               })}
               <div className="flex  justify-center ">
-                <button className="p-5" onClick={() => setToggle(false)}>
+                <button className="p-5" onClick={() => disableOverlay()}>
                   close
                 </button>
                 <button
@@ -146,7 +177,5 @@ export default function ExerciseDescriptionOverlay({
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </div>;
 }

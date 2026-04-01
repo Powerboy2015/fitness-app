@@ -116,7 +116,7 @@ export default function AddExercises() {
 
         {filteredExercises.map((exercise) => {
           return (
-            <ExerciseWidget
+            <ExerciseDescriptionOverlay
               key={exercise.exercise_id}
               name={exercise.name}
               gif={exercise.gif_url}
