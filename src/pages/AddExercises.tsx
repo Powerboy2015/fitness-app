@@ -1,5 +1,5 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import {useMemo, useRef, useState} from "react";
+import {useMemo, useState, useRef} from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
@@ -15,10 +15,10 @@ import lats from "../assets/lats.png";
 import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
-import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
+import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 
-const muscleFilters = [
+const muscleFilters: {gif: string, name: muscleGroups}[] = [
   { gif: chest, name: "pectorals" },
   { gif: bicep, name: "biceps" },
   { gif: tricep, name: "triceps" },
@@ -36,11 +36,17 @@ const muscleFilters = [
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
   const { addExercise } = useWorkout();
-  const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement>(null);
 
+    const scrollToTop = () => {
+    if (listRef.current) {
+      listRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+  };
 
-  const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
+
+  const {sortedExercises, setMuscle, muscleGroup} = UseMuscleFilters();
 
   const filteredExercises = useMemo(() => {
     const searchQuery = searchText.toLowerCase();
@@ -49,72 +55,37 @@ export default function AddExercises() {
             .toLowerCase()
             .includes(searchQuery)
     );
-    
   }, [sortedExercises, searchText]);
 
-  useEffect(() => {
-    fetchExercises();
-  }, []);
-
-  useEffect(() => {
-    setActiveQuery(searchText);
-  }, [searchText]);
-
-  useEffect(() => {
-    if (muscle === "") return;
-    loadExercises();
-  }, [muscle]);
-
-  const scrollToTop = () => {
-    if (listRef.current) {
-      listRef.current.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-  };
-
-  useEffect(() => {
-    scrollToTop();
-  }, [muscle, activeQuery]);
-
-  const filteredExercises = allExercises.filter((exercise) =>
-    exercise.name.toLowerCase().includes(activeQuery.toLowerCase()),
-  );
-
-  function handleFilterClick(muscleInput: string) {
-    console.log(muscle);
-    if (muscle === muscleInput) {
-      setMuscle("");
-      fetchExercises();
-    } else setMuscle(muscleInput);
-  }
 
   return (
     <>
-    <div className="h-screen">
-      <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
+      <div className="h-screen">
+      <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden"></div>
       <SearchBar
         value={searchText}
         onChange={setSearchText}
         onSearch={() => {}}
       />
+      <div>
         <div
           className="overflow-x-scroll flex
                 [&::-webkit-scrollbar-thumb]:bg-neutral-500
                 [&::-webkit-scrollbar]:bg-neutral-700"
         >
-
           {muscleFilters.map(({ gif, name }) => (
             <Filter
               key={name}
               gif={gif}
-              isSelected={muscle === name}
-              onClick={() => handleFilterClick(name)}
+              isSelected={muscleGroup === name}
+              onClick={() => {
+                scrollToTop();
+                setMuscle(name)}}
             />
           ))}
         </div>
-      </div>
-
-      <div ref={listRef} className="mt-38 overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-14rem)]">
+        </div>
+        <div ref={listRef} className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-14rem)]">
         {filteredExercises.map((exercise) => {
           return (
             <ExerciseDescriptionOverlay
@@ -132,8 +103,8 @@ export default function AddExercises() {
             />
           );
         })}
+        </div>
       </div>
-    </div>
     </>
   );
 }
