@@ -43,7 +43,7 @@ export default function Exercises() {
             {exercises.map((exercise, index) => (
               <ExerciseOverviewWidget
                 key={exercise.exercise_id}
-                id={exercise.exercise_id.toString()}
+                id={exercise.exercise_id}
                 index={index}
                 name={exercise.name}
                 gif={exercise.gif_url}
