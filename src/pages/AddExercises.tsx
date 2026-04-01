@@ -1,10 +1,7 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import { useEffect, useRef, useState } from "react";
+import {useMemo, useRef, useState} from "react";
 import { useWorkout } from "../context/WorkoutContext";
-import { useNavigate } from "react-router-dom";
-import API from "../classes/api";
 import SearchBar from "../components/SearchBar";
-import { invoke } from "@tauri-apps/api/core";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
 import chest from "../assets/chest.jpg";
@@ -18,6 +15,8 @@ import lats from "../assets/lats.png";
 import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
+import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
+import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 
 const muscleFilters = [
   { gif: chest, name: "pectorals" },
@@ -35,35 +34,23 @@ const muscleFilters = [
 ];
 
 export default function AddExercises() {
-  const [allExercises, setAllExercise] = useState<ExerciseDTO[]>([]);
   const [searchText, setSearchText] = useState("");
-  const [activeQuery, setActiveQuery] = useState("");
-  const [muscle, setMuscle] = useState<string>("");
   const { addExercise } = useWorkout();
   const navigate = useNavigate();
   const listRef = useRef<HTMLDivElement>(null);
 
-  async function fetchExercises() {
-    const result = await API.exercises.list();
-    setAllExercise(result);
-    console.log(activeQuery);
-  }
 
-  interface ExerciseResponse {
-    data: ExerciseDTO[];
-    ok: boolean;
-  }
+  const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
 
-  async function loadExercises() {
-    try {
-      const res = await invoke<ExerciseResponse>("get_exercises_by_muscle", {
-        muscle: muscle,
-      });
-      setAllExercise(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  const filteredExercises = useMemo(() => {
+    const searchQuery = searchText.toLowerCase();
+    return sortedExercises.filter(exercise =>
+        exercise.name
+            .toLowerCase()
+            .includes(searchQuery)
+    );
+    
+  }, [sortedExercises, searchText]);
 
   useEffect(() => {
     fetchExercises();
@@ -108,7 +95,7 @@ export default function AddExercises() {
       <SearchBar
         value={searchText}
         onChange={setSearchText}
-        onSearch={() => setActiveQuery(searchText)}
+        onSearch={() => {}}
       />
         <div
           className="overflow-x-scroll flex
@@ -130,17 +117,17 @@ export default function AddExercises() {
       <div ref={listRef} className="mt-38 overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-14rem)]">
         {filteredExercises.map((exercise) => {
           return (
-            <ExerciseWidget
-              key={exercise.id}
+            <ExerciseDescriptionOverlay
+              key={exercise.exercise_id}
               name={exercise.name}
-              gif={exercise.data}
+              gif={exercise.gif_url}
+              id={exercise.exercise_id}
               onSelect={() => {
                 addExercise({
-                  id: exercise.id,
+                  id: exercise.exercise_id,
                   name: exercise.name,
-                  gif: exercise.data,
+                  gif: exercise.gif_url,
                 });
-                navigate(-1);
               }}
             />
           );

@@ -9,8 +9,11 @@ type backendFunctions =
   | "start_session"
   | "get_session"
   | "complete_session"
-  | "update_set"
-  | "workout_history";
+  | "update_session_set"
+  | "get_exercises_by_muscle"
+  | "create_workout_with_exercises"
+  | "workout_history"
+  | "get_exercise_by_id";
 
 interface WorkoutDTO {
   uuid: string;
@@ -19,11 +22,14 @@ interface WorkoutDTO {
 }
 
 interface ExerciseDTO {
-  instanceId: number;
-  id: string;
-  name: string;
-  data: string;
-  gif_url: string;
+    exercise_id: string;
+    name: string;
+    gif_url: string;
+    target_muscles: string;
+    body_parts: string;
+    equipments: string;
+    secondary_muscles: string;
+    instructions: string;
 }
 
 interface linkExerciseDTO {
@@ -54,64 +60,64 @@ interface IdetailedWorkoutDTO {
 }
 
 interface ISessionState {
-    workout_name: string,
-    workout_uuid: string,
-    session_uuid: string,
-    start_time: string,
-    end_time: string,
-    exercises: ISessionExercises[]
+  workout_name: string;
+  workout_uuid: string;
+  session_uuid: string;
+  start_time: string;
+  end_time: string;
+  exercises: ISessionExercises[];
 }
 
 interface ISessionExercises {
-    exercise_id: string,
-    gif_url: string,
-    name: string,
-    sets: IWeightedSet[]|ITimedSet[]
+  exercise_id: string;
+  gif_url: string;
+  name: string;
+  sets: IWeightedSet[] | ITimedSet[];
 }
 interface IBaseSet {
-    time_completed: string;
+  time_completed: string;
 }
 interface IWeightedSet extends IBaseSet {
-    type: "Weighted";
-    weight: number;
-    reps: number;
+  type: "Weighted";
+  weight: number;
+  reps: number;
 }
 interface ITimedSet extends IBaseSet {
-    type: "Timed";
-    time: number;
-    distance: number;
+  type: "Timed";
+  time: number;
+  distance: number;
 }
 
 interface IBaseSetUpdate {
-    exercise_id: string,
+  exercise_id: string;
 }
 
 interface IWeightedSetUpdate extends IBaseSetUpdate {
-    type: "Weighted";
-    exercise_id: string;
-    set_nr: number;
-    weight:number;
-    reps:number;
+  type: "Weighted";
+  exercise_id: string;
+  set_nr: number;
+  weight: number;
+  reps: number;
 }
 
 interface ITimedSetUpdate extends IBaseSetUpdate {
-    type:"Timed";
-    exercise_id: string;
-    set_nr: number;
-    time:number;
-    distance:number;
+  type: "Timed";
+  exercise_id: string;
+  set_nr: number;
+  time: number;
+  distance: number;
 }
 
 interface workoutHistoryDTO {
-    workout_name:    string;
-    session_uuid:    string;
-    start_date:      string;
-    end_date:        string;
+  workout_name: string;
+  session_uuid: string;
+  start_date: string;
+  end_date: string;
 }
 
 interface IworkoutHistory {
-    workoutName: string;
-    sessionUuid: string;
-    startDate: Date;
-    endDate: Date;
+  workoutName: string;
+  sessionUuid: string;
+  startDate: Date;
+  endDate: Date;
 }

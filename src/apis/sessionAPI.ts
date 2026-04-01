@@ -1,5 +1,10 @@
 import { ApiClient } from "../classes/api";
 
+export const SESSION_STORAGE_KEYS = {
+    id: "workoutSessionId",
+    startedAt: "workoutSessionStartedAt",
+    workoutName: "workoutSessionName",
+} as const;
 
 export default  class sessionAPI {
 
@@ -9,15 +14,16 @@ export default  class sessionAPI {
      * @returns A boolean indicating if the session is started sucessfully.
      */
     public async start(workout_id: string): Promise<Boolean> {
-        const resp= await ApiClient.send<string>("start_session", {workoutId: workout_id});
+        const resp= await ApiClient.send<string>("start_session", {req: workout_id});
 
         const sessionId= ApiClient.assertOk(resp);
         
         if (!resp.ok || !sessionId) return false; 
 
-        localStorage.setItem("workoutSessionId",sessionId);
+        localStorage.setItem(SESSION_STORAGE_KEYS.id, sessionId);
+        localStorage.setItem(SESSION_STORAGE_KEYS.startedAt, Date.now().toString());
 
-        return localStorage.getItem("workoutSessionId") !== null;
+        return localStorage.getItem(SESSION_STORAGE_KEYS.id) !== null;
     }
 
 
@@ -25,9 +31,10 @@ export default  class sessionAPI {
      * @returns ISessionState | error string
      */
     public async get(): Promise<ISessionState|string> {
-        const session_id = localStorage.getItem("workoutSessionId");
+        const session_id = localStorage.getItem(SESSION_STORAGE_KEYS.id);
         if (!session_id) return "session not found";
 
+        // LOL this sessionID is absolutely useless.....
         const resp = await ApiClient.send<ISessionState>("get_session",{sessionId: session_id});
         const sessionData = ApiClient.assertOk(resp);
         console.log(sessionData);
@@ -46,7 +53,7 @@ export default  class sessionAPI {
             return { success: false, resp: error };
         }
 
-        const resp = await ApiClient.send<string>("update_set", { setUpdate });
+        const resp = await ApiClient.send<string>("update_session_set", { req: setUpdate });
         const data = ApiClient.assertOk(resp);
 
         console.log(`updated ${setUpdate.type} set:`, data);
@@ -55,13 +62,15 @@ export default  class sessionAPI {
     }
 
     public async complete(): Promise<{ok:boolean,msg:string}> {
-        if (typeof localStorage.getItem("workoutSessionId") == "undefined") 
+        if (!localStorage.getItem(SESSION_STORAGE_KEYS.id))
             return {ok: false, msg:"no workout active to save."}
 
 
-        const resp = await ApiClient.send<string>("complete_session");
+        await ApiClient.send<string>("complete_session");
 
-        localStorage.removeItem("workoutSessionId");
+        localStorage.removeItem(SESSION_STORAGE_KEYS.id);
+        localStorage.removeItem(SESSION_STORAGE_KEYS.startedAt);
+        localStorage.removeItem(SESSION_STORAGE_KEYS.workoutName);
         return {
             ok: true,
             msg:"cleared"
