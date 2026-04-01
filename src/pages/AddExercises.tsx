@@ -1,5 +1,5 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
 import API from "../classes/api";
@@ -19,6 +19,21 @@ import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
 
+const muscleFilters = [
+  { gif: chest, name: "pectorals" },
+  { gif: bicep, name: "biceps" },
+  { gif: tricep, name: "triceps" },
+  { gif: lats, name: "lats" },
+  { gif: back, name: "upper back" },
+  { gif: shoulders, name: "delts" },
+  { gif: forearms, name: "forearms" },
+  { gif: abs, name: "abs" },
+  { gif: quads, name: "quads" },
+  { gif: hamstrings, name: "hamstrings" },
+  { gif: glutes, name: "glutes" },
+  { gif: calves, name: "calves" },
+];
+
 export default function AddExercises() {
   const [allExercises, setAllExercise] = useState<ExerciseDTO[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -26,6 +41,7 @@ export default function AddExercises() {
   const [muscle, setMuscle] = useState<string>("");
   const { addExercise } = useWorkout();
   const navigate = useNavigate();
+  const listRef = useRef<HTMLDivElement>(null);
 
   async function fetchExercises() {
     const result = await API.exercises.list();
@@ -62,6 +78,17 @@ export default function AddExercises() {
     loadExercises();
   }, [muscle]);
 
+  const scrollToTop = () => {
+    if (listRef.current) {
+      listRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+  };
+
+  useEffect(() => {
+    scrollToTop();
+  }, [muscle, activeQuery]);
+
   const filteredExercises = allExercises.filter((exercise) =>
     exercise.name.toLowerCase().includes(activeQuery.toLowerCase()),
   );
@@ -88,69 +115,19 @@ export default function AddExercises() {
                 [&::-webkit-scrollbar-thumb]:bg-neutral-500
                 [&::-webkit-scrollbar]:bg-neutral-700"
         >
-          <Filter
-            gif={chest}
-            isSelected={muscle === "pectorals"}
-            onClick={() => handleFilterClick("pectorals")}
-          />
-          <Filter
-            gif={bicep}
-            isSelected={muscle === "biceps"}
-            onClick={() => handleFilterClick("biceps")}
-          />
-          <Filter
-            gif={tricep}
-            isSelected={muscle === "triceps"}
-            onClick={() => handleFilterClick("triceps")}
-          />
-          <Filter
-            gif={lats}
-            isSelected={muscle === "lats"}
-            onClick={() => handleFilterClick("lats")}
-          />
-          <Filter
-            gif={back}
-            isSelected={muscle === "upper back"}
-            onClick={() => handleFilterClick("upper back")}
-          />
-          <Filter
-            gif={shoulders}
-            isSelected={muscle === "delts"}
-            onClick={() => handleFilterClick("delts")}
-          />
-          <Filter
-            gif={forearms}
-            isSelected={muscle === "forearms"}
-            onClick={() => handleFilterClick("forearms")}
-          />
-          <Filter
-            gif={abs}
-            isSelected={muscle === "abs"}
-            onClick={() => handleFilterClick("abs")}
-          />
-          <Filter
-            gif={quads}
-            isSelected={muscle === "quads"}
-            onClick={() => handleFilterClick("quads")}
-          />
-          <Filter
-            gif={hamstrings}
-            isSelected={muscle === "hamstrings"}
-            onClick={() => handleFilterClick("hamstrings")}
-          />
-          <Filter
-            gif={glutes}
-            isSelected={muscle === "glutes"}
-            onClick={() => handleFilterClick("glutes")}
-          />
-          <Filter
-            gif={calves}
-            isSelected={muscle === "calves"}
-            onClick={() => handleFilterClick("calves")}
-          />
+
+          {muscleFilters.map(({ gif, name }) => (
+            <Filter
+              key={name}
+              gif={gif}
+              isSelected={muscle === name}
+              onClick={() => handleFilterClick(name)}
+            />
+          ))}
         </div>
       </div>
-      <div className="mt-38 overflow-y-auto overscroll-behavior-y-auto">
+
+      <div ref={listRef} className="mt-38 overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-14rem)]">
         {filteredExercises.map((exercise) => {
           return (
             <ExerciseWidget
