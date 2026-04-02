@@ -1,5 +1,5 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import { useWorkout } from "../context/WorkoutContext";
+import { Iworkout, useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
 import { useMemo ,useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
@@ -19,14 +19,17 @@ import Filter from "../components/Filter";
 import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
+import UseExerciseSelection from "../Hooks/UseExerciseSelection.ts";
+import useExerciseSelectReducer, { ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
-  const { addExercise,selectedIds } = useWorkout();
+  const { exercises,selectedIds, setExerciseList } = useWorkout();
   const navigate = useNavigate();
 
 
   const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
+  const {state,dispatch} = useExerciseSelectReducer();
 
   const filteredExercises = useMemo(() => {
     const searchQuery = searchText.toLowerCase();
@@ -36,6 +39,12 @@ export default function AddExercises() {
             .includes(searchQuery)
     );
   }, [sortedExercises, searchText]);
+
+
+
+  const onSave = () => {
+    setExerciseList(state.exercises);
+  }
 
 
   return (
@@ -122,18 +131,20 @@ export default function AddExercises() {
               gif={exercise.gif_url}
               id={exercise.exercise_id}
               onSelect={() => {
-                addExercise({
-                  id: exercise.exercise_id,
-                  name: exercise.name,
-                  gif: exercise.gif_url,
-                });
+                dispatch({
+                  type: ExercisesActionKind.SELECT,
+                  payload: {
+                    id: exercise.exercise_id,
+                    gif: exercise.gif_url,
+                    name: exercise.name
+                  }})
               }}
               selected={selectedIds.has(exercise.exercise_id)}
             />
           );
         })}
       </div>
-      <SelectedExerciseModal/>
+      <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
     </>
   );
 }

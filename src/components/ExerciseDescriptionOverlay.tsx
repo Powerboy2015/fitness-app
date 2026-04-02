@@ -66,7 +66,7 @@ export default function ExerciseDescriptionOverlay({
 
 
   //Handles save click, adds to list and sets checkmark for a second.
-  const handleClick = (event: MouseEvent) => {
+  const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (!onSelect || added) return;
     onSelect();
@@ -93,7 +93,10 @@ export default function ExerciseDescriptionOverlay({
           />
           <h2 className="text-lg ml-5 font-semibold">{name}</h2>
             <button
-            onClick={handleClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick(e);
+              }}
             className="flex h-12 w-12 rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] ml-2 z-50">
             {!added ? <AddIcon sx={{ fontSize: 49 }} /> : <CheckIcon sx={{ fontSize: 49 }} />}
             </button>

@@ -1,17 +1,20 @@
-import { ActionDispatch, ReactElement, ReactNode, useEffect, useState } from "react";
-import { Iworkout, useWorkout } from "../context/WorkoutContext"
+import { ActionDispatch,  ReactNode, useEffect, useState } from "react";
+import { Iworkout } from "../context/WorkoutContext"
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useNavigate } from "react-router-dom";
-import useExerciseSelectReducer, { ExerciseAction, ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer";
+import { ExerciseAction, ExercisesActionKind, ExerciseState } from "../Hooks/reducers/exerciseSelectReducer";
 
-export default function SelectedExerciseModal() {
+type SelectedExerciseModalProps = {
+    dispatch: ActionDispatch<[action: ExerciseAction]>;
+    state: ExerciseState;
+    saveFunc: () => void;
+}
+export default function SelectedExerciseModal({dispatch,state, saveFunc}:SelectedExerciseModalProps) {
 
-    const {exercises} = useWorkout();
     const [exerciseRows,setExerciseRows] = useState<ReactNode[]>([]);
-    const {state,dispatch} = useExerciseSelectReducer();
     const navigate = useNavigate();
 
-    const exerciseCount = exercises.length;
+    const exerciseCount = state.exercises.length;
 
     useEffect(() =>{
         const rows = state.exercises.map((exercise) => 
@@ -20,7 +23,7 @@ export default function SelectedExerciseModal() {
             />);
 
         setExerciseRows(rows);
-    },[exercises]);
+    },[state.exercises]);
 
     return <div className="absolute z-100 bottom-20 left-[2dvw] w-[96dvw]">
         <ul className={`px-2 pt-2 mx-4 bg-[#F17F41] flex gap-2 flex-col rounded-t-2xl overflow-scroll max-h-30 ${exerciseRows.length == 0 ? "hidden":""}`}>
@@ -29,6 +32,7 @@ export default function SelectedExerciseModal() {
         <div className="bg-[#F67631] flex justify-between px-8 rounded-xl items-center border border-[#DC6728]">
             <p className="text-2xl">{exerciseCount} exercise{exerciseCount == 1 ? "" : "s"} added</p>
             <button className="text-4xl" onClick={() => {
+                saveFunc();
                 navigate(-1);    
             }}>Add</button>
         </div>
