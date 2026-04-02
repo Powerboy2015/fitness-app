@@ -1,26 +1,24 @@
-import { ReactNode, useEffect, useState } from "react";
-import { useWorkout } from "../context/WorkoutContext"
+import { ActionDispatch, ReactElement, ReactNode, useEffect, useState } from "react";
+import { Iworkout, useWorkout } from "../context/WorkoutContext"
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useNavigate } from "react-router-dom";
+import useExerciseSelectReducer, { ExerciseAction, ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer";
 
 export default function SelectedExerciseModal() {
 
-    const {exercises, removeExercise} = useWorkout();
+    const {exercises} = useWorkout();
     const [exerciseRows,setExerciseRows] = useState<ReactNode[]>([]);
+    const {state,dispatch} = useExerciseSelectReducer();
     const navigate = useNavigate();
 
     const exerciseCount = exercises.length;
 
     useEffect(() =>{
-    const rows = exercises.map((exercise) => 
-        <li className="flex items-center justify-between" key={exercise.id}>
-            <p className="text-2xl">{exercise.name}</p>
-            <div className="randomIconWrapperLOL" onClick={() => {
-                removeExercise(exercise)
-            }}>
-            <DeleteOutlineIcon style={{fontSize: 32}}/>
-            </div>
-        </li>);
+        const rows = state.exercises.map((exercise) => 
+            <ExerciseRow exercise={exercise} 
+                         dispatcher={dispatch}
+            />);
+
         setExerciseRows(rows);
     },[exercises]);
 
@@ -35,4 +33,26 @@ export default function SelectedExerciseModal() {
             }}>Add</button>
         </div>
     </div>
+}
+
+
+type exerciseRowProps = {
+    exercise: Iworkout;
+    dispatcher: ActionDispatch<[action: ExerciseAction]>
+}
+
+function ExerciseRow({exercise,dispatcher}: exerciseRowProps): ReactNode {
+    return <>
+    <li className="flex items-center justify-between" key={exercise.id}>
+            <p className="text-2xl">{exercise.name}</p>
+            <div className="randomIconWrapperLOL" onClick={() => {
+                dispatcher({
+                    type: ExercisesActionKind.UNSELECT,
+                    payload: exercise});
+                }}>
+            <DeleteOutlineIcon style={{fontSize: 32}}/>
+            </div>
+        </li>
+    </>;
+
 }
