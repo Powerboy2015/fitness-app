@@ -1,4 +1,4 @@
-import {useMemo, useState, useRef} from "react";
+import {useMemo, useState, useRef, useEffect} from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
@@ -36,6 +36,7 @@ export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
   const { addExercise } = useWorkout();
   const listRef = useRef<HTMLDivElement>(null);
+  const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
 
   const scrollToTop = () => {
     if (listRef.current) {
@@ -43,6 +44,19 @@ export default function AddExercises() {
       return;
     }
   };
+
+  useEffect(() => {
+    const listElement = listRef.current;
+    const handleScroll = () => {
+      if (listElement) {
+        setIsScrollTopVisible(listElement.scrollTop > 0);
+      }
+    };
+
+    if (listElement) {
+      listElement.addEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   const {sortedExercises, setMuscle, muscleGroup} = UseMuscleFilters();
 
@@ -80,17 +94,17 @@ export default function AddExercises() {
               />
             ))}
           </div>
-          <div className="fixed left-0 top-58 w-full h-full flex justify-center pointer-events-none">
+          <div className="fixed bottom-25 right-10 pointer-events-none z-20">
             <button
               onClick={scrollToTop}
-              className="w-17 h-11 bg-[#414141] hover:bg-[#353535] rounded-full transition opacity-95 pointer-events-auto"
+              className={`w-13 h-13 bg-[#414141] hover:bg-[#353535] rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? 'opacity-95 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
             >
               ↑
             </button>
           </div>
           <div ref={listRef} className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)]">
             {filteredExercises.map((exercise) => {
-              return (
+              return (    
                 <ExerciseDescriptionOverlay
                   key={exercise.exercise_id}
                   name={exercise.name}
