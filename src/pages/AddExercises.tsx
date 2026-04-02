@@ -1,5 +1,5 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import {useMemo, useState} from "react";
+import { useMemo, useState } from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
@@ -15,6 +15,7 @@ import lats from "../assets/lats.png";
 import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
+import cardio from "../assets/cardio.png";
 import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 
@@ -22,18 +23,14 @@ export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
   const { addExercise } = useWorkout();
 
-
-  const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
+  const { sortedExercises, setMuscle, muscleGroup } = UseMuscleFilters();
 
   const filteredExercises = useMemo(() => {
     const searchQuery = searchText.toLowerCase();
-    return sortedExercises.filter(exercise =>
-        exercise.name
-            .toLowerCase()
-            .includes(searchQuery)
+    return sortedExercises.filter((exercise) =>
+      exercise.name.toLowerCase().includes(searchQuery),
     );
   }, [sortedExercises, searchText]);
-
 
   return (
     <>
@@ -108,6 +105,11 @@ export default function AddExercises() {
             gif={calves}
             isSelected={muscleGroup === "calves"}
             onClick={() => setMuscle("calves")}
+          />
+          <Filter
+            gif={cardio}
+            isSelected={muscleGroup === "cardiovascular system"}
+            onClick={() => setMuscle("cardiovascular system")}
           />
         </div>
 
