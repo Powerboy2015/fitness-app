@@ -65,7 +65,7 @@ fn migrate(conn: &mut Connection) {
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         WorkoutId TEXT NOT NULL,
         ExerciseId TEXT NOT NULL,
-        FOREIGN KEY (WorkoutId) REFERENCES Workouts(Uuid),
+        FOREIGN KEY (WorkoutId) REFERENCES Workouts(Uuid) ON DELETE CASCADE,
         FOREIGN KEY (ExerciseId) REFERENCES exercises(exerciseid)
         )",
         [],
@@ -75,7 +75,7 @@ fn migrate(conn: &mut Connection) {
     tx.execute("CREATE TABLE IF NOT EXISTS workoutHistory (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         sessionId TEXT UNIQUE NOT NULL,
-        workoutId TEXT NOT NULL,
+        workoutId TEXT,
         started_at TEXT NOT NULL,
         completed_at TEXT NOT NULL,
         FOREIGN KEY (workoutId) REFERENCES Workouts(Uuid)
