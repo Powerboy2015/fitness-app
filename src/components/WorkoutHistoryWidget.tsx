@@ -10,7 +10,7 @@ export default function WorkoutHistoryWidget({ workout }: WorkoutHistoryWidgetPr
                 <div className="flex-1 text-left cursor-pointer mb-auto">
                     <h2 className="text-lg font-semibold">{workout.workoutName}</h2>
                 </div>
-                <p className="text-sm text-[#696969] leading-tight">{`${workout.startDate.getDay()}-${workout.startDate.getMonth()}-${workout.startDate.getFullYear()}`}</p>
+                <p className="text-sm text-[#696969] leading-tight">{`${workout.startDate.getDate()}-${workout.startDate.getMonth()}-${workout.startDate.getFullYear()}`}</p>
                 <p className="text-sm text-[#696969] leading-tight">{`${workout.startDate.getHours()}:${workout.startDate.getMinutes()} - ${workout.endDate.getHours()}:${workout.endDate.getMinutes()}`}</p>
             </div>
         </div>
