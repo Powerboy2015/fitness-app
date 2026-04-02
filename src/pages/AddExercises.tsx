@@ -1,4 +1,3 @@
-import ExerciseWidget from "../components/ExerciseWidget";
 import {useMemo, useState, useRef} from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
@@ -38,13 +37,12 @@ export default function AddExercises() {
   const { addExercise } = useWorkout();
   const listRef = useRef<HTMLDivElement>(null);
 
-    const scrollToTop = () => {
+  const scrollToTop = () => {
     if (listRef.current) {
       listRef.current.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
   };
-
 
   const {sortedExercises, setMuscle, muscleGroup} = UseMuscleFilters();
 
@@ -57,52 +55,58 @@ export default function AddExercises() {
     );
   }, [sortedExercises, searchText]);
 
-
   return (
     <>
       <div className="h-screen">
-      <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden"></div>
-      <SearchBar
-        value={searchText}
-        onChange={setSearchText}
-        onSearch={() => {}}
-      />
-      <div>
-        <div
-          className="overflow-x-scroll flex
-                [&::-webkit-scrollbar-thumb]:bg-neutral-500
-                [&::-webkit-scrollbar]:bg-neutral-700"
-        >
-          {muscleFilters.map(({ gif, name }) => (
-            <Filter
-              key={name}
-              gif={gif}
-              isSelected={muscleGroup === name}
-              onClick={() => {
-                scrollToTop();
-                setMuscle(name)}}
-            />
-          ))}
-        </div>
-        </div>
-        <div ref={listRef} className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-14rem)]">
-        {filteredExercises.map((exercise) => {
-          return (
-            <ExerciseDescriptionOverlay
-              key={exercise.exercise_id}
-              name={exercise.name}
-              gif={exercise.gif_url}
-              id={exercise.exercise_id}
-              onSelect={() => {
-                addExercise({
-                  id: exercise.exercise_id,
-                  name: exercise.name,
-                  gif: exercise.gif_url,
-                });
-              }}
-            />
-          );
-        })}
+        <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
+          <SearchBar
+            value={searchText}
+            onChange={setSearchText}
+            onSearch={() => {}}
+          />
+          <div
+            className="overflow-x-scroll flex
+                  [&::-webkit-scrollbar-thumb]:bg-neutral-500
+                  [&::-webkit-scrollbar]:bg-neutral-700"
+          >
+            {muscleFilters.map(({ gif, name }) => (
+              <Filter
+                key={name}
+                gif={gif}
+                isSelected={muscleGroup === name}
+                onClick={() => {
+                  scrollToTop();
+                  setMuscle(name)}}
+              />
+            ))}
+          </div>
+          <div className="fixed left-0 top-58 w-full h-full flex justify-center pointer-events-none">
+            <button
+              onClick={scrollToTop}
+              className="w-17 h-11 bg-[#414141] hover:bg-[#353535] rounded-full transition opacity-95 pointer-events-auto"
+            >
+              ↑
+            </button>
+          </div>
+          <div ref={listRef} className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)]">
+            {filteredExercises.map((exercise) => {
+              return (
+                <ExerciseDescriptionOverlay
+                  key={exercise.exercise_id}
+                  name={exercise.name}
+                  gif={exercise.gif_url}
+                  id={exercise.exercise_id}
+                  onSelect={() => {
+                    addExercise({
+                      id: exercise.exercise_id,
+                      name: exercise.name,
+                      gif: exercise.gif_url,
+                    });
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </>
