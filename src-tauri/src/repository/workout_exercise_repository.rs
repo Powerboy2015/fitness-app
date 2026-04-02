@@ -33,7 +33,8 @@ impl WorkoutExerciseRepo for WorkoutExerciseRepository {
 
             let mut exercises_stmt = tx.prepare("SELECT e.* FROM Exercises e
                                                                INNER JOIN WorkoutExercises we ON e.exerciseid = we.ExerciseId
-                                                               WHERE we.WorkoutId = ?")?;
+                                                               WHERE we.WorkoutId = ?
+                                                               ORDER BY we.orderNr ASC")?;
             let exercise_rows = exercises_stmt.query_map([workout_id], |row| {
                 Ok(Exercise{
                     exercise_id: row.get(0)?,
@@ -59,21 +60,29 @@ impl WorkoutExerciseRepo for WorkoutExerciseRepository {
 
     // links exercises in a single bulk query.
     fn link(&self,workout_id:String,exercise_ids: Vec<String>) -> Result<bool, Error> {
+        //roundabout way to fix an issue where I
+        // can't reuse the i to add a numbering for the order of workouts.
+        let order_strs: Vec<String> = (0..exercise_ids.len())
+            .map(|i| i.to_string())
+            .collect();
+
+
         self.db.use_conn(|tx| {
             let mut query = String::from(
-                "INSERT INTO WorkoutExercises (orderNr,WorkoutId, ExerciseId) VALUES "
+                "INSERT INTO WorkoutExercises (WorkoutId, ExerciseId,orderNr) VALUES "
             );
 
             let mut params_vec = Vec::new();
 
-            for (i, exercise_id) in exercise_ids.iter().enumerate() {
+            exercise_ids.iter().enumerate().for_each(|(i, exercise_id)| {
                 if i > 0 {
                     query.push_str(", ");
                 }
-                query.push_str("(?, ?)");
+                query.push_str("(?, ?, ?)");
                 params_vec.push(&workout_id);
                 params_vec.push(exercise_id);
-            }
+                params_vec.push(&order_strs[i]);
+            });
 
             tx.execute(&query, params_from_iter(params_vec))?;
 
