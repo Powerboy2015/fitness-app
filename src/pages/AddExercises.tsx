@@ -1,4 +1,3 @@
-import ExerciseWidget from "../components/ExerciseWidget";
 import {useMemo, useState} from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
