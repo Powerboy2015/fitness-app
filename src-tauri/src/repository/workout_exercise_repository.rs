@@ -61,7 +61,7 @@ impl WorkoutExerciseRepo for WorkoutExerciseRepository {
     fn link(&self,workout_id:String,exercise_ids: Vec<String>) -> Result<bool, Error> {
         self.db.use_conn(|tx| {
             let mut query = String::from(
-                "INSERT INTO WorkoutExercises (WorkoutId, ExerciseId) VALUES "
+                "INSERT INTO WorkoutExercises (orderNr,WorkoutId, ExerciseId) VALUES "
             );
 
             let mut params_vec = Vec::new();

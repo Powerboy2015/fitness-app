@@ -63,6 +63,7 @@ fn migrate(conn: &mut Connection) {
     tx.execute(
         "CREATE TABLE IF NOT EXISTS WorkoutExercises (
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        orderNr INTEGER NOT NULL,
         WorkoutId TEXT NOT NULL,
         ExerciseId TEXT NOT NULL,
         FOREIGN KEY (WorkoutId) REFERENCES Workouts(Uuid),
