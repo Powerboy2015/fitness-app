@@ -32,7 +32,7 @@ impl WorkoutExerciseRepo for WorkoutExerciseRepository {
                 .cloned()
                 .ok_or(rusqlite::Error::InvalidQuery)?;
 
-            let mut exercises_stmt = tx.prepare("SELECT e.* FROM Exercises e
+            let mut exercises_stmt = tx.prepare("SELECT e.*,we.SetCount FROM Exercises e
                                                                INNER JOIN WorkoutExercises we ON e.exerciseid = we.ExerciseId
                                                                WHERE we.WorkoutId = ?")?;
             let exercise_rows = exercises_stmt.query_map([workout_id], |row| {
@@ -45,6 +45,7 @@ impl WorkoutExerciseRepo for WorkoutExerciseRepository {
                     equipments: row.get(5)?,
                     secondary_muscles: row.get(6)?,
                     instructions: row.get(7)?,
+                    set_count: row.get(8)?,
                 })
             })?;
 
