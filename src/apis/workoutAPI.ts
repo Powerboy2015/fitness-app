@@ -3,7 +3,7 @@ import { ApiClient } from "../classes/api";
 interface createWorkoutInput {
     name:string;
     desc?:string;
-    exercises?: string[];
+    exercises?: Record<string, { sets: number }>;
 }
 
 export default class workoutAPI {

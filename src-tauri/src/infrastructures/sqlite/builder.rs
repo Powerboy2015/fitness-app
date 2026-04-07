@@ -65,6 +65,7 @@ fn migrate(conn: &mut Connection) {
         ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         WorkoutId TEXT NOT NULL,
         ExerciseId TEXT NOT NULL,
+        SetCount INTEGER NOT NULL,
         FOREIGN KEY (WorkoutId) REFERENCES Workouts(Uuid),
         FOREIGN KEY (ExerciseId) REFERENCES exercises(exerciseid)
         )",

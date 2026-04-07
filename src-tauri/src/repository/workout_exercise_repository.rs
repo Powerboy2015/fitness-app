@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use rusqlite::{params_from_iter, Error};
 use crate::domain::{Exercise, WorkoutExerciseRepo};
 use crate::domain::Workout;
@@ -58,21 +59,27 @@ impl WorkoutExerciseRepo for WorkoutExerciseRepository {
     }
 
     // links exercises in a single bulk query.
-    fn link(&self,workout_id:String,exercise_ids: Vec<String>) -> Result<bool, Error> {
+    fn link(&self,workout_id:String,exercise_ids: HashMap<String,i64>) -> Result<bool, Error> {
         self.db.use_conn(|tx| {
             let mut query = String::from(
-                "INSERT INTO WorkoutExercises (WorkoutId, ExerciseId) VALUES "
+                "INSERT INTO WorkoutExercises (WorkoutId, ExerciseId,SetCount) VALUES "
             );
 
             let mut params_vec = Vec::new();
 
-            for (i, exercise_id) in exercise_ids.iter().enumerate() {
+            // We are creating a vector of string outside the for loop as to not kill it's lifecylce.
+            let set_count_strings: Vec<String> = exercise_ids.values()
+                .map(|set| set.to_string())
+                .collect();
+
+            for (i, (exercise_id,set_count)) in exercise_ids.iter().enumerate() {
                 if i > 0 {
                     query.push_str(", ");
                 }
-                query.push_str("(?, ?)");
+                query.push_str("(?, ?, ?)");
                 params_vec.push(&workout_id);
                 params_vec.push(exercise_id);
+                params_vec.push(&set_count_strings[i]);
             }
 
             tx.execute(&query, params_from_iter(params_vec))?;

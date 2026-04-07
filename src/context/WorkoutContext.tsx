@@ -16,6 +16,7 @@ interface WorkoutContextProps {
   clearWorkout: () => void;
   selectedWorkout: string;
   setSelectedWorkout: (value: SetStateAction<string>) => void;
+  updateExercise: (index:number, updated: Iworkout) => void;
 }
 
 const WorkoutContext = createContext<WorkoutContextProps | undefined>(
@@ -26,6 +27,7 @@ export type Iworkout = {
   id: string;
   name: string;
   gif: string;
+  sets: number;
 };
 
 export function WorkoutProvider({ children }: { children: ReactNode }) {
@@ -35,6 +37,10 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
 
   const addExercise = (workout: Iworkout) => {
     if (!exercises.includes(workout)) setExercises([...exercises, workout]);
+  };
+
+  const updateExercise = (index: number, updated: Iworkout) => {
+    setExercises(prev => prev.map((exercise, i) => i === index ? updated : exercise));
   };
 
   const removeExercise = (workout: Iworkout) => {
@@ -57,6 +63,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         clearWorkout,
         selectedWorkout,
         setSelectedWorkout,
+        updateExercise
       }}
     >
       {children}

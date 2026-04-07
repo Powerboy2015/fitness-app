@@ -3,3 +3,20 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
   height: 100dvh;
 }
+
+.appearance-none {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  outline: none; //important!
+  border: none;
+
+  /* Remove spinner buttons (Chrome, Edge, Safari, WebKit) */
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

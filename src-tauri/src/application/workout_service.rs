@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse};
@@ -17,7 +18,12 @@ pub struct CreateWorkoutRequest {
     pub uuid: String,
     pub name: String,
     pub desc: Option<String>,
-    pub exercises: Option<Vec<String>>,
+    pub exercises: Option<HashMap<String,exerciseRequestRecord>>,
+}
+
+#[derive(Clone,Serialize,Deserialize)]
+pub struct exerciseRequestRecord {
+    sets: i64
 }
 
 
@@ -86,7 +92,12 @@ impl WorkoutService {
 
         let uuid = self.create_workout(dto.clone()).map_err(|_| ApiError::DatabaseError)?;
 
-        self.workout_exercises.link(uuid.clone(), exercises.clone()).map_err(|e| {
+        let exercise_set_map: HashMap<String, i64> = exercises
+            .into_iter()
+            .map(|(k, v)| (k, v.sets))
+            .collect();
+
+        self.workout_exercises.link(uuid.clone(), exercise_set_map).map_err(|e| {
             println!("{:?}", e);
             ApiError::DatabaseError
         })?;

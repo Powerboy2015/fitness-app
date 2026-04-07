@@ -13,8 +13,9 @@ export default function SaveButton() {
             new Promise(async (Resolve, Reject) => {
                 if (!workoutName) Reject("No name");
 
-                const exerciseIds = exercises.map(e => e.id);
-
+                const exerciseIds: Record<string, { sets: number }> = Object.fromEntries(
+                    exercises.map(e => [e.id, {sets: e.sets}])
+                );
                 const workoutUuid = await API.workouts.create({name: workoutName, exercises: exerciseIds });
                 console.log("workout sucessfully created!");
 
@@ -27,7 +28,7 @@ export default function SaveButton() {
             {
                 loading: "Saving workout...",
                 success: "Workout saved!",
-                // @ts-ignore This is an type error made by the library itself.
+                // @ts-ignore This is a type error made by the library itself.
                 error: (err: unknown) => `Error: ${err}`,
             }
         );
