@@ -11,24 +11,30 @@ export default function Session() {
   const [selectedTimer, setSelectedTimer] = useState("stopwatch");
   const [expandedByExercise, setExpandedByExercise] = useState<boolean[]>([]);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [session, setSession] = useState<ISessionState>();
+  const [currentSession, setCurrentSession] = useState<ISessionState>();
 
   useEffect(() => {
     const getState = async () => {
       const resp = await API.session.get();
       console.log(resp);
       if (typeof resp !== "string") {
-        setSession(resp);
+        setCurrentSession(resp);
         setExpandedByExercise(Array(resp.exercises.length).fill(false));
       }
     };
     getState();
   }, []);
 
-  useEffect(() => {
-    if (!session) return;
+  const updateState = async() => {
+    const resp = await API.session.get();
+    if (typeof resp === "string") throw new Error(resp);
+    setCurrentSession(resp);
+  }
 
-    const startTime = new Date(session.start_time).getTime();
+  useEffect(() => {
+    if (!currentSession) return;
+
+    const startTime = new Date(currentSession.start_time).getTime();
     const now = new Date().getTime();
     setElapsedSeconds(Math.floor((now - startTime) / 1000));
 
@@ -39,75 +45,20 @@ export default function Session() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [session]);
+  }, [currentSession]);
 
   const handleAddSet = (exerciseIndex: number) => {
-    setSession((prevSession) => {
-      if (!prevSession) return prevSession;
-
-      const exercise = prevSession.exercises[exerciseIndex];
-      if (!exercise) return prevSession;
-
-      if (exercise.sets.length > 0 && exercise.sets[0].type === "Timed") {
-        return prevSession;
-      }
-
-      const lastSet = exercise.sets[exercise.sets.length - 1] as
-        | IWeightedSet
-        | undefined;
-      const newSet: IWeightedSet = lastSet
-        ? { ...lastSet }
-        : {
-            type: "Weighted",
-            reps: 0,
-            weight: 0,
-            time_completed: new Date().toISOString(),
-          };
-
-      const nextExercises = [...prevSession.exercises];
-      nextExercises[exerciseIndex] = {
-        ...exercise,
-        sets: [...exercise.sets, newSet] as IWeightedSet[],
-      };
-
-      return {
-        ...prevSession,
-        exercises: nextExercises,
-      };
-    });
+      if (!currentSession) return;
+      API.session.addSet(exerciseIndex).then(() => updateState());
   };
 
-  const handleDeleteSet = (exerciseIndex: number, setIndex: number) => {
-    setSession((prevSession) => {
-      if (!prevSession) return prevSession;
+  const handleDeleteSet = (exerciseIndex: number) => {
+      if (!currentSession) return;
+      API.session.removeSet(exerciseIndex).then(() => updateState());
 
-      const exercise = prevSession.exercises[exerciseIndex];
-      if (!exercise) return prevSession;
-
-      if (exercise.sets.length > 0 && exercise.sets[0].type === "Timed") {
-        return prevSession;
-      }
-
-      if (exercise.sets.length <= 1) {
-        return prevSession;
-      }
-
-      const nextExercises = [...prevSession.exercises];
-      nextExercises[exerciseIndex] = {
-        ...exercise,
-        sets: exercise.sets.filter((_, idx) => idx !== setIndex) as
-          | IWeightedSet[]
-          | ITimedSet[],
-      };
-
-      return {
-        ...prevSession,
-        exercises: nextExercises,
-      };
-    });
   };
 
-  if (!session) return <h1>Loading....</h1>;
+  if (!currentSession) return <h1>Loading....</h1>;
 
   return (
     <>
@@ -134,12 +85,12 @@ pb-30
           )}
         </div>
 
-        {session.exercises.length === 0 ? (
+        {currentSession.exercises.length === 0 ? (
           <div className="w-87 bg-[#1E1E1E] border-2 border-[#565d5d] rounded-xl p-4 mb-4 text-center">
             <p className="text-white">No exercises selected.</p>
           </div>
         ) : (
-          session.exercises.map((exercise, exerciseIndex) => {
+          currentSession.exercises.map((exercise, exerciseIndex) => {
             const isCardio =
               exercise.sets.length > 0 && exercise.sets[0].type === "Timed";
 
@@ -154,7 +105,7 @@ pb-30
                   setExpandedByExercise(next);
                 }}
                 onDeleteSet={(setIndex) =>
-                  handleDeleteSet(exerciseIndex, setIndex)
+                  handleDeleteSet(exerciseIndex)
                 }
               >
                 {!isCardio && (

@@ -161,3 +161,23 @@ pub fn workout_history(ctx: State<Ctx>) -> Result<ApiResponse<Vec<WorkoutHistory
     })
 
 }
+
+#[tauri::command]
+pub fn remove_session_set(ctx: State<Ctx>, req: i64) -> Result<ApiResponse<String>, ApiErrorResponse> {
+    let session = ctx.service.session()?.delete_set(req)?;
+
+    Ok(ApiResponse {
+        ok: true,
+        data: "removed last set".to_string(),
+    })
+}
+
+#[tauri::command]
+pub fn add_session_set(ctx: State<Ctx>, req: i64) -> Result<ApiResponse<String>, ApiErrorResponse> {
+    let session = ctx.service.session()?.add_set(req)?;
+
+    Ok(ApiResponse {
+        ok: true,
+        data: "added another set".to_string(),
+    })
+}

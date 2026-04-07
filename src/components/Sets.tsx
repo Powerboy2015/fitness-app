@@ -147,7 +147,7 @@ function OuterLayer({children,set_nr,onDelete}:outerLayerProps) {
         <div className="border-t border-[#565d5d] pt-4 mt-3">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-white text-lg font-semibold">Set {set_nr}</h3>
-                {onDelete && set_nr > 3 && (
+                {onDelete && set_nr > 1 && (
                     <button
                         onClick={onDelete}
                         className="text-red-500 hover:text-red-400 active:text-red-400 cursor-pointer transition-colors"

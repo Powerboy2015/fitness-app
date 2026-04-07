@@ -96,6 +96,39 @@ impl SessionService {
         }
     }
 
+    pub fn add_set(&mut self, exercise_nr: i64) -> Result<bool, ApiErrorResponse> {
+        let mut session = self.current_session.clone().unwrap();
+        let exercise = session.exercises.get_mut(exercise_nr as usize).ok_or(ApiError::InvalidInput)?;
+        let set = exercise.sets.get(0).ok_or(ApiError::InvalidInput)?;
+
+        match set {
+            Set::Weighted { .. }  => {exercise.sets.push(Set::Weighted {
+                reps: 0,
+                weight: 0.0,
+                time_completed: String::new(),
+            })},
+           Set::Timed { .. } => exercise.sets.push(Set::Timed {
+               distance: 0.0,
+               time: 0.0,
+               time_completed: String::new(),
+           })
+        }
+
+        self.current_session = Some(session);
+        Ok(true)
+    }
+
+    pub fn delete_set(&mut self, exercise_nr: i64) -> Result<bool, ApiErrorResponse> {
+        let mut session = self.current_session.clone().unwrap();
+
+        let exercise = session.exercises.get_mut(exercise_nr as usize).ok_or(ApiError::InvalidInput)?;
+
+        exercise.sets.pop();
+
+        self.current_session = Option::from(session);
+        Ok(true)
+    }
+
     pub fn workout_history(&self) -> Result<CompletedWorkouts,ApiErrorResponse> {
         let workout_history = self
             .workout_history

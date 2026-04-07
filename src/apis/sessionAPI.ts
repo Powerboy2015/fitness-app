@@ -8,6 +8,17 @@ export const SESSION_STORAGE_KEYS = {
 
 export default  class sessionAPI {
 
+    public async addSet(exerciseIdx: number): Promise<boolean> {
+        const resp = await ApiClient.send<boolean>("add_session_set",{req: exerciseIdx});
+
+        return ApiClient.assertOk<boolean>(resp);
+    }
+    public async removeSet(exerciseIdx: number): Promise<boolean> {
+        const resp = await ApiClient.send<boolean>("remove_session_set",{req: exerciseIdx});
+
+        return ApiClient.assertOk<boolean>(resp);
+    }
+
     /**
      * Starts a session for a workout.
      * @param workout_id The provided ID of the workout.
