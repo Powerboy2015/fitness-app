@@ -12,9 +12,10 @@ interface WorkoutWidgetProps {
     id: string;
     index: number;
     name: string;
+    reloadWorkouts: () => Promise<void>;
 }
 
-export default function WorkoutWidget({ id, index, name }: WorkoutWidgetProps) {
+export default function WorkoutWidget({ id, index, name, reloadWorkouts }: WorkoutWidgetProps) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [element, setElement] = useState<HTMLElement | null>(null);
@@ -66,6 +67,7 @@ export default function WorkoutWidget({ id, index, name }: WorkoutWidgetProps) {
                     </button>
                     <button className="w-full hover:bg-gray-700 text-red-500 flex items-center gap-2 px-3 py-2 rounded-xl" onClick={() => {setOpen(false);
                         API.workouts.remove(id);
+                        reloadWorkouts();
                     } /*TODO add delete functionality*/ }>
                         <DeleteIcon className="w-5 h-5" /> Delete
                     </button>
