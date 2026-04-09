@@ -59,7 +59,6 @@ export default function ExerciseDescriptionOverlay({
   }
 
   function handleAddClick() {
-    navigate(-1);
     setToggle(false);
     onSelect();
   }
