@@ -24,7 +24,7 @@ export default function SelectedExerciseModal({dispatch,state, saveFunc}:Selecte
         setExerciseRows(rows);
     },[state.exercises]);
 
-    return <div className="absolute z-100 bottom-20 left-[2dvw] w-[96dvw]">
+    return <div className="absolute z-30 bottom-20 left-[2dvw] w-[96dvw]">
         <ul className={`px-2 pt-2 mx-4 bg-[#F17F41] flex gap-2 flex-col rounded-t-2xl overflow-y-scroll max-h-30 ${exerciseRows.length == 0 || !open ? "hidden":""}`}>
             {exerciseRows}
         </ul>
