@@ -13,6 +13,7 @@ import hamstrings from "../assets/hamstrings.png.jpg";
 import lats from "../assets/lats.png";
 import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
+import cardio from "../assets/cardio.png";
 import Filter from "../components/Filter";
 import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
@@ -33,6 +34,7 @@ const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: hamstrings, name: "hamstrings" },
   { gif: glutes, name: "glutes" },
   { gif: calves, name: "calves" },
+  { gif: cardio, name: "cardiovascular system"}
 ];
 
 export default function AddExercises() {
