@@ -18,6 +18,7 @@ interface WorkoutContextProps {
   selectedWorkout: string;
   setSelectedWorkout: (value: SetStateAction<string>) => void;
   selectedIds: Set<string>;
+  setExerciseList: (workouts: Iworkout[]) => void;
 }
 
 const WorkoutContext = createContext<WorkoutContextProps | undefined>(
@@ -43,6 +44,10 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     setExercises(exercises.filter((ex) => ex !== workout));
   };
 
+  const setExerciseList = (workouts: Iworkout[]) => {
+    setExercises(workouts);
+  }
+
   const clearWorkout = () => {
     setWorkoutName("");
     setExercises([]);
@@ -64,7 +69,8 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         clearWorkout,
         selectedWorkout,
         setSelectedWorkout,
-        selectedIds
+        selectedIds,
+        setExerciseList
       }}
     >
       {children}

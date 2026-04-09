@@ -1,6 +1,6 @@
 import ExerciseWidget from "../components/ExerciseWidget";
 import {  useMemo, useState, useRef, useEffect  } from "react";
-import { useWorkout } from "../context/WorkoutContext";
+import { Iworkout, useWorkout } from "../context/WorkoutContext";
 import { useNavigate } from "react-router-dom";
 import { useMemo ,useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
@@ -131,7 +131,7 @@ export default function AddExercises() {
           </div>
         </div>
       </div>
-      <SelectedExerciseModal/>
+      <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
     </>
   );
 }
