@@ -100,7 +100,7 @@ export default function AddExercises() {
               />
             ))}
           </div>
-          <div className="fixed bottom-25 right-10 pointer-events-none z-20">
+          <div className="fixed top-60 right-10 pointer-events-none z-100">
             <button
               onClick={scrollToTop}
               className={`w-13 h-13 bg-[#414141] hover:bg-[#353535] rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
