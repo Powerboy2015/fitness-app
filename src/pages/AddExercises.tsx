@@ -1,8 +1,5 @@
-import ExerciseWidget from "../components/ExerciseWidget";
-import {  useMemo, useState, useRef, useEffect  } from "react";
+import {  useMemo, useState, useRef, useEffect, useReducer  } from "react";
 import { Iworkout, useWorkout } from "../context/WorkoutContext";
-import { useNavigate } from "react-router-dom";
-import { useMemo ,useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
@@ -20,6 +17,8 @@ import Filter from "../components/Filter";
 import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
+import useExerciseSelectReducer, { ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
+import { useNavigate } from "react-router-dom";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -41,6 +40,11 @@ export default function AddExercises() {
   const { addExercise } = useWorkout();
   const listRef = useRef<HTMLDivElement>(null);
   const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
+  const {state,dispatch} = useExerciseSelectReducer();
+
+    const onSave = () => {
+    state.exercises.map(exercise => addExercise(exercise));
+  }
 
   const scrollToTop = () => {
     if (listRef.current) {
@@ -67,10 +71,7 @@ export default function AddExercises() {
   const filteredExercises = useMemo(() => {
     const searchQuery = searchText.toLowerCase();
     return sortedExercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(searchQuery),
-    return sortedExercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(searchQuery),
-    );
+      exercise.name.toLowerCase().includes(searchQuery))
   }, [sortedExercises, searchText]);
 
   return (
@@ -118,12 +119,16 @@ export default function AddExercises() {
                   name={exercise.name}
                   gif={exercise.gif_url}
                   id={exercise.exercise_id}
+                  selected={false}
                   onSelect={() => {
-                    addExercise({
-                      id: exercise.exercise_id,
-                      name: exercise.name,
-                      gif: exercise.gif_url,
-                    });
+                    dispatch({
+                      type: ExercisesActionKind.SELECT,
+                      payload: {
+                        id: exercise.exercise_id,
+                        gif: exercise.gif_url,
+                        name: exercise.name
+                      }
+                    })
                   }}
                 />
               );
