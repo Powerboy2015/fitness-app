@@ -1,4 +1,5 @@
-import { useMemo, useState, useRef, useEffect } from "react";
+import ExerciseWidget from "../components/ExerciseWidget";
+import {  useMemo, useState, useRef, useEffect  } from "react";
 import { useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
@@ -62,6 +63,8 @@ export default function AddExercises() {
 
   const filteredExercises = useMemo(() => {
     const searchQuery = searchText.toLowerCase();
+    return sortedExercises.filter((exercise) =>
+      exercise.name.toLowerCase().includes(searchQuery),
     return sortedExercises.filter((exercise) =>
       exercise.name.toLowerCase().includes(searchQuery),
     );
