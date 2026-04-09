@@ -1,6 +1,8 @@
 import ExerciseWidget from "../components/ExerciseWidget";
 import {  useMemo, useState, useRef, useEffect  } from "react";
 import { useWorkout } from "../context/WorkoutContext";
+import { useNavigate } from "react-router-dom";
+import { useMemo ,useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
@@ -16,6 +18,7 @@ import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
 import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
+import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
@@ -128,6 +131,7 @@ export default function AddExercises() {
           </div>
         </div>
       </div>
+      <SelectedExerciseModal/>
     </>
   );
 }

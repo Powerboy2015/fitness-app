@@ -32,6 +32,15 @@ impl WorkoutService {
         }
     }
 
+    pub fn delete_workout(&self, workout_id: String) -> Result<bool,ApiErrorResponse> {
+        let is_updated = self.workout.remove(workout_id).map_err(|e| {
+            println!("{:?}", e);
+            ApiError::DatabaseError
+        })?;
+
+        Ok(is_updated)
+    }
+
     // gets the workout and connected exercises and maps it.
     pub fn get_detailed_workout(&self,workout_id: String) -> Result<Workout,ApiErrorResponse> {
         let record = self.workout_exercises.get_detailed(&workout_id).map_err(|_| ApiError::DatabaseError)?;

@@ -1,6 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
+import CheckIcon from "@mui/icons-material/Check"
 import { invoke } from "@tauri-apps/api/core";
-import { useState } from "react";
+import { MouseEvent, ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ExerciseDescriptionOverlay({
@@ -8,11 +9,13 @@ export default function ExerciseDescriptionOverlay({
   id,
   gif,
   onSelect,
+  selected
 }: {
   name: string;
   id: string;
   gif: string;
   onSelect: () => void;
+  selected: boolean
 }) {
   const [equipments, setEquipments] = useState<string[]>([]);
   const [instructions, setInstructions] = useState<string[]>([]);
@@ -20,6 +23,8 @@ export default function ExerciseDescriptionOverlay({
   const [targetMuscle, setTargetMuscle] = useState<string[]>([]);
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
+  const [added,isAdded] = useState<boolean>(false);
+
 
   interface ExerciseResponse {
     data: {
@@ -59,13 +64,26 @@ export default function ExerciseDescriptionOverlay({
     onSelect();
   }
 
+
+  //Handles save click, adds to list and sets checkmark for a second.
+  const handleClick = (event: MouseEvent) => {
+    event.stopPropagation();
+    if (!onSelect || added) return;
+    onSelect();
+    isAdded(true);
+
+    setTimeout(() => {
+      isAdded(false);
+    },2000);
+  }
+
   return (
     <div>
       <li
-        className={` border-[#414141] border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-[#252525] active:bg-[#252525] transition-transform duration-100 ease-in-out `}
+        className={`bg-[#1E1E1E] ${selected ? "border-[#F67631]" : "border-[#414141]"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-[#252525] active:bg-[#252525] cursor-pointer mt-2`}
       >
         <div
-          className="flex w-full h-full py-4 items-center"
+          className="flex w-full h-full py-4 items-center justify-between"
           onClick={() => handleToggleClick()}
         >
           <img
@@ -74,30 +92,46 @@ export default function ExerciseDescriptionOverlay({
             alt=""
           />
           <h2 className="text-lg ml-5 font-semibold">{name}</h2>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleAddClick();
-            }}
-            className="flex h-12 w-12 rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] ml-auto justify-center items-center"
-          >
-            <AddIcon sx={{ fontSize: 49 }} />
-          </button>
+            <button
+            onClick={handleClick}
+            className="flex h-12 w-12 rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] ml-2 z-50">
+            {!added ? <AddIcon sx={{ fontSize: 49 }} /> : <CheckIcon sx={{ fontSize: 49 }} />}
+            </button>
         </div>
       </li>
-      <div className={toggle ? "block" : "hidden"}>
-        <div
-          className="
-    fixed inset-0 
-    top-15
-    bottom-15
-    bg-[#1E1E1E] 
-    z-1000
-    overflow-y-auto
-    pt-[env(safe-area-inset-top)]
-    pb-[env(safe-area-inset-bottom)]
-  "
-        >
+      <Overlay
+      active={toggle}
+      name={name}
+      gif={gif}
+      targetMuscle={targetMuscle}
+      secondaryMuscles={secondaryMuscles}
+      equipments={equipments}
+      instructions={instructions}
+      handleAddClick={handleAddClick}
+      disableOverlay={() =>{setToggle(false)}}
+      />
+    </div>
+  );
+}
+
+
+interface OverlayProps {
+  active: boolean;
+  name: string;
+  gif: string;
+  targetMuscle: string[];
+  secondaryMuscles: string[];
+  equipments: string[];
+  instructions: string[];
+  handleAddClick: () => void;
+  disableOverlay: () => void;
+}
+function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instructions,handleAddClick,disableOverlay}:OverlayProps): ReactElement {
+  
+  if (!active) return <></>;
+
+  return <div>
+        <div className="flex w-screen fixed top-0 bottom-0 bg-[#1E1E1E] z-10000 overflow-scroll">
           <div className="grid grid-cols-2 gap-4 py-4 w-[90%] mx-auto">
             <div className="col-span-2 bg-[#1E1E1E] border border-[#414141] rounded-xl p-6 font-bold flex flex-col ">
               <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto">
@@ -119,7 +153,7 @@ export default function ExerciseDescriptionOverlay({
                       className="border-[#F67631] border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 "
                     >
                       {muscle}
-                    </div>
+                   </div>
                   );
                 })}
               </div>
@@ -144,7 +178,7 @@ export default function ExerciseDescriptionOverlay({
                 );
               })}
               <div className="flex  justify-center ">
-                <button className="p-5" onClick={() => setToggle(false)}>
+                <button className="p-5" onClick={() => disableOverlay()}>
                   close
                 </button>
                 <button
@@ -157,7 +191,5 @@ export default function ExerciseDescriptionOverlay({
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </div>;
 }
