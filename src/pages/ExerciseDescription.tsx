@@ -1,5 +1,4 @@
 import { useLocation } from "react-router-dom";
-import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 import API from "../classes/api";
 
@@ -21,18 +20,6 @@ export default function ExerciseDescription() {
   useEffect(() => {
     getExerciseById();
   }, [id]);
-
-  interface ExerciseResponse {
-    data: {
-      equipments: string;
-      gif_url: string;
-      instructions: string;
-      name: string;
-      secondary_muscles: string;
-      target_muscles: string;
-    };
-    ok: boolean;
-  }
   async function getExerciseById() {
     if (id !== "") {
       try {

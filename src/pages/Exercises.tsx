@@ -1,18 +1,22 @@
-import { useEffect, useState, useMemo } from "react";
+import {useEffect, useMemo, useState} from "react";
 import ExerciseOverviewWidget from "../components/ExerciseOverviewWidget.tsx";
-import { DragDropProvider } from "@dnd-kit/react";
-import { move } from "@dnd-kit/helpers";
+import {DragDropProvider} from "@dnd-kit/react";
+import {move} from "@dnd-kit/helpers";
 import StartSessionButton from "../components/StartSessionButton.tsx";
 import API from "../classes/api.ts";
-import { useWorkout } from "../context/WorkoutContext.tsx";
-import { DndManagerdelay } from "../components/DndManager.tsx";
+import {useWorkout} from "../context/WorkoutContext.tsx";
+import {DndManagerdelay} from "../components/DndManager.tsx";
 
 export default function Exercises() {
   const manager = useMemo(() => DndManagerdelay(), []);
 
   /* muk data, moet uiteindelijk een GET API worden*/
-  const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
+  const [exercises, setExercises] = useState<randomFixOfIssue[]>([]);
   const { selectedWorkout } = useWorkout();
+
+  interface randomFixOfIssue extends ExerciseDTO {
+    id: number;
+  }
 
   useEffect(() => {
     const getData = async () => {
@@ -23,7 +27,7 @@ export default function Exercises() {
       setExercises(
         hi.exercises.map((exercise: ExerciseDTO, index: number) => ({
           ...exercise,
-          instanceId: index,
+          id: index,
         })),
       );
     };
@@ -47,7 +51,7 @@ pb-30
         <DragDropProvider
           manager={manager}
           onDragEnd={(event) => {
-            setExercises((exercises) => move(exercises, event));
+            setExercises((exercises) => move(exercises, event) as unknown as randomFixOfIssue[]);
           }}
         >
           <ul className="mt-5">
