@@ -37,6 +37,7 @@ impl Service {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    lars::get_product_by_barcode::get_product_by_barcode();
     // Tauri building process
 
     // sets up the default structure of the database.
