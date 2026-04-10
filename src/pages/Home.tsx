@@ -12,7 +12,7 @@ export default function Home() {
     fixed inset-0 
     top-15
     bottom-15
-    bg-[#1E1E1E] 
+    bg-[#161818]
     z-1000
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
