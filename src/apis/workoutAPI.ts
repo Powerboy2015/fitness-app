@@ -36,7 +36,10 @@ export default class workoutAPI {
         return ApiClient.assertOk(result);
     }
 
-
+    public async remove(workoutId: string) {
+        const result = await ApiClient.send<string>("remove_workout",{req: workoutId});
+        return ApiClient.assertOk(result);
+    } 
 
     public async list(): Promise<Array<WorkoutDTO>> {
         const result = await ApiClient.send<WorkoutDTO[]>("list_workouts");

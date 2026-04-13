@@ -1,29 +1,30 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import API from "../classes/api.ts";
 
-
-interface ReturnProps{
-    sortedExercises: ExerciseDTO[]
-    setMuscle: (muscle:muscleGroups) => void
-    muscleGroup: muscleGroups
+interface ReturnProps {
+  sortedExercises: ExerciseDTO[];
+  setMuscle: (muscle: muscleGroups) => void;
+  muscleGroup: muscleGroups;
 }
 
 // interface UseMuscleFilterProps {
 // }
 
-export type muscleGroups = "pectorals"|
-    "biceps"|
-    "triceps"|
-    "lats"|
-    "upper back"|
-    "delts"|
-    "forearms"|
-    "abs"|
-    "quads"|
-    "hamstrings"|
-    "glutes"|
-    "calves"|
-    null;
+export type muscleGroups =
+  | "pectorals"
+  | "biceps"
+  | "triceps"
+  | "lats"
+  | "upper back"
+  | "delts"
+  | "forearms"
+  | "abs"
+  | "quads"
+  | "hamstrings"
+  | "glutes"
+  | "calves"
+  | "cardiovascular system"
+  | null;
 
 /**
  * Encapsulated version of Lars's filter function.
@@ -33,33 +34,33 @@ export type muscleGroups = "pectorals"|
  * @returns setMuscle -- a function to change the currently selected muscle. Passing the same muscle twice unsets it.
  */
 export default function UseMuscleFilters(): ReturnProps {
-    const [muscleGroup,setMuscleGroup] = useState<muscleGroups>(null);
-    const [exercises,setExercises] = useState<ExerciseDTO[]>([]);
+  const [muscleGroup, setMuscleGroup] = useState<muscleGroups>(null);
+  const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
 
-    // The default function to update muscles.
-    const setMuscle = (muscle: muscleGroups) => {
-        if (muscleGroup === muscle) {
-            setMuscleGroup(null);
-        } else setMuscleGroup(muscle);
-    }
+  // The default function to update muscles.
+  const setMuscle = (muscle: muscleGroups) => {
+    if (muscleGroup === muscle) {
+      setMuscleGroup(null);
+    } else setMuscleGroup(muscle);
+  };
 
-    // Fetch exercises once
-    useEffect(() => {
-        API.exercises.list().then(setExercises);
-    }, []);
+  // Fetch exercises once
+  useEffect(() => {
+    API.exercises.list().then(setExercises);
+  }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!muscleGroup) {
-                const data = await API.exercises.list();
-                setExercises(data);
-            } else {
-                const data = await API.exercises.filter(muscleGroup);
-                setExercises(data);
-            }
-        };
-        fetchData();
-    }, [muscleGroup]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!muscleGroup) {
+        const data = await API.exercises.list();
+        setExercises(data);
+      } else {
+        const data = await API.exercises.filter(muscleGroup);
+        setExercises(data);
+      }
+    };
+    fetchData();
+  }, [muscleGroup]);
 
-    return {sortedExercises: exercises, muscleGroup,setMuscle}
+  return { sortedExercises: exercises, muscleGroup, setMuscle };
 }

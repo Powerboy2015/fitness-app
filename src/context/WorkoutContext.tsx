@@ -5,6 +5,7 @@ import {
   useState,
   ReactNode,
   SetStateAction,
+  useMemo,
 } from "react";
 
 interface WorkoutContextProps {
@@ -16,6 +17,8 @@ interface WorkoutContextProps {
   clearWorkout: () => void;
   selectedWorkout: string;
   setSelectedWorkout: (value: SetStateAction<string>) => void;
+  selectedIds: Set<string>;
+  setExerciseList: (workouts: Iworkout[]) => void;
 }
 
 const WorkoutContext = createContext<WorkoutContextProps | undefined>(
@@ -41,10 +44,19 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     setExercises(exercises.filter((ex) => ex !== workout));
   };
 
+  const setExerciseList = (workouts: Iworkout[]) => {
+    setExercises(workouts);
+  }
+
   const clearWorkout = () => {
     setWorkoutName("");
     setExercises([]);
   };
+
+  const selectedIds = useMemo(
+  () => new Set(exercises.map(e => e.id)),
+  [exercises]
+);
 
   return (
     <WorkoutContext.Provider
@@ -57,6 +69,8 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         clearWorkout,
         selectedWorkout,
         setSelectedWorkout,
+        selectedIds,
+        setExerciseList
       }}
     >
       {children}

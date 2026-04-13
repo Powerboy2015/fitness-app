@@ -6,14 +6,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSortable } from "@dnd-kit/react/sortable";
 import { useWorkout } from "../context/WorkoutContext";
+import API from "../classes/api";
 
 interface WorkoutWidgetProps {
     id: string;
     index: number;
     name: string;
+    reloadWorkouts: () => Promise<void>;
 }
 
-export default function WorkoutWidget({ id, index, name }: WorkoutWidgetProps) {
+export default function WorkoutWidget({ id, index, name, reloadWorkouts }: WorkoutWidgetProps) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [element, setElement] = useState<HTMLElement | null>(null);
@@ -58,12 +60,15 @@ export default function WorkoutWidget({ id, index, name }: WorkoutWidgetProps) {
 
             <div ref={dropdownRef} className="ml-auto cursor-pointer relative" onClick={() => setOpen((prev) => !prev)}>
                 <MoreVertIcon sx={{ fontSize: 40 }} />
-                <div className={`absolute z-100 top-full right-1 mt-1 flex flex-col rounded-xl p-2 bg-[#1E1E1E] border border-gray-600 transform transition-all duration-100 ease-out origin-top-right 
+                <div className={`absolute z-10 top-full right-1 mt-1 flex flex-col rounded-xl p-2 bg-[#1E1E1E] border border-gray-600 transform transition-all duration-100 ease-out origin-top-right 
                 ${open ? "opacity-100 scale-100" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"}`}>
                     <button className="w-full hover:bg-gray-700 flex items-center gap-2 px-3 py-2 rounded-xl" onClick={() => {setOpen(false); navigate("/edit-workout");}}>
                         <EditIcon className="w-5 h-5" /> Edit
                     </button>
-                    <button className="w-full hover:bg-gray-700 text-red-500 flex items-center gap-2 px-3 py-2 rounded-xl" onClick={() => {setOpen(false);} /*TODO add delete functionality*/ }>
+                    <button className="w-full hover:bg-gray-700 text-red-500 flex items-center gap-2 px-3 py-2 rounded-xl" onClick={() => {setOpen(false);
+                        API.workouts.remove(id);
+                        reloadWorkouts();
+                    } /*TODO add delete functionality*/ }>
                         <DeleteIcon className="w-5 h-5" /> Delete
                     </button>
                 </div>
