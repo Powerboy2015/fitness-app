@@ -34,7 +34,7 @@ export default function SelectedExerciseModal({dispatch,state, saveFunc}:Selecte
             <button className="text-4xl" onClick={() => {
                 saveFunc();
                 navigate(-1);
-            }}>Add</button>
+            }}>{exerciseCount > 0 ? "Add":"Back"}</button>
         </div>
     </div>
 }

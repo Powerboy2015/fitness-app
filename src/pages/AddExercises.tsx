@@ -45,7 +45,7 @@ export default function AddExercises() {
   const {state,dispatch} = useExerciseSelectReducer();
 
     const onSave = () => {
-    state.exercises.map(exercise => addExercise(exercise));
+    state.exercises.forEach(exercise => addExercise(exercise));
   }
 
   const scrollToTop = () => {
