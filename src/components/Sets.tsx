@@ -10,6 +10,7 @@ interface SetsProps {
 }
 
 export default function Sets({updateFunction, setNumber = 1, onDelete, data }: SetsProps) {
+    const isCompleted = Boolean(data.time_completed);
 
     const parseNumberInput = (value: string): number | null => {
         if (value.trim() === "") return 0;
@@ -44,7 +45,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
     }, [reps, weightInput]);
 
     return ( 
-            <OuterLayer set_nr={setNumber} onDelete={onDelete|| (() => {return;})}>
+            <OuterLayer set_nr={setNumber} onDelete={onDelete|| (() => {return;})} isCompleted={isCompleted}>
                 <>
                     <div className="flex items-center justify-between mb-3">
                         <label className="text-white text-base">reps:</label>
@@ -57,7 +58,8 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                                 const parsed = parseNumberInput(e.target.value);
                                 if (parsed !== null) setReps(parsed);
                             }}
-                            className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631]"
+                            disabled={isCompleted}
+                            className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631] disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="0"
                         />
                     </div>
@@ -74,7 +76,8 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                                     setWeightInput(value);
                                 }
                             }}
-                            className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631]"
+                            disabled={isCompleted}
+                            className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631] disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="0.0"
                         />
                     </div>
@@ -98,7 +101,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
     }, [time,distance]);
 
     return (
-        <OuterLayer set_nr={setNumber} onDelete={onDelete|| (() => {return;})}>
+        <OuterLayer set_nr={setNumber} onDelete={onDelete|| (() => {return;})} isCompleted={isCompleted}>
             <>
                 <div className="flex items-center justify-between mb-3">
                     <label className="text-white text-base">Time in minutes:</label>
@@ -110,7 +113,8 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                             const parsed = parseNumberInput(e.target.value);
                             if (parsed !== null) setTime(parsed);
                         }}
-                        className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631]"
+                        disabled={isCompleted}
+                        className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631] disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="0"
                     />
                 </div>
@@ -125,7 +129,8 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                             const parsed = parseNumberInput(e.target.value);
                             if (parsed !== null) setDistance(parsed);
                         }}
-                        className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631]"
+                        disabled={isCompleted}
+                        className="w-32 bg-[#2e2e2e] border border-[#565d5d] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#F67631] disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="0.0"
                     />
                 </div>
@@ -141,21 +146,24 @@ interface outerLayerProps {
     children: React.ReactNode;
     set_nr: number;
     onDelete: () => void;
+    isCompleted: boolean;
 }
-function OuterLayer({children,set_nr,onDelete}:outerLayerProps) {
+function OuterLayer({children,set_nr,onDelete,isCompleted}:outerLayerProps) {
     return (
-        <div className="border-t border-[#565d5d] pt-4 mt-3">
+        <div className={`border-t pt-4 mt-3 ${isCompleted ? "border-[#2e8b57]" : "border-[#565d5d]"}`}>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-white text-lg font-semibold">Set {set_nr}</h3>
-                {onDelete && set_nr > 3 && (
-                    <button
-                        onClick={onDelete}
-                        className="text-red-500 hover:text-red-400 active:text-red-400 cursor-pointer transition-colors"
-                        title="Delete set"
-                    >
-                        <DeleteIcon sx={{ fontSize: 24 }} />
-                    </button>
-                )}
+                <div className="flex items-center gap-3">
+                    {onDelete && set_nr > 3 && (
+                        <button
+                            onClick={onDelete}
+                            className="text-red-500 hover:text-red-400 active:text-red-400 cursor-pointer transition-colors"
+                            title="Delete set"
+                        >
+                            <DeleteIcon sx={{ fontSize: 24 }} />
+                        </button>
+                    )}
+                </div>
             </div>
             {children}
         </div>

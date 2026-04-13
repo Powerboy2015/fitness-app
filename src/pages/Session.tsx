@@ -4,6 +4,7 @@ import StopWatch from "../components/StopWatch";
 import TabataTimer from "../components/TabataTimer";
 import { CurrentExercise } from "../components/CurrentExercise.tsx";
 import Plusknop from "../components/plusknop.tsx";
+import CompleteSetButton from "../components/CompleteSetButton";
 import FinishWorkoutButton from "../components/FinishWorkoutButton";
 import API from "../classes/api.ts";
 
@@ -56,12 +57,12 @@ export default function Session() {
         | IWeightedSet
         | undefined;
       const newSet: IWeightedSet = lastSet
-        ? { ...lastSet }
+        ? { ...lastSet, time_completed: "" }
         : {
             type: "Weighted",
             reps: 0,
             weight: 0,
-            time_completed: new Date().toISOString(),
+            time_completed: "",
           };
 
       const nextExercises = [...prevSession.exercises];
@@ -107,6 +108,48 @@ export default function Session() {
     });
   };
 
+  const handleCompleteSet = (exerciseIndex: number) => {
+    setSession((prevSession) => {
+      if (!prevSession) return prevSession;
+
+      const exercise = prevSession.exercises[exerciseIndex];
+      if (!exercise || exercise.sets.length === 0) return prevSession;
+
+      const areAllCompleted = exercise.sets.every((set) => Boolean(set.time_completed));
+      const completionTime = areAllCompleted ? "" : new Date().toISOString();
+      const isTimedExercise = exercise.sets[0].type === "Timed";
+
+      const nextSets = isTimedExercise
+        ? (exercise.sets as ITimedSet[]).map((set) => ({
+            ...set,
+            time_completed: completionTime,
+          }))
+        : (exercise.sets as IWeightedSet[]).map((set) => ({
+            ...set,
+            time_completed: completionTime,
+          }));
+
+      if (!areAllCompleted) {
+        setExpandedByExercise((prevExpanded) => {
+          const nextExpanded = [...prevExpanded];
+          nextExpanded[exerciseIndex] = false;
+          return nextExpanded;
+        });
+      }
+
+      const nextExercises = [...prevSession.exercises];
+      nextExercises[exerciseIndex] = {
+        ...exercise,
+        sets: nextSets,
+      };
+
+      return {
+        ...prevSession,
+        exercises: nextExercises,
+      };
+    });
+  };
+
   if (!session) return <h1>Loading....</h1>;
 
   return (
@@ -142,11 +185,13 @@ pb-30
           session.exercises.map((exercise, exerciseIndex) => {
             const isCardio =
               exercise.sets.length > 0 && exercise.sets[0].type === "Timed";
+            const isCompleted = exercise.sets.some((set) => Boolean(set.time_completed));
 
             return (
               <CurrentExercise
                 key={exercise.exercise_id}
                 exerciseData={exercise}
+                isCompleted={isCompleted}
                 isExpanded={expandedByExercise[exerciseIndex] || false}
                 onToggle={() => {
                   const next = [...expandedByExercise];
@@ -157,13 +202,20 @@ pb-30
                   handleDeleteSet(exerciseIndex, setIndex)
                 }
               >
-                {!isCardio && (
-                  <Plusknop
-                    onClick={() => handleAddSet(exerciseIndex)}
-                    className="mt-3 w-77 h-12 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a]  justify-center transition-colors"
-                    iconSize={32}
+                <div className="mt-3 flex items-center gap-2">
+                  {!isCardio && (
+                    <Plusknop
+                      onClick={() => handleAddSet(exerciseIndex)}
+                      className="w-full h-12 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a] justify-center transition-colors"
+                      iconSize={32}
+                    />
+                  )}
+                  <CompleteSetButton
+                    onClick={() => handleCompleteSet(exerciseIndex)}
+                    isCardio={isCardio}
+                    isCompleted={isCompleted}
                   />
-                )}
+                </div>
               </CurrentExercise>
             );
           })
