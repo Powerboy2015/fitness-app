@@ -36,8 +36,12 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
   const [exercises, setExercises] = useState<Iworkout[]>([]);
   const [selectedWorkout, setSelectedWorkout] = useState<string>("");
 
+  // updates the workoutProvider state of exercise list. It adds a 
   const addExercise = (workout: Iworkout) => {
-    if (!exercises.includes(workout)) setExercises([...exercises, workout]);
+    setExercises(prev => {
+      return [...prev, workout];
+    });
+
   };
 
   const removeExercise = (workout: Iworkout) => {
