@@ -44,7 +44,7 @@ export function CurrentExercise({exerciseData, isCompleted = false, isExpanded =
                     <Sets
                         key={idx}
                         setNumber={idx + 1}
-                        onDelete={() => onDeleteSet?.(idx)}
+                        onDelete={onDeleteSet ? () => onDeleteSet(idx) : undefined}
                         updateFunction={updateSet}
                         data={set}
                     />

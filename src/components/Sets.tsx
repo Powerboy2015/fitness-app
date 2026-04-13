@@ -45,7 +45,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
     }, [reps, weightInput]);
 
     return ( 
-            <OuterLayer set_nr={setNumber} onDelete={onDelete|| (() => {return;})} isCompleted={isCompleted}>
+            <OuterLayer set_nr={setNumber} onDelete={onDelete} isCompleted={isCompleted}>
                 <>
                     <div className="flex items-center justify-between mb-3">
                         <label className="text-white text-base">reps:</label>
@@ -101,7 +101,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
     }, [time,distance]);
 
     return (
-        <OuterLayer set_nr={setNumber} onDelete={onDelete|| (() => {return;})} isCompleted={isCompleted}>
+        <OuterLayer set_nr={setNumber} onDelete={onDelete} isCompleted={isCompleted}>
             <>
                 <div className="flex items-center justify-between mb-3">
                     <label className="text-white text-base">Time in minutes:</label>
@@ -145,7 +145,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
 interface outerLayerProps {
     children: React.ReactNode;
     set_nr: number;
-    onDelete: () => void;
+    onDelete?: () => void;
     isCompleted: boolean;
 }
 function OuterLayer({children,set_nr,onDelete,isCompleted}:outerLayerProps) {

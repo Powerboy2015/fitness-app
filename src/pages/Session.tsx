@@ -85,6 +85,11 @@ export default function Session() {
       const exercise = prevSession.exercises[exerciseIndex];
       if (!exercise) return prevSession;
 
+      const isCompleted = exercise.sets.some((set) => Boolean(set.time_completed));
+      if (isCompleted) {
+        return prevSession;
+      }
+
       if (exercise.sets.length > 0 && exercise.sets[0].type === "Timed") {
         return prevSession;
       }
@@ -198,7 +203,7 @@ pb-30
                   next[exerciseIndex] = !next[exerciseIndex];
                   setExpandedByExercise(next);
                 }}
-                onDeleteSet={(setIndex) =>
+                onDeleteSet={isCompleted ? undefined : (setIndex) =>
                   handleDeleteSet(exerciseIndex, setIndex)
                 }
               >
@@ -206,6 +211,7 @@ pb-30
                   {!isCardio && (
                     <Plusknop
                       onClick={() => handleAddSet(exerciseIndex)}
+                      disabled={isCompleted}
                       className="w-full h-12 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a] justify-center transition-colors"
                       iconSize={32}
                     />
