@@ -37,8 +37,6 @@ impl Service {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    lars::get_product_by_barcode::get_product_by_barcode();
-    // Tauri building process
 
     // sets up the default structure of the database.
     tauri::Builder::default()
@@ -92,7 +90,8 @@ pub fn run() {
             interface::tauri_commands::update_session_set,
             interface::tauri_commands::complete_session,
             interface::tauri_commands::workout_history,
-            lars::get_exercise_by_id
+            lars::get_products,
+            lars::get_exercise_by_id,
             
         ])
         .run(tauri::generate_context!())
