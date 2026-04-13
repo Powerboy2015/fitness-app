@@ -73,11 +73,11 @@ export const NutritionDonutChart: React.FC = () => {
                     style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-                        gap: '12px 16px',
+                        gap: 20,
                     }}>
                     {legendData.slice(1).map((item, idx) => (
                         <div>
-                            <div key={idx} style={{ display: 'block', gap: 2, justifyContent: 'space-between', width: '100%', borderColor: item.color}} className="border-2 rounded-xl p-4">
+                            <div key={idx} style={{ display: 'block', justifyContent: 'center', width: '100%', borderColor: item.color}} className="border-2 rounded-xl p-3">
                                 <span style={{color: item.color, display: 'block'}}>{item.label}</span>
                                 <span>{item.value}</span>
                                 <span className="text-[10px] text-gray-500">/{item.max}{item.unit}</span>
