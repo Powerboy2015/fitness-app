@@ -17,8 +17,8 @@ export default function WorkoutOverview() {
   const manager = useMemo(() => DndManagerdelay(), []);
 
   const [workouts, setWorkouts] = useState<dndLibModifier[]>([]);
-  useEffect(() => {
-    const getWorkouts = async () => {
+
+  const getWorkouts = async () => {
       //beautifully wrapped API call.
       const workoutList = await API.workouts.list();
       // I have to remap the response because muks lib requires an ID
@@ -29,11 +29,10 @@ export default function WorkoutOverview() {
           desc: workout.desc,
         };
       });
-      // only set if there's an actual workout saved. Allows for fake data.
-      if (remappedWorkout.length >= 1) {
         setWorkouts(remappedWorkout);
-      }
     };
+
+  useEffect(() => {
     // just calls this above ^
     getWorkouts();
   }, []);
@@ -89,6 +88,7 @@ export default function WorkoutOverview() {
                 id={workout.id}
                 index={index}
                 name={workout.name}
+                reloadWorkouts={getWorkouts}
               />
             ))}
           </ul>

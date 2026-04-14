@@ -1,9 +1,11 @@
 import "./App.css";
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import BottomNavBar from "./components/BottomNavBar.tsx";
 import { WorkoutProvider } from "./context/WorkoutContext";
 
+import AddFood from "./pages/AddFood.tsx"
 import Home from "./pages/Home.tsx";
 import WorkoutOverview from "./pages/WorkoutOverview.tsx";
 import EditWorkout from "./pages/EditWorkout.tsx";
@@ -18,8 +20,59 @@ import Exercises from "./pages/Exercises.tsx";
 import ExerciseDescription from "./pages/ExerciseDescription.tsx";
 import { Toaster } from "react-hot-toast";
 import FloatingWorkoutTimer from "./components/FloatingWorkoutTimer.tsx";
+import API from "./classes/api";
+import { SESSION_STORAGE_KEYS } from "./apis/sessionAPI";
 
 function App() {
+  useEffect(() => {
+    let unlistenCloseRequested: (() => void) | undefined;
+    let isClosing = false;
+
+    const finishActiveWorkout = async () => {
+      if (!localStorage.getItem(SESSION_STORAGE_KEYS.id)) return;
+
+      try {
+        await API.session.complete();
+      } catch (error) {
+        console.error("Failed to auto-complete workout on app close", error);
+      }
+    };
+
+    const handleBeforeUnload = () => {
+      void finishActiveWorkout();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    const registerTauriCloseHook = async () => {
+      const isTauriRuntime = "__TAURI_INTERNALS__" in window || "__TAURI__" in window;
+      if (!isTauriRuntime) return;
+
+      try {
+        const { getCurrentWindow } = await import("@tauri-apps/api/window");
+        const appWindow = getCurrentWindow();
+
+        unlistenCloseRequested = await appWindow.onCloseRequested(async (event) => {
+          if (isClosing) return;
+
+          event.preventDefault();
+          isClosing = true;
+          await finishActiveWorkout();
+          await appWindow.close();
+        });
+      } catch (error) {
+        console.error("Failed to register Tauri close handler", error);
+      }
+    };
+
+    void registerTauriCloseHook();
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      unlistenCloseRequested?.();
+    };
+  }, []);
+
   return (
     <WorkoutProvider>
       <BrowserRouter>
@@ -40,6 +93,7 @@ function App() {
               <Route path="/session-history" element={<SessionHistory />} />
               <Route path="/kcal-tracker" element={<KcalTracker />} />
               <Route path="/exercises" element={<Exercises />} />
+              <Route path="/add-food" element={<AddFood />} />
               <Route
                 path="/exercise-description"
                 element={<ExerciseDescription />}

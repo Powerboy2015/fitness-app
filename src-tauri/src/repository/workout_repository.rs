@@ -16,6 +16,15 @@ impl WorkoutRepo for WorkoutRepository {
         }
     }
 
+    fn remove(&self,workout_id: String) -> Result<bool,Error> {
+    self.db.use_conn(|tx| {
+        tx.execute("DELETE FROM Workouts WHERE Uuid = ?1", [workout_id])
+    })?;
+
+    Ok(true)
+    }
+
+
     fn list(&self) -> Result<Workouts, Error> {
         self.db.use_conn(|tx| {
             let mut stmt = tx.prepare(

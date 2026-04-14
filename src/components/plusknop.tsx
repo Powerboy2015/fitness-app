@@ -6,12 +6,15 @@ interface PlusknopProps {
     onClick?: () => void;
     className?: string;
     iconSize?: number;
+    disabled?: boolean;
 }
 
-export default function Plusknop ({ to = "/add-exercises", onClick, className, iconSize = 49 }: PlusknopProps) {
+export default function Plusknop ({ to = "/add-exercises", onClick, className, iconSize = 49, disabled = false }: PlusknopProps) {
     const navigate = useNavigate();
 
     const handleClick = () => {
+        if (disabled) return;
+
         if (onClick) {
             onClick();
             return;
@@ -22,7 +25,8 @@ export default function Plusknop ({ to = "/add-exercises", onClick, className, i
     return (
         <button
             onClick={handleClick}
-            className={className || "cursor-pointer fixed bottom-30 right-6 h-16 w-87 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a] active:bg-[#3a3a3a] flex items-center justify-center z-50"}
+            disabled={disabled}
+            className={`${className || "cursor-pointer fixed bottom-30 right-6 h-16 w-87 rounded-full bg-[#2e2e2e] hover:bg-[#3a3a3a] active:bg-[#3a3a3a] flex items-center justify-center z-20"} ${disabled ? "opacity-50 cursor-not-allowed hover:bg-[#2e2e2e] active:bg-[#2e2e2e]" : ""}`}
         >
             <AddIcon sx={{ fontSize: iconSize }} />
         </button>

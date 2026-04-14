@@ -41,7 +41,7 @@ export const NutritionDonutChart: React.FC = () => {
                 filter: { type: 'none' },
             },
         },
-    };
+    }
 
     const legendData = labels.map((label, i) => ({
         label,

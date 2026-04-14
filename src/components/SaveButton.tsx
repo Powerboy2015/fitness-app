@@ -16,6 +16,8 @@ export default function SaveButton() {
                 const exerciseIds = exercises.map(e => e.id);
 
                 const workoutUuid = await API.workouts.create({name: workoutName, exercises: exerciseIds });
+                if (typeof workoutUuid !== "string") Reject(workoutUuid.msg);
+                console.log(workoutUuid);
                 console.log("workout sucessfully created!");
 
                 // for (const exercise of exercises) {

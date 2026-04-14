@@ -7,7 +7,7 @@ interface createWorkoutInput {
 }
 
 export default class workoutAPI {
-    public async create(dto: createWorkoutInput): Promise<string> {
+    public async create(dto: createWorkoutInput): Promise<string|{ok: false, msg: string}> {
         if (!dto.name.trim()) {
             const errMessage = "Workout requires a name"
             console.error(errMessage);
@@ -15,28 +15,24 @@ export default class workoutAPI {
         }
 
         let result: ApiError | ApiSucess<string>;
-        if (!dto.exercises) {
-            const req = {
-                uuid: "",
-                name: dto.name,
-                desc: dto.desc,
+        if (!dto.exercises || dto.exercises?.length < 1) return {ok: false, msg:"can't create workout without exercises."};
 
-            };
-            result = await ApiClient.send<string>("create_workout", { req });
-        } else {
-            const req = {
-                uuid: "",
-                name: dto.name,
-                desc: dto.desc,
-                exercises: dto.exercises
-            };
-            result = await ApiClient.send<string>("create_workout_with_exercises",{ req });
+        const req = {
+            uuid: "",
+            name: dto.name,
+            desc: dto.desc,
+            exercises: dto.exercises
+        };
 
-        }
+        result = await ApiClient.send<string>("create_workout_with_exercises",{ req });
+
         return ApiClient.assertOk(result);
     }
 
-
+    public async remove(workoutId: string) {
+        const result = await ApiClient.send<string>("remove_workout",{req: workoutId});
+        return ApiClient.assertOk(result);
+    } 
 
     public async list(): Promise<Array<WorkoutDTO>> {
         const result = await ApiClient.send<WorkoutDTO[]>("list_workouts");

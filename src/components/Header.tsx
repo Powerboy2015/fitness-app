@@ -17,13 +17,16 @@ const pageTitles: Record<string, string> = {
   "/exercise-description": "Exercise Description",
 };
 
-const routesWithSave = ["/edit-workout", "/new-workout"];
+const routesWithSave = [
+  "/edit-workout",
+  "/new-workout",
+];
 
 // This component will display the title of the current page based on the URL path
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
-  // Get the title for the current path, or default to "Page" if not found
+// Get the title for the current path, or default to "Page" if not found
   const title = pageTitles[location.pathname] || "Page";
 
   const showSave = routesWithSave.includes(location.pathname);
