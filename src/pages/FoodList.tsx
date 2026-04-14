@@ -12,8 +12,8 @@ export default function FoodList() {
             value={searchText}
             onChange={setSearchText}
             onSearch={() => {}}
-            placeholderText="exercise"/>
-            <div className="h-full pt-2">
+            placeholderText="food"/>
+            <div className="h-full">
 
                 <FoodItemComponent/>
                 {/* <div className="pt-2">
