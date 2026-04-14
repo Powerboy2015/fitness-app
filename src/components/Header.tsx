@@ -33,7 +33,7 @@ export default function Header() {
   const showBack = location.pathname !== "/";
 
   return (
-    <header className="z-1001 pt-6 shrink-0 w-full mx-auto bg-[#161818]">
+    <header className="z-200 pt-6 shrink-0 w-full mx-auto bg-[#161818]">
       <div className="relative flex items-center border-b-2 border-[#414141] pb-2 w-[90%] mx-auto">
         {showBack && (
           <button
