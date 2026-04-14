@@ -19,7 +19,6 @@ pub async fn get_products(product: String, page: u64) -> Result<String, String> 
 
     if let Ok(response) = res {
         let text = response.text().await.unwrap();
-        println!("{:?}", text);
         return Ok(text);
     }
 
