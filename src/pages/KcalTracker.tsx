@@ -10,18 +10,21 @@ export default function KcalTracker() {
 
   async function fetchAPI() {
     try {
-      const result = await invoke("get_products", { product: "chocolade" });
-      setProduct(result.products);
+      const result = await invoke("get_products", {
+        product: "kwark",
+        page: 1,
+      });
+      setProduct(JSON.parse(result).entries);
+      console.log(JSON.parse(result).entries);
     } catch (err) {
       console.error("Error:", err);
     }
   }
   return (
     <>
-      <div onClick={() => console.log(product)}>test</div>
       {product
         ? product.map((item, index) => {
-            return <img key={index} src={item.image_front_small_url} alt="" />;
+            return <div>{item.descForUi.replace(/<[^>]*>/g, "")}</div>;
           })
         : null}
     </>

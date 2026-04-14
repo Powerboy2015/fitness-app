@@ -1,27 +1,27 @@
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ProductResponse {
-    pub count: u32,
-    pub products: Vec<Value>, // Of een meer specifieke struct
-    pub skip: u32,
-}
 
 #[tauri::command]
-pub async fn get_products(product: String) -> Result<ProductResponse, String> {
-    let url = format!(
-        "https://world.openfoodfacts.org/cgi/search.pl?search_terms={}&search_simple=1&action=process&json=1countries=nl",
-        product
-    );
-    
-    let response = reqwest::get(&url)
-        .await
-        .map_err(|e| format!("Request failed: {}", e))?
-        .json::<ProductResponse>()
-        .await
-        .map_err(|e| format!("JSON decode failed: {}", e))?;
+pub async fn get_products(product: String, page: u64) -> Result<String, String> {
+    let client = reqwest::Client::new();
+    let url = "https://www.mynetdiary.com/muiInstantFoodSearchFindFoods.do";
 
-    println!("Found {} products", response.count);
-    Ok(response)
+    let body = serde_json::json!({
+        "searchToken": product,
+        "page": page,
+        "pageSize": 16
+    });
+
+    let res = client
+        .post(url)
+        .body(body.to_string())
+        .send()
+        .await;
+
+    if let Ok(response) = res {
+        let text = response.text().await.unwrap();
+        println!("{:?}", text);
+        return Ok(text);
+    }
+
+    Err("request failed".into())
 }
