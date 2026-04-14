@@ -10,7 +10,7 @@ export default function KcalTracker() {
         </h2>
         <WeightLineChart />
       </div>
-      <AddFoodButton to="/add-food" />
+      <AddFoodButton to="/food-list" />
   </div>
   );
 }

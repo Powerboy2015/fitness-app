@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import BottomNavBar from "./components/BottomNavBar.tsx";
 import { WorkoutProvider } from "./context/WorkoutContext";
 
-import AddFood from "./pages/AddFood.tsx"
+import FoodList from "./pages/FoodList.tsx"
 import Home from "./pages/Home.tsx";
 import WorkoutOverview from "./pages/WorkoutOverview.tsx";
 import EditWorkout from "./pages/EditWorkout.tsx";
@@ -93,7 +93,7 @@ function App() {
               <Route path="/session-history" element={<SessionHistory />} />
               <Route path="/kcal-tracker" element={<KcalTracker />} />
               <Route path="/exercises" element={<Exercises />} />
-              <Route path="/add-food" element={<AddFood />} />
+              <Route path="/food-list" element={<FoodList />} />
               <Route
                 path="/exercise-description"
                 element={<ExerciseDescription />}
