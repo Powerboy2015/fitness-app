@@ -195,16 +195,16 @@ export default function FloatingWorkoutTimer() {
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
       onClick={handleClick}
-      className={`fixed z-500 flex items-center gap-3 rounded-2xl border border-[#4b4b4b] bg-[#1E1E1E]/95 px-4 py-3 text-left shadow-lg backdrop-blur-sm transition hover:border-[#F67631] ${isDragging ? "cursor-grabbing" : "cursor-grab"} ${position ? "left-0 top-0" : "left-1/2 top-24 -translate-x-1/2"}`}
+      className={`fixed z-500 flex items-center gap-3 rounded-2xl border border-bordercolor bg-components-color/95 px-4 py-3 text-left shadow-lg backdrop-blur-sm transition hover:border-orange-accent ${isDragging ? "cursor-grabbing" : "cursor-grab"} ${position ? "left-0 top-0" : "left-1/2 top-24 -translate-x-1/2"}`}
       style={position ? { left: `${position.x}px`, top: `${position.y}px`, transform: "none" } : undefined}
       title="Return to workout session"
     >
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2e2e2e] text-[#F67631]">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-components-color text-orange-accent">
         <FitnessCenterIcon fontSize="small" />
       </div>
       <div className="min-w-0">
-        <p className="truncate text-xs text-[#b7b7b7]">{workoutName}</p>
-        <p className="flex items-center gap-1 text-sm font-semibold text-white">
+        <p className="truncate text-md text-textcolor font-bold">{workoutName}</p>
+        <p className="flex items-center gap-1 text-sm font-semibold text-textcolor">
           <AccessTimeIcon sx={{ fontSize: 14 }} />
           {elapsedLabel}
         </p>

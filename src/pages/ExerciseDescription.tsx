@@ -52,16 +52,16 @@ export default function ExerciseDescription() {
   "
       >
         <div className="grid grid-cols-2 gap-4 py-4 w-[90%] mx-auto">
-          <div className="col-span-2 bg-[#1E1E1E] border border-[#414141] rounded-xl p-6 font-bold flex flex-col pb-10 ">
-            <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto">
+          <div className="col-span-2 bg-components-color border border-bordercolor rounded-xl p-6 font-bold flex flex-col pb-10 ">
+            <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto">
               <div>{name.charAt(0).toUpperCase() + name.slice(1)}</div>
             </h2>
             <img src={gif} alt="" />
 
-            <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
+            <h2 className="font-bold text-textcolor text-2xl mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
               Targeted muscles:
             </h2>
-            <div className="bg-[#F67631] w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
+            <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
               {targetMuscle}
             </div>
             <div className="grid grid-cols-2 text-center">
@@ -69,20 +69,20 @@ export default function ExerciseDescription() {
                 return (
                   <div
                     key={index}
-                    className="border-[#F67631] border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 "
+                    className="border-orange-accent border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 text-textcolor"
                   >
                     {muscle}
                   </div>
                 );
               })}
             </div>
-            <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
+            <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
               Equipment
             </h2>
-            <div className="bg-[#F67631] w-fit px-9 py-1 rounded-xl mx-2 my-1">
+            <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1">
               {equipments}
             </div>
-            <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
+            <h2 className="font-bold text-textcolor text-2xl mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
               Instructions
             </h2>
             {instructions.map((instruct, index) => {

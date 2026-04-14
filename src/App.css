@@ -52,3 +52,12 @@ body {
 .apexcharts-bar-area.apexcharts-active {
   stroke: transparent !important;
 }
+
+@theme {
+  --color-components-color: oklch(0.235 0 0);
+  --color-components-hover: oklch(0.2645 0 0);
+  --color-bordercolor: oklch(0.3753 0 0);
+  --color-orange-accent: oklch(0.7064 0.1758 45.51);
+  --color-buttons-action: oklch(0.7783 0.1413 48.09);
+  --color-textcolor: oklch(0.9631 0.0017 145.56);
+}

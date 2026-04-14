@@ -28,7 +28,7 @@ export default function SelectedExerciseModal({dispatch,state, saveFunc}:Selecte
         <ul className={`px-2 pt-2 mx-4 bg-[#F17F41] flex gap-2 flex-col rounded-t-2xl overflow-y-scroll max-h-30 ${exerciseRows.length == 0 || !open ? "hidden":""}`}>
             {exerciseRows}
         </ul>
-        <div className="bg-[#F67631] flex justify-between pr-8 pl-2 rounded-xl items-center border border-[#DC6728]">
+        <div className="bg-orange-accent flex justify-between pr-8 pl-2 rounded-xl items-center border border-[#DC6728]">
             <ListOpenButton open={open} onOpen={(opened) => {isOpen(opened)}}/>
             <p className="text-2xl">{exerciseCount} exercise{exerciseCount == 1 ? "" : "s"} added</p>
             <button className="text-4xl" onClick={() => {
@@ -74,7 +74,7 @@ type exerciseRowProps = {
 function ExerciseRow({exercise,dispatcher}: exerciseRowProps): ReactNode {
     return <>
         <li className="flex items-center justify-between" key={exercise.id}>
-            <p className="text-2xl">{exercise.name}</p>
+            <p className="text-2xl text-textcolor">{exercise.name}</p>
             <div className="randomIconWrapperLOL" onClick={() => {
                 dispatcher({
                     type: ExercisesActionKind.UNSELECT,

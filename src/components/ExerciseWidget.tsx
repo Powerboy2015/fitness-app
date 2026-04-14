@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from '@mui/icons-material/Check';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface ExerciseWidgetProps {
   name: string;
@@ -34,7 +34,7 @@ export default function ExerciseWidget({
 
 
   return (
-    <div className={`bg-[#1E1E1E] ${selected ? "border-[#F67631]" : "border-[#414141]"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-[#252525] active:bg-[#252525] cursor-pointer mt-2`}>
+    <div className={`bg-components-color ${selected ? "border-orange-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}>
       <button
         className="flex w-full h-full py-4"
         onClick={() =>
@@ -53,7 +53,7 @@ export default function ExerciseWidget({
       </button>
       <button
         onClick={handleClick}
-        className="flex h-12 w-12 rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] ml-2 z-50"
+        className="flex h-12 w-12 rounded-full bg-orange-accent hover:bg-buttons-action active:bg-buttons-action ml-2 z-50"
       >
         {!added ? <AddIcon sx={{ fontSize: 49 }} /> : <CheckIcon sx={{ fontSize: 49 }} />}
       </button>

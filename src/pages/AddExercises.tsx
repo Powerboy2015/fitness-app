@@ -1,5 +1,5 @@
-import {  useMemo, useState, useRef, useEffect, useReducer  } from "react";
-import { Iworkout, useWorkout } from "../context/WorkoutContext";
+import {  useMemo, useState, useRef, useEffect } from "react";
+import { useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
@@ -19,7 +19,6 @@ import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 import useExerciseSelectReducer, { ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
-import { useNavigate } from "react-router-dom";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -79,7 +78,7 @@ export default function AddExercises() {
   return (
     <>
       <div className="h-screen">
-        <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
+        <div className="fixed top-16 left-0 right-0 z-30 overflow-hidden">
           <SearchBar
             value={searchText}
             onChange={setSearchText}

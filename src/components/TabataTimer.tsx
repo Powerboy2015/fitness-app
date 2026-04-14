@@ -107,9 +107,9 @@ export default function TabataTimer({ onTimerChange }: TabataTimerProps) {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center relative w-87 bg-[#1E1E1E] border-2 border-[#565d5d] rounded-lg p-6 pt-8">
+        <div className="flex flex-col items-center justify-center relative w-87 bg-components-color border-2 border-bordercolor rounded-lg p-6 pt-8">
             <button
-                className="absolute top-2 right-2 text-orange-500 hover:text-orange-400 active:text-orange-400 transition-colors z-30"
+                className="absolute top-2 right-2 text-orange-accent hover:text-buttons-action active:text-buttons-action transition-colors z-30"
                 onClick={handleMenuClick}
             >
                 <MenuIcon style={{ fontSize: '32px' }} />
@@ -127,7 +127,7 @@ export default function TabataTimer({ onTimerChange }: TabataTimerProps) {
                         <select
                             value={workSeconds}
                             onChange={(e) => setWorkSeconds(Number(e.target.value))}
-                            className="px-3 py-2 border-2 border-[#565d5d] rounded-lg bg-gray-800 text-white cursor-pointer"
+                            className="px-3 py-2 border-2 border-bordercolor rounded-lg bg-components-color text-textcolor cursor-pointer"
                         >
                             {Array.from({ length: 60 }, (_, i) => i + 1).map((v) => (
                                 <option key={v} value={v}>{v}s</option>
@@ -139,7 +139,7 @@ export default function TabataTimer({ onTimerChange }: TabataTimerProps) {
                         <select
                             value={restSeconds}
                             onChange={(e) => setRestSeconds(Number(e.target.value))}
-                            className="px-3 py-2 border-2 border-[#565d5d] rounded-lg bg-gray-800 text-white cursor-pointer"
+                            className="px-3 py-2 border-2 border-bordercolor rounded-lg bg-components-color text-textcolor cursor-pointer"
                         >
                             {Array.from({ length: 60 }, (_, i) => i + 1).map((v) => (
                                 <option key={v} value={v}>{v}s</option>
@@ -151,7 +151,7 @@ export default function TabataTimer({ onTimerChange }: TabataTimerProps) {
                         <select
                             value={totalRounds}
                             onChange={(e) => setTotalRounds(Number(e.target.value))}
-                            className="px-3 py-2 border-2 border-[#565d5d] rounded-lg bg-gray-800 text-white cursor-pointer"
+                            className="px-3 py-2 border-2 border-bordercolor rounded-lg bg-components-color text-textcolor cursor-pointer"
                         >
                             {Array.from({ length: 20 }, (_, i) => i + 1).map((v) => (
                                 <option key={v} value={v}>{v}</option>
@@ -161,19 +161,19 @@ export default function TabataTimer({ onTimerChange }: TabataTimerProps) {
                 </div>
             )}
 
-            <div className="text-lg font-bold mb-2 text-white">
+            <div className="text-lg font-bold mb-2 text-textcolor">
                 Round {currentRound}/{totalRounds} · {isWorkPhase ? "WORK" : "REST"}
             </div>
 
-            <div className="border-2 border-[#565d5d] rounded-lg p-4 mb-4 w-56 text-center">
-                <div className="text-3xl font-bold text-white font-mono">
+            <div className="border-2 border-bordercolor rounded-lg p-4 mb-4 w-56 text-center">
+                <div className="text-3xl font-bold text-textcolor font-mono">
                     {formatTime(timeLeftMs)}
                 </div>
             </div>
 
             <div className="flex flex-row items-center justify-center gap-3">
                 <button
-                    className="w-14 h-14 rounded-full border-4 border-green-500 bg-gray-900 text-green-500 hover:bg-green-500 hover:text-white active:bg-green-500 active:text-white transition-colors flex items-center justify-center"
+                    className="w-14 h-14 rounded-full border-4 border-green-500 bg-components-color text-green-500 hover:bg-green-500 hover:text-textcolor active:bg-green-500 active:text-textcolor transition-colors flex items-center justify-center"
                     onClick={() => {
                         if (isActive) {
                             setIsActive(false);
@@ -185,7 +185,7 @@ export default function TabataTimer({ onTimerChange }: TabataTimerProps) {
                     {isActive ? <PauseCircleOutlineIcon fontSize="large" /> : <PlayCircleOutlineIcon fontSize="large" />}
                 </button>
                 <button
-                    className="w-14 h-14 rounded-full border-4 border-red-500 bg-gray-900 text-red-500 hover:bg-red-500 hover:text-white active:bg-red-500 active:text-white transition-colors flex items-center justify-center"
+                    className="w-14 h-14 rounded-full border-4 border-red-500 bg-components-color text-red-500 hover:bg-red-500 hover:text-textcolor active:bg-red-500 active:text-textcolor transition-colors flex items-center justify-center"
                     onClick={handleReset}
                 >
                     <StopCircleOutlinedIcon fontSize="large" />
