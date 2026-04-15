@@ -7,7 +7,7 @@ export default function KcalTracker() {
   useEffect(() => {
     fetchAPI();
   }, []);
-  let count = 0;
+
   async function fetchAPI() {
     try {
       const result = await invoke("get_products", {
@@ -19,20 +19,22 @@ export default function KcalTracker() {
       console.log(result.products);
     } catch (err) {
       console.error("Error:", err);
-
-      if (count < 6) {
-        count++;
-        fetchAPI();
-      }
     }
   }
   return (
     <>
-      {product
-        ? product.map((item, index) => {
-            return <div>{item.product_name}</div>;
-          })
-        : null}
+      {product ? (
+        product.map((item, index) => {
+          return <div>{item.product_name}</div>;
+        })
+      ) : (
+        <button
+          className="border-gray-700 bg-gray-500"
+          onClick={() => fetchAPI()}
+        >
+          try again
+        </button>
+      )}
     </>
   );
 }
