@@ -87,8 +87,9 @@ export default function ExerciseDescriptionOverlay({
         >
           <img
             className="h-20 w-20 contain-content rounded-xl"
-            src={gif}
+            src={"gif"}
             alt=""
+            loading="lazy"
           />
           <h2 className="text-lg ml-5 font-semibold">{name}</h2>
             <button
@@ -139,7 +140,7 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
               <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto">
                 <div>{name.charAt(0).toUpperCase() + name.slice(1)}</div>
               </h2>
-              <img src={gif} alt="" />
+              <img src={"gif"} alt="" loading="lazy" />
 
               <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
                 Targeted muscles:

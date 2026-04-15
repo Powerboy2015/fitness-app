@@ -18,6 +18,7 @@ import Filter from "../components/Filter";
 import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
+import { List, RowComponentProps } from "react-window";
 import useExerciseSelectReducer, { ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
 import { useNavigate } from "react-router-dom";
 
@@ -114,31 +115,41 @@ export default function AddExercises() {
             ref={listRef}
             className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)]"
           >
-            {filteredExercises.map((exercise) => {
-              return (
-                <ExerciseDescriptionOverlay
-                  key={exercise.exercise_id}
-                  name={exercise.name}
-                  gif={exercise.gif_url}
-                  id={exercise.exercise_id}
-                  selected={false}
-                  onSelect={() => {
-                    dispatch({
-                      type: ExercisesActionKind.SELECT,
-                      payload: {
-                        id: exercise.exercise_id,
-                        gif: exercise.gif_url,
-                        name: exercise.name
-                      }
-                    })
-                  }}
-                />
-              );
-            })}
+                    <List
+          rowComponent={exerciseListItem}
+          rowHeight={112}
+          rowCount={filteredExercises.length}
+          rowProps={{exerciseList: filteredExercises, addExercise}}
+        />
           </div>
         </div>
       </div>
       <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
     </>
   );
+}
+
+interface exerciseListItemProps {
+  exerciseList: ExerciseDTO[];
+  addExercise: (workout: Iworkout) => void;
+} 
+function exerciseListItem({index, addExercise,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
+  const exercise = exerciseList[index];
+
+  return <>
+    <ExerciseDescriptionOverlay
+              key={exercise.exercise_id}
+              name={exercise.name}
+              gif={exercise.gif_url}
+              id={exercise.exercise_id}
+              selected={false}
+              onSelect={() => {
+                addExercise({
+                  id: exercise.exercise_id,
+                  name: exercise.name,
+                  gif: exercise.gif_url,
+                });
+              }}
+              />
+  </>
 }
