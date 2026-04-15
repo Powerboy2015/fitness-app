@@ -7,7 +7,7 @@ export default function KcalTracker() {
   useEffect(() => {
     fetchAPI();
   }, []);
-
+  let count = 0;
   async function fetchAPI() {
     try {
       const result = await invoke("get_products", {
@@ -19,8 +19,8 @@ export default function KcalTracker() {
       console.log(result.products);
     } catch (err) {
       console.error("Error:", err);
-      let count = 0;
-      if (count < 3) {
+
+      if (count < 6) {
         count++;
         fetchAPI();
       }
