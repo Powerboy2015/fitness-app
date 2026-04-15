@@ -3,7 +3,7 @@ import CountDownTimer from "../components/CountDownTimer";
 import StopWatch from "../components/StopWatch";
 import TabataTimer from "../components/TabataTimer";
 import { CurrentExercise } from "../components/CurrentExercise.tsx";
-import Plusknop from "../components/plusknop.tsx";
+import Plusknop from "../components/AddSetButton.tsx";
 import CompleteSetButton from "../components/CompleteSetButton";
 import FinishWorkoutButton from "../components/FinishWorkoutButton";
 import API from "../classes/api.ts";
