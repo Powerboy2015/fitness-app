@@ -15,10 +15,10 @@ export default function StartSessionButton({ exercises, workoutId }: StartSessio
     };
     return (
         <>
-            <div className="flex font-bold">
+            <div className="flex">
                     <button
                         onClick={handleStart}
-                        className="text-textcolor rounded-full p-5 w-[90%] mx-auto bg-orange-accent hover:bg-buttons-action active:bg-buttons-action"
+                        className="text-textcolor font-bold rounded-full p-5 w-[90%] mx-auto bg-orange-accent hover:bg-buttons-action active:bg-buttons-action"
                         >
                         Start Session
                     </button>

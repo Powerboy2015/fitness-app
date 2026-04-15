@@ -131,9 +131,9 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
   if (!active) return <></>;
 
   return <div>
-        <div className="flex w-screen fixed top-0 bottom-0 bg-[#161818] z-200 overflow-scroll">
+        <div className="flex w-screen fixed top-0 bottom-0 bg-background z-200 overflow-scroll">
           <div className="grid grid-cols-2 gap-4 py-4 w-[90%] h-[210%] mx-auto">
-            <div className="col-span-2 bg-components-color border border-bordercolor rounded-xl p-6 font-bold flex flex-col ">
+            <div className="col-span-2 bg-components border border-bordercolor rounded-xl p-6 font-bold flex flex-col text-textcolor">
               <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto">
                 <div>{name.charAt(0).toUpperCase() + name.slice(1)}</div>
               </h2>
@@ -170,14 +170,14 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
                 return (
                   <div
                     key={index}
-                    className=" self-start w-fit px-3 rounded-xl mx-2 my-1 font-normal"
+                    className=" self-start w-fit px-3 rounded-xl mx-2 my-1 font-normal text-textcolor"
                   >
                     <div className="font-bold">Step {index + 1}</div>
                     {instruct.replace(/^.*Step:\d+\s*/, "")}
                   </div>
                 );
               })}
-              <div className="flex  justify-center ">
+              <div className="flex justify-center text-textcolor">
                 <button className="p-5" onClick={() => disableOverlay()}>
                   close
                 </button>

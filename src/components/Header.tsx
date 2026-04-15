@@ -33,17 +33,17 @@ export default function Header() {
   const showBack = location.pathname !== "/";
 
   return (
-    <header className="z-200 pt-6 shrink-0 w-full mx-auto bg-[#161818]">
-      <div className="relative flex items-center border-b-2 border-[#414141] pb-2 w-[90%] mx-auto">
+    <header className="z-48 pt-6 shrink-0 w-full mx-auto bg-background">
+      <div className="relative flex items-center border-b-2 border-bordercolor pb-2 w-[90%] mx-auto">
         {showBack && (
           <button
             onClick={() => navigate(-1)}
-            className="absolute left-0 cursor-pointer"
+            className="absolute left-0 cursor-pointer text-textcolor"
           >
             <ArrowBackIcon sx={{ fontSize: 32 }} />
           </button>
         )}
-        <h1 className="text-[24px] font-bold text-[#F2F3F2] mx-auto">
+        <h1 className="text-[24px] font-bold text-textcolor mx-auto">
           {title}
         </h1>
         {showSave && (

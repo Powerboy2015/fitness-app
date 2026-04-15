@@ -52,7 +52,7 @@ export const NutritionDonutChart: React.FC = () => {
     }));
 
     return (
-        <div style={{ width: '100%', textAlign: 'center', color: 'white' }}>
+        <div style={{ width: '100%', textAlign: 'center', color: 'white'}}>
             <Chart
                 options={options}
                 series={series}
@@ -63,9 +63,9 @@ export const NutritionDonutChart: React.FC = () => {
             <div style={{ marginTop: 16 }}>
                 <div style={{ textAlign: 'left', marginBottom: 16 }}>
                     <span style={{ color: colors[0], fontSize: 24, fontWeight: 700, display: 'block'}}>{labels[0]}</span>
-                    <div style={{ fontSize: 28, fontWeight: 700 }}>
+                    <div className="text-[28px] text-textcolor">
                         {Rawseries[0]}
-                        <span style={{ fontSize: 14, color: '#888' }}>/{max[0]}{units[0]}</span>
+                        <span className="text-lg text-gray-500">/{max[0]}{units[0]}</span>
                     </div>
                 </div>
 
@@ -79,7 +79,7 @@ export const NutritionDonutChart: React.FC = () => {
                         <div>
                             <div key={idx} style={{ display: 'block', justifyContent: 'center', width: '100%', borderColor: item.color}} className="border-2 rounded-xl p-3">
                                 <span style={{color: item.color, display: 'block'}}>{item.label}</span>
-                                <span>{item.value}</span>
+                                <span className="text-textcolor">{item.value}</span>
                                 <span className="text-[10px] text-gray-500">/{item.max}{item.unit}</span>
                             </div>
                         </div>

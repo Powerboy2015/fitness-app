@@ -182,7 +182,7 @@ pb-30
         </div>
 
         {session.exercises.length === 0 ? (
-          <div className="w-87 bg-components-color border-2 border-bordercolor rounded-xl p-4 mb-4 text-center">
+          <div className="w-87 bg-components border-2 border-bordercolor rounded-xl p-4 mb-4 text-center">
             <p className="text-white">No exercises selected.</p>
           </div>
         ) : (
@@ -211,7 +211,7 @@ pb-30
                     <Plusknop
                       onClick={() => handleAddSet(exerciseIndex)}
                       disabled={isCompleted}
-                      className="w-full h-12 rounded-full bg-components-color hover:bg-components-hover justify-center transition-colors"
+                      className="w-full h-12 rounded-full bg-components hover:bg-components-hover justify-center transition-colors"
                       iconSize={32}
                     />
                   )}

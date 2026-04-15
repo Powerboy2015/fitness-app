@@ -5,7 +5,7 @@ interface WorkoutHistoryWidgetProps {
 export default function WorkoutHistoryWidget({ workout }: WorkoutHistoryWidgetProps) {
 
     return (
-        <div className="bg-components-color border-bordercolor border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer">
+        <div className="bg-components border-bordercolor border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer">
             <div className="pl-3 pb-1">
                 <div className="flex-1 text-left cursor-pointer mb-auto">
                     <h2 className="text-lg font-semibold text-textcolor">{workout.workoutName}</h2>

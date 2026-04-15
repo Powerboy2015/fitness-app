@@ -60,7 +60,7 @@ export default function StopWatch({ onTimerChange }: StopWatchProps) {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center relative w-87 bg-components-color border-2 border-bordercolor rounded-lg p-6 pt-12">
+        <div className="flex flex-col items-center justify-center relative w-87 bg-components border-2 border-bordercolor rounded-lg p-6 pt-12">
             <button 
                 className="absolute top-2 right-2 text-orange-accent hover:text-buttons-action active:text-buttons-action transition-colors z-30"
                 onClick={handleMenuClick}
@@ -83,13 +83,13 @@ export default function StopWatch({ onTimerChange }: StopWatchProps) {
             </div>
             <div className="flex flex-row items-center justify-center gap-3">
                 <button 
-                    className="w-14 h-14 rounded-full border-4 border-green-500 bg-components-color text-green-500 hover:bg-green-500 hover:text-textcolor active:bg-green-500 active:text-textcolor transition-colors flex items-center justify-center"
+                    className="w-14 h-14 rounded-full border-4 border-button-green bg-components text-button-green hover:bg-button-green hover:text-textcolor active:bg-button-green active:text-textcolor transition-colors flex items-center justify-center"
                     onClick={() => setIsActive(!isActive)}
                 >
                     {isActive ? <PauseCircleOutlineIcon fontSize="large" /> : <PlayCircleOutlineIcon fontSize="large" />}
                 </button>
                 <button 
-                    className="w-14 h-14 rounded-full border-4 border-yellow-500 bg-componentscolor text-yellow-500 hover:bg-yellow-500 hover:text-textcolor active:bg-yellow-500 active:text-textcolor transition-colors flex items-center justify-center"
+                    className="w-14 h-14 rounded-full border-4 border-button-yellow bg-components-color text-button-yellow hover:bg-button-yellow hover:text-textcolor active:bg-button-yellow active:text-textcolor transition-colors flex items-center justify-center"
                     disabled={timeInMs === 0}
                     onClick={() => {
                         if (isActive) {
@@ -103,7 +103,7 @@ export default function StopWatch({ onTimerChange }: StopWatchProps) {
                     {isActive ? <FlagCircleOutlinedIcon fontSize="large" /> : <RestartAltIcon fontSize="large" />}
                 </button>
                 <button 
-                    className="w-14 h-14 rounded-full border-4 border-red-500 bg-components-color text-red-500 hover:bg-red-500 hover:text-textcolor active:bg-red-500 active:text-textcolor transition-colors flex items-center justify-center"
+                    className="w-14 h-14 rounded-full border-4 border-button-red bg-components text-button-red hover:bg-button-red hover:text-textcolor active:bg-button-red active:text-textcolor transition-colors flex items-center justify-center"
                     disabled={timeInMs === 0}
                     onClick={() => setIsActive(false)}
                 >
@@ -115,7 +115,7 @@ export default function StopWatch({ onTimerChange }: StopWatchProps) {
                     <h3 className="text-lg font-semibold mb-2 text-textcolor">Laps</h3>
                     <ul className="space-y-1">
                         {laps.map((lap, index) => (
-                            <li key={index} className="text-base bg-components-color p-2 rounded">
+                            <li key={index} className="text-base bg-components p-2 rounded">
                                 {`Lap ${index + 1}: ${formatTime(lap)}`}
                             </li>
                         ))}

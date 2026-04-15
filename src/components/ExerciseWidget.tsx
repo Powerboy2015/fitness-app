@@ -34,7 +34,7 @@ export default function ExerciseWidget({
 
 
   return (
-    <div className={`bg-components-color ${selected ? "border-orange-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}>
+    <div className={`bg-components ${selected ? "border-orange-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}>
       <button
         className="flex w-full h-full py-4"
         onClick={() =>
@@ -49,7 +49,7 @@ export default function ExerciseWidget({
           src={gif}
           loading="lazy"
         />
-        <h2 className="text-lg font-semibold">{name}</h2>
+        <h2 className="text-lg font-semibold text-textcolor">{name}</h2>
       </button>
       <button
         onClick={handleClick}

@@ -1,12 +1,5 @@
 @import "tailwindcss";
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #161818;
-  }
-}
-
 .app {
   padding-top: calc(16px + var(--safe-top));
   padding-bottom: calc(16px + var(--safe-bottom));
@@ -53,11 +46,45 @@ body {
   stroke: transparent !important;
 }
 
+/* 🌞 LIGHT THEME (default) */
 @theme {
-  --color-components-color: oklch(0.235 0 0);
-  --color-components-hover: oklch(0.2645 0 0);
-  --color-bordercolor: oklch(0.3753 0 0);
+  --color-background: oklch(0.9631 0.0017 145.56);
+  --color-components: oklch(0.9167 0.0017 145.64);
+  --color-components-hover: oklch(0.791 0.0017 145.64);
+  --color-bordercolor: oklch(0.7507 0.0017 145.64);
+  --color-textcolor: oklch(0.1 0 0);
+
   --color-orange-accent: oklch(0.7064 0.1758 45.51);
   --color-buttons-action: oklch(0.7783 0.1413 48.09);
-  --color-textcolor: oklch(0.9631 0.0017 145.56);
+
+  --color-button-green: oklch(0.7227 0.192 149.58);
+  --color-button-red: oklch(0.6368 0.2078 25.33);
+  --color-button-yellow: oklch(0.7952 0.1617 86.05);
+
+  --color-navbar: oklch(0.7721 0.0017 145.64);
+  --color-icons: oklch(0.4401 0.0055 196.89);
 }
+
+/* 🌙 DARK THEME OVERRIDES */
+:root[data-theme="dark"] {
+  --color-background: oklch(0.2069 0.0031 196.92);
+  --color-components: oklch(0.235 0 0);
+  --color-components-hover: oklch(0.2645 0 0);
+  --color-bordercolor: oklch(0.3753 0 0);
+  --color-textcolor: oklch(0.9631 0.0017 145.56);
+
+  --color-orange-accent: oklch(0.7064 0.1758 45.51);
+  --color-buttons-action: oklch(0.7783 0.1413 48.09);
+
+  --color-button-green: oklch(0.7227 0.192 149.58);
+  --color-button-red: oklch(0.6368 0.2078 25.33);
+  --color-button-yellow: oklch(0.7952 0.1617 86.05);
+
+  --color-navbar: oklch(0.3329 0.0055 196.89);
+  --color-icons: oklch(0.9215 0.0017 145.64);
+}
+
+
+
+
+

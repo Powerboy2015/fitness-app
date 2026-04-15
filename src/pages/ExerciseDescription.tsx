@@ -42,17 +42,16 @@ export default function ExerciseDescription() {
     return (
       <div
         className="
-    fixed inset-0 
+    fixed inset-0
     top-15
     bottom-15
-    bg-[#1E1E1E] 
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
     pb-[env(safe-area-inset-bottom)]
   "
       >
         <div className="grid grid-cols-2 gap-4 py-4 w-[90%] mx-auto">
-          <div className="col-span-2 bg-components-color border border-bordercolor rounded-xl p-6 font-bold flex flex-col pb-10 ">
+          <div className="col-span-2 bg-components border border-bordercolor rounded-xl p-6 font-bold flex flex-col pb-10 ">
             <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto">
               <div>{name.charAt(0).toUpperCase() + name.slice(1)}</div>
             </h2>
@@ -61,7 +60,7 @@ export default function ExerciseDescription() {
             <h2 className="font-bold text-textcolor text-2xl mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
               Targeted muscles:
             </h2>
-            <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
+            <div className="bg-orange-accent text-textcolor w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
               {targetMuscle}
             </div>
             <div className="grid grid-cols-2 text-center">
@@ -79,7 +78,7 @@ export default function ExerciseDescription() {
             <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
               Equipment
             </h2>
-            <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1">
+            <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 text-textcolor">
               {equipments}
             </div>
             <h2 className="font-bold text-textcolor text-2xl mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
@@ -89,7 +88,7 @@ export default function ExerciseDescription() {
               return (
                 <div
                   key={index}
-                  className=" self-start w-fit px-3 rounded-xl mx-2 my-1 font-normal"
+                  className=" self-start w-fit px-3 rounded-xl mx-2 my-1 font-normal text-textcolor"
                 >
                   <div className="font-bold">Step {index + 1}</div>
                   {instruct.replace(/^.*Step:\d+\s*/, "")}

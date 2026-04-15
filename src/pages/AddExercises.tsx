@@ -78,7 +78,7 @@ export default function AddExercises() {
   return (
     <>
       <div className="h-screen">
-        <div className="fixed top-16 left-0 right-0 z-30 overflow-hidden">
+        <div className="fixed top-16 left-0 right-0 z-30 overflow-hidden text-textcolor">
           <SearchBar
             value={searchText}
             onChange={setSearchText}
@@ -104,7 +104,7 @@ export default function AddExercises() {
           <div className="fixed top-60 right-10 pointer-events-none z-100">
             <button
               onClick={scrollToTop}
-              className={`w-13 h-13 bg-[#414141] hover:bg-[#353535] rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+              className={`w-13 h-13 bg-components hover:bg-components-hover rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
             >
               ↑
             </button>

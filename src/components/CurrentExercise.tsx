@@ -18,7 +18,7 @@ export function CurrentExercise({exerciseData, isCompleted = false, isExpanded =
 
 
     return (
-        <div className={`w-87 bg-components-color border-2 rounded-xl p-4 mb-4 ${isCompleted ? "border-[#2e8b57]" : "border-bordercolor"}`}>
+        <div className={`w-87 bg-components border-2 rounded-xl p-4 mb-4 ${isCompleted ? "border-[#2e8b57]" : "border-bordercolor"}`}>
             <button
                 onClick={onToggle}
                 className="w-full flex items-center justify-between cursor-pointer"
