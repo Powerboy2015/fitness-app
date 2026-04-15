@@ -14,17 +14,23 @@ export default function KcalTracker() {
         product: "kwark",
         page: 1,
       });
-      setProduct(JSON.parse(result).entries);
-      console.log(JSON.parse(result).entries);
+
+      setProduct(result.products);
+      console.log(result.products);
     } catch (err) {
       console.error("Error:", err);
+      let count = 0;
+      if (count < 3) {
+        count++;
+        fetchAPI();
+      }
     }
   }
   return (
     <>
       {product
         ? product.map((item, index) => {
-            return <div>{item.descForUi.replace(/<[^>]*>/g, "")}</div>;
+            return <div>{item.product_name}</div>;
           })
         : null}
     </>

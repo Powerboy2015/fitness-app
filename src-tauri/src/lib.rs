@@ -6,7 +6,7 @@ mod repository;
 mod interface;
 mod application;
 mod domain;
-mod lars;
+pub mod lars;
 
 use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
@@ -92,6 +92,7 @@ pub fn run() {
             interface::tauri_commands::workout_history,
             lars::get_products,
             lars::get_exercise_by_id,
+            lars::get_product_detail
             
         ])
         .run(tauri::generate_context!())

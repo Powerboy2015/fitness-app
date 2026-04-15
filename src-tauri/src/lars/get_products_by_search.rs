@@ -1,26 +1,14 @@
-
-
 #[tauri::command]
-pub async fn get_products(product: String, page: u64) -> Result<String, String> {
-    let client = reqwest::Client::new();
-    let url = "https://www.mynetdiary.com/muiInstantFoodSearchFindFoods.do";
+pub async fn get_products(product: String, page: u64) -> Result<serde_json::Value, String> {
+    let body = reqwest::get(format!(
+        "https://world.openfoodfacts.org/cgi/search.pl?search_terms={}&search_simple=1&action=process&json=1&countries=nl&page={}",
+        product, page
+    ))
+    .await
+    .map_err(|e| e.to_string())?
+    .json::<serde_json::Value>()
+    .await
+    .map_err(|e| e.to_string())?;
 
-    let body = serde_json::json!({
-        "searchToken": product,
-        "page": page,
-        "pageSize": 16
-    });
-
-    let res = client
-        .post(url)
-        .body(body.to_string())
-        .send()
-        .await;
-
-    if let Ok(response) = res {
-        let text = response.text().await.unwrap();
-        return Ok(text);
-    }
-
-    Err("request failed".into())
+    Ok(body)
 }
