@@ -1,6 +1,6 @@
 import ExerciseWidget from "../components/ExerciseWidget";
 import {useMemo, useState} from "react";
-import { useWorkout } from "../context/WorkoutContext";
+import { Iworkout, useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
@@ -17,11 +17,11 @@ import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
 import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
+import { List, RowComponentProps } from "react-window";
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
   const { addExercise } = useWorkout();
-
 
   const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
 
@@ -111,9 +111,26 @@ export default function AddExercises() {
           />
         </div>
 
-        {filteredExercises.map((exercise) => {
-          return (
-            <ExerciseDescriptionOverlay
+        <List
+          rowComponent={exerciseListItem}
+          rowHeight={112}
+          rowCount={filteredExercises.length}
+          rowProps={{exerciseList: filteredExercises, addExercise}}
+        />
+      </div>
+    </>
+  );
+}
+
+interface exerciseListItemProps {
+  exerciseList: ExerciseDTO[];
+  addExercise: (workout: Iworkout) => void;
+} 
+function exerciseListItem({index, addExercise,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
+  const exercise = exerciseList[index];
+
+  return <>
+    <ExerciseDescriptionOverlay
               key={exercise.exercise_id}
               name={exercise.name}
               gif={exercise.gif_url}
@@ -125,10 +142,6 @@ export default function AddExercises() {
                   gif: exercise.gif_url,
                 });
               }}
-            />
-          );
-        })}
-      </div>
-    </>
-  );
+              />
+  </>
 }
