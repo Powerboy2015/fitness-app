@@ -5,7 +5,7 @@ export default function KcalTracker() {
   const [product, setProduct] = useState<searchItem[] | undefined>();
 
   useEffect(() => {
-    fetchSearchAPI("kwark");
+    fetchSearchAPI("kwark", 1);
     fetchProductAPI("3017620422003");
   }, []);
 
@@ -22,11 +22,11 @@ export default function KcalTracker() {
     skip: number;
   }
 
-  async function fetchSearchAPI(product: string) {
+  async function fetchSearchAPI(product: string, page: number) {
     try {
       const result = await invoke<searchReturn>("get_products", {
         product: product,
-        page: 1,
+        page: page,
       });
       setProduct(result.products);
       console.log(result);
@@ -55,7 +55,7 @@ export default function KcalTracker() {
       ) : (
         <button
           className="border-gray-700 bg-gray-500"
-          onClick={() => fetchSearchAPI("kwark")}
+          onClick={() => fetchSearchAPI("kwark", 1)}
         >
           try again
         </button>
