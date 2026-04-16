@@ -29,7 +29,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeh
                             <BarcodeIcon className="w-6" />
                         </button>
                     )}
-
                 </div>
             </div>
         </div>
