@@ -1,4 +1,4 @@
-import {  useMemo, useState, useRef, useEffect, useReducer  } from "react";
+import {  useMemo, useState, useRef, useEffect, useReducer, ActionDispatch  } from "react";
 import { Iworkout, useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
@@ -19,7 +19,7 @@ import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 import { List, RowComponentProps } from "react-window";
-import useExerciseSelectReducer, { ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
+import useExerciseSelectReducer, { ExerciseAction, ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
 import { useNavigate } from "react-router-dom";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
@@ -119,7 +119,7 @@ export default function AddExercises() {
           rowComponent={exerciseListItem}
           rowHeight={112}
           rowCount={filteredExercises.length}
-          rowProps={{exerciseList: filteredExercises, addExercise}}
+          rowProps={{exerciseList: filteredExercises, dispatch}}
         />
           </div>
         </div>
@@ -131,9 +131,9 @@ export default function AddExercises() {
 
 interface exerciseListItemProps {
   exerciseList: ExerciseDTO[];
-  addExercise: (workout: Iworkout) => void;
+  dispatch: ActionDispatch<[action: ExerciseAction]>;
 } 
-function exerciseListItem({index, addExercise,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
+function exerciseListItem({index, dispatch,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
   const exercise = exerciseList[index];
 
   return <>
@@ -144,12 +144,15 @@ function exerciseListItem({index, addExercise,exerciseList}: RowComponentProps<e
               id={exercise.exercise_id}
               selected={false}
               onSelect={() => {
-                addExercise({
-                  id: exercise.exercise_id,
-                  name: exercise.name,
-                  gif: exercise.gif_url,
-                });
-              }}
+                    dispatch({
+                      type: ExercisesActionKind.SELECT,
+                      payload: {
+                        id: exercise.exercise_id,
+                        gif: exercise.gif_url,
+                        name: exercise.name
+                      }
+                    })
+                  }}
               />
   </>
 }
