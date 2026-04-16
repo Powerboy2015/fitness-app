@@ -59,18 +59,22 @@ export default function UseExerciseList(): ReturnProps {
                 setExercises(data);
         };
         fetchData();
+        setCurrentPage(1);
     }, [muscleGroup,searchQuery]);
 
     const LoadNextPage = () => {
-        setCurrentPage(prev => prev++);
+
+        setCurrentPage(prev => prev + 1);
 
         const fetchData = async () => {
-                const data = await API.exercises.list({query:searchQuery,filter: muscleGroup,page_size: 50, page: 1});
-                setExercises(prev => [...prev,...data]);
+                const data = await API.exercises.list({query:searchQuery,filter: muscleGroup,page_size: 50, page: currentPage});
+                setExercises(prev => {
+                    const existingIds = new Set(prev.map(ex => ex.exercise_id));
+                    const newExercises = data.filter(ex => !existingIds.has(ex.exercise_id));
+                    return [...prev, ...newExercises];
+                });
         };
         fetchData();
-
-
     }
 
     return {exercises, muscleGroup,setMuscle,setQuery,LoadNextPage}

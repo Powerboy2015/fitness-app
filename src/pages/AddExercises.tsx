@@ -15,13 +15,11 @@ import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import cardio from "../assets/cardio.png";
 import Filter from "../components/Filter";
-import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 import { List, RowComponentProps } from "react-window";
-import UseExerciseList from "../Hooks/UseExerciseList.ts";
+import UseExerciseList, { muscleGroups } from "../Hooks/UseExerciseList.ts";
 import useExerciseSelectReducer, { ExerciseAction, ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
-import { useNavigate } from "react-router-dom";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -70,13 +68,7 @@ export default function AddExercises() {
     }
   }, []);
 
-  const { sortedExercises, setMuscle, muscleGroup } = UseMuscleFilters();
-
-  const filteredExercises = useMemo(() => {
-    const searchQuery = searchText.toLowerCase();
-    return sortedExercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(searchQuery))
-  }, [sortedExercises, searchText]);
+  const {exercises, muscleGroup,setMuscle,setQuery,LoadNextPage} = UseExerciseList()
 
   return (
     <>
@@ -111,42 +103,14 @@ export default function AddExercises() {
             <button
               onClick={scrollToTop}
               className={`w-13 h-13 bg-[#414141] hover:bg-[#353535] rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-            >
-              ↑
-            </button>
+            >↑</button>
           </div>
-          <div
-            ref={listRef}
-            className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)]"
-          >
-                    <List
-          rowComponent={exerciseListItem}
-          rowHeight={128}
-          rowCount={exercises.length}
-          rowProps={{exerciseList: exercises, addExercise}}
-          className="pb-4"
-        />
-        <div className="px-4">
-        <button 
-        className=" bg-amber-700 w-full rounded mb-25"
-        onClick={() => {LoadNextPage()}}>load more</button>
-        </div>
-      </div>
-      </div>
-      <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
-    </>
-  );
-}
-
-interface exerciseListItemProps {
-  exerciseList: ExerciseDTO[];
-  dispatch: ActionDispatch<[action: ExerciseAction]>;
-} 
-function exerciseListItem({index, style, dispatch,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
-  const exercise = exerciseList[index];
-
-  return <div style={style} className="p-4">
-    <ExerciseDescriptionOverlay
+        <div
+          ref={listRef}
+          className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)] p-8 flex flex-col gap-4"
+        >
+          {exercises.map(exercise => 
+          <ExerciseDescriptionOverlay
               key={exercise.exercise_id}
               name={exercise.name}
               gif={exercise.gif_url}
@@ -162,6 +126,28 @@ function exerciseListItem({index, style, dispatch,exerciseList}: RowComponentPro
                       }
                     })
                   }}
-              />
+              />)}
+          <div className="px-4">
+            <button 
+            className=" bg-amber-700 w-full rounded mb-25"
+            onClick={() => {LoadNextPage()}}>load more</button>
+          </div>
+        </div>
+      </div>
+      <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
+      </div>
+    </>
+  );
+}
+
+interface exerciseListItemProps {
+  exerciseList: ExerciseDTO[];
+  dispatch: ActionDispatch<[action: ExerciseAction]>;
+} 
+function exerciseListItem({index, style, dispatch,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
+  const exercise = exerciseList[index];
+
+  return <div style={style} className="p-4">
+    
   </div>
 }
