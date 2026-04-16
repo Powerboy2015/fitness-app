@@ -148,3 +148,11 @@ pub fn workout_history(ctx: State<Ctx>) -> Result<ApiResponse<Vec<WorkoutHistory
     })
 
 }
+
+#[tauri::command]
+pub fn remove_workout(ctx: State<Ctx>, req: String) -> Result<ApiResponse<String>,ApiErrorResponse> {
+    let response = ctx.service.workout.delete_workout(req)?;
+
+    Ok(ApiResponse { ok: response, data: "Workout removed".to_string() })
+
+}

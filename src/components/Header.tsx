@@ -17,21 +17,24 @@ const pageTitles: Record<string, string> = {
   "/exercise-description": "Exercise Description",
 };
 
-const routesWithSave = ["/edit-workout", "/new-workout"];
+const routesWithSave = [
+  "/edit-workout",
+  "/new-workout",
+];
 
 // This component will display the title of the current page based on the URL path
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
-  // Get the title for the current path, or default to "Page" if not found
+// Get the title for the current path, or default to "Page" if not found
   const title = pageTitles[location.pathname] || "Page";
 
   const showSave = routesWithSave.includes(location.pathname);
   const showBack = location.pathname !== "/";
 
   return (
-    <header className="z-40 pt-6 shrink-0 w-[90%] mx-auto bg-[#1E1E1E]">
-      <div className="relative flex items-center">
+    <header className="z-200 pt-6 shrink-0 w-full mx-auto bg-[#161818]">
+      <div className="relative flex items-center border-b-2 border-[#414141] pb-2 w-[90%] mx-auto">
         {showBack && (
           <button
             onClick={() => navigate(-1)}
@@ -49,7 +52,6 @@ export default function Header() {
           </div>
         )}
       </div>
-      <div className="border-b-2 border-[#414141] mt-2"></div>
     </header>
   );
 }

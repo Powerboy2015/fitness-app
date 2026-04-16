@@ -5,19 +5,20 @@ import UseSetUpdate from "../Hooks/UseSetUpdate.ts";
 
 interface CurrentExerciseProps {
     exerciseData: ISessionExercises;
+    isCompleted?: boolean;
     isExpanded?: boolean;
     onToggle?: () => void;
     onDeleteSet?: (setIndex: number) => void;
     children?: React.ReactNode;
 }
 
-export function CurrentExercise({exerciseData, isExpanded = false, onToggle, onDeleteSet, children}: CurrentExerciseProps) {
+export function CurrentExercise({exerciseData, isCompleted = false, isExpanded = false, onToggle, onDeleteSet, children}: CurrentExerciseProps) {
 
     const updateSet = UseSetUpdate(exerciseData.exercise_id);
 
 
     return (
-        <div className="w-87 bg-[#1E1E1E] border-2 border-[#565d5d] rounded-xl p-4 mb-4">
+        <div className={`w-87 bg-[#1E1E1E] border-2 rounded-xl p-4 mb-4 ${isCompleted ? "border-[#2e8b57]" : "border-[#565d5d]"}`}>
             <button
                 onClick={onToggle}
                 className="w-full flex items-center justify-between cursor-pointer"
@@ -28,30 +29,28 @@ export function CurrentExercise({exerciseData, isExpanded = false, onToggle, onD
                 </span>
             </button>
 
-            {isExpanded && (
-                <div className="border-t border-[#565d5d] pt-3 mt-3">
-                    {exerciseData.gif_url && (
-                        <div className="bg-white rounded-lg p-2 w-fit mb-3">
-                            <img
-                                src={exerciseData.gif_url}
-                                alt={exerciseData.name}
-                                className="w-16 h-16 object-contain"
-                            />
-                        </div>
-                    )}
-
-                    {exerciseData.sets.map((set, idx) => (
-                        <Sets
-                            key={idx}
-                            setNumber={idx + 1}
-                            onDelete={() => onDeleteSet?.(idx)}
-                            updateFunction={updateSet}
-                            data={set}
+            <div className={isExpanded ? "border-t border-[#565d5d] pt-3 mt-3" : "hidden"}>
+                {exerciseData.gif_url && (
+                    <div className="bg-white rounded-lg p-2 w-fit mb-3">
+                        <img
+                            src={exerciseData.gif_url}
+                            alt={exerciseData.name}
+                            className="w-16 h-16 object-contain"
                         />
-                    ))}
-                    {children}
-                </div>
-            )}
+                    </div>
+                )}
+
+                {exerciseData.sets.map((set, idx) => (
+                    <Sets
+                        key={idx}
+                        setNumber={idx + 1}
+                        onDelete={onDeleteSet ? () => onDeleteSet(idx) : undefined}
+                        updateFunction={updateSet}
+                        data={set}
+                    />
+                ))}
+                {children}
+            </div>
         </div>
     );
 }

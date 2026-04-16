@@ -195,7 +195,7 @@ export default function FloatingWorkoutTimer() {
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
       onClick={handleClick}
-      className={`fixed z-45 flex items-center gap-3 rounded-2xl border border-[#4b4b4b] bg-[#1E1E1E]/95 px-4 py-3 text-left shadow-lg backdrop-blur-sm transition hover:border-[#F67631] ${isDragging ? "cursor-grabbing" : "cursor-grab"} ${position ? "left-0 top-0" : "left-1/2 top-24 -translate-x-1/2"}`}
+      className={`fixed z-500 flex items-center gap-3 rounded-2xl border border-[#4b4b4b] bg-[#1E1E1E]/95 px-4 py-3 text-left shadow-lg backdrop-blur-sm transition hover:border-[#F67631] ${isDragging ? "cursor-grabbing" : "cursor-grab"} ${position ? "left-0 top-0" : "left-1/2 top-24 -translate-x-1/2"}`}
       style={position ? { left: `${position.x}px`, top: `${position.y}px`, transform: "none" } : undefined}
       title="Return to workout session"
     >

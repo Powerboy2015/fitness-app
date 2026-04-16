@@ -1,5 +1,5 @@
 import ExerciseWidget from "../components/ExerciseWidget";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import { Iworkout, useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
@@ -14,110 +14,121 @@ import hamstrings from "../assets/hamstrings.png.jpg";
 import lats from "../assets/lats.png";
 import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
+import cardio from "../assets/cardio.png";
 import Filter from "../components/Filter";
+import UseExerciseList, { muscleGroups } from "../Hooks/UseExerciseList.ts";
+import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 import { List, RowComponentProps } from "react-window";
-import UseExerciseList from "../Hooks/UseExerciseList.ts";
+import useExerciseSelectReducer, { ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
+
+const muscleFilters: { gif: string; name: muscleGroups }[] = [
+  { gif: chest, name: "pectorals" },
+  { gif: bicep, name: "biceps" },
+  { gif: tricep, name: "triceps" },
+  { gif: lats, name: "lats" },
+  { gif: back, name: "upper back" },
+  { gif: shoulders, name: "delts" },
+  { gif: forearms, name: "forearms" },
+  { gif: abs, name: "abs" },
+  { gif: quads, name: "quads" },
+  { gif: hamstrings, name: "hamstrings" },
+  { gif: glutes, name: "glutes" },
+  { gif: calves, name: "calves" },
+  { gif: cardio, name: "cardiovascular system"}
+];
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
   const { addExercise } = useWorkout();
+  const listRef = useRef<HTMLDivElement>(null);
+  const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
+  const {state,dispatch} = useExerciseSelectReducer();
+
+    const onSave = () => {
+    state.exercises.forEach(exercise => addExercise(exercise));
+  }
+
+  const scrollToTop = () => {
+    if (listRef.current) {
+      listRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+  };
+
+  useEffect(() => {
+    const listElement = listRef.current;
+    const handleScroll = () => {
+      if (listElement) {
+        setIsScrollTopVisible(window.document.body.scrollTop > 0);
+      }
+    };
+
+    if (listElement) {
+      listElement.addEventListener("scroll", handleScroll);
+    }
+  }, []);
 
   const {exercises, setMuscle,muscleGroup, setQuery, LoadNextPage} = UseExerciseList();
 
-
   return (
     <>
-      <SearchBar
-        value={searchText}
-        onChange={(query) => {
+      <div className="h-screen">
+        <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
+          <SearchBar
+            value={searchText}
+            onChange={(query) => {
           setSearchText(query);
           setQuery(query);
         }}
-        onSearch={() => {}}
-      />
-      <div className="">
-        <div
-          className="overflow-x-scroll flex
-                [&::-webkit-scrollbar-thumb]:bg-neutral-500
-                [&::-webkit-scrollbar]:bg-neutral-700"
-        >
-          <Filter
-            gif={chest}
-            isSelected={muscleGroup === "pectorals"}
-            onClick={() => setMuscle("pectorals")}
+            onSearch={() => {}}
           />
+          <div
+            className="overflow-x-scroll flex
+                  [&::-webkit-scrollbar-thumb]:bg-neutral-500
+                  [&::-webkit-scrollbar]:bg-neutral-700"
+          >
+            {muscleFilters.map(({ gif, name }) => (
+              <Filter
+                key={name}
+                gif={gif}
+                isSelected={muscleGroup === name}
+                onClick={() => {
+                  scrollToTop();
+                  setMuscle(name);
+                }}
+              />
+            ))}
+          </div>
+          <div className="fixed top-60 right-10 pointer-events-none z-100">
+            <button
+              onClick={scrollToTop}
+              className={`w-13 h-13 bg-[#414141] hover:bg-[#353535] rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+            >
+              ↑
+            </button>
+          </div>
+          <div
+            ref={listRef}
+            className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)]"
+          >
 
-          <Filter
-            gif={bicep}
-            isSelected={muscleGroup === "biceps"}
-            onClick={() => setMuscle("biceps")}
+          <List
+            rowComponent={exerciseListItem}
+            rowHeight={128}
+            rowCount={exercises.length}
+            rowProps={{exerciseList: exercises, addExercise}}
+            className="pb-4"
           />
-          <Filter
-            gif={tricep}
-            isSelected={muscleGroup === "triceps"}
-            onClick={() => setMuscle("triceps")}
-          />
-          <Filter
-            gif={lats}
-            isSelected={muscleGroup === "lats"}
-            onClick={() => setMuscle("lats")}
-          />
-          <Filter
-            gif={back}
-            isSelected={muscleGroup === "upper back"}
-            onClick={() => setMuscle("upper back")}
-          />
-          <Filter
-            gif={shoulders}
-            isSelected={muscleGroup === "delts"}
-            onClick={() => setMuscle("delts")}
-          />
-          <Filter
-            gif={forearms}
-            isSelected={muscleGroup === "forearms"}
-            onClick={() => setMuscle("forearms")}
-          />
-          <Filter
-            gif={abs}
-            isSelected={muscleGroup === "abs"}
-            onClick={() => setMuscle("abs")}
-          />
-          <Filter
-            gif={quads}
-            isSelected={muscleGroup === "quads"}
-            onClick={() => setMuscle("quads")}
-          />
-          <Filter
-            gif={hamstrings}
-            isSelected={muscleGroup === "hamstrings"}
-            onClick={() => setMuscle("hamstrings")}
-          />
-          <Filter
-            gif={glutes}
-            isSelected={muscleGroup === "glutes"}
-            onClick={() => setMuscle("glutes")}
-          />
-          <Filter
-            gif={calves}
-            isSelected={muscleGroup === "calves"}
-            onClick={() => setMuscle("calves")}
-          />
-        </div>
-
-        <List
-          rowComponent={exerciseListItem}
-          rowHeight={128}
-          rowCount={exercises.length}
-          rowProps={{exerciseList: exercises, addExercise}}
-          className="pb-4"
-        />
-        <div className="px-4">
-        <button 
-        className=" bg-amber-700 w-full rounded mb-25"
-        onClick={() => {LoadNextPage()}}>load more</button>
+          <div className="px-4">
+          <button 
+          className=" bg-amber-700 w-full rounded mb-25"
+          onClick={() => {LoadNextPage()}}>load more</button>
+            </div>
+          </div>
         </div>
       </div>
+      <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
     </>
   );
 }
@@ -135,6 +146,7 @@ function exerciseListItem({index, style, addExercise,exerciseList}: RowComponent
               name={exercise.name}
               gif={exercise.gif_url}
               id={exercise.exercise_id}
+              selected={false}
               onSelect={() => {
                 addExercise({
                   id: exercise.exercise_id,

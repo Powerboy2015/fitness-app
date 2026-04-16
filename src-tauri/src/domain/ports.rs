@@ -19,6 +19,7 @@ pub trait WorkoutRepo {
     fn new(db : Db) -> Self;
     fn list(&self) -> Result<Workouts, Error>;
     fn create(&self,create_workout_dto: CreateWorkoutParams) -> Result<bool, Error>;
+    fn remove(&self,workout_id: String) -> Result<bool,Error>;
 }
 
 pub trait ExerciseRepo {

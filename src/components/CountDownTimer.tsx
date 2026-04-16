@@ -77,7 +77,7 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
     <>
       <div className="flex flex-col items-center justify-center  w-87 bg-[#1E1E1E] border-2 border-[#565d5d] rounded-lg p-6 pt-12">
         <button 
-          className="absolute top-2 right-2 text-orange-500 hover:text-orange-400 active:text-orange-400 transition-colors z-10"
+          className="absolute top-2 right-2 text-orange-500 hover:text-orange-400 active:text-orange-400 transition-colors z-30"
           onClick={handleMenuClick}
         >
           <MenuIcon style={{ fontSize: '32px' }} />
