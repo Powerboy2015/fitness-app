@@ -2,11 +2,17 @@ import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 
 export default function KcalTracker() {
+  const [product, setProduct] = useState<searchItem[] | undefined>();
+
+  useEffect(() => {
+    fetchSearchAPI("kwark");
+    fetchProductAPI("3017620422003");
+  }, []);
+
   interface searchItem {
     id: string;
     product_name: string;
   }
-
   interface searchReturn {
     count: number;
     page: string;
@@ -16,20 +22,12 @@ export default function KcalTracker() {
     skip: number;
   }
 
-  const [product, setProduct] = useState<searchItem[] | undefined>();
-
-  useEffect(() => {
-    fetchSearchAPI("kwark");
-    fetchProductAPI("3017620422003");
-  }, []);
-
   async function fetchSearchAPI(product: string) {
     try {
       const result = await invoke<searchReturn>("get_products", {
         product: product,
         page: 1,
       });
-
       setProduct(result.products);
       console.log(result);
     } catch (err) {
