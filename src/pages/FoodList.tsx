@@ -32,6 +32,7 @@ interface searchReturn {
 export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [recents, setRecents] = useState<searchItem[]>([])
 
   async function fetchSearchAPI(product: string, page: number) {
     try {
@@ -53,29 +54,66 @@ export default function FoodList() {
 
   return (
     <>
-      <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
-        <div className=" mr-10 ml-7 flex">
-          <SearchBar
-            value={searchText}
-            onChange={setSearchText}
-            onSearch={() => { }}
-            placeholderText="food"
-          />
-          <button className="ml-3" onClick={() => handleSearch()}><SearchIcon /></button>
-        </div>
-      </div >
+      {!searchText ?
+        <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
+          <div className=" mr-10 ml-7 flex">
 
-      <div className="pt-15">
-        {product.map((item) => (
-          <FoodItemComponent
-            key={item.id}
-            name={item.product_name}
-            nutriments={item.nutriments}
-            barcode={item.code}
-            brand={item.brands}
-          />
-        ))}
-      </div>
+            <SearchBar
+              value={searchText}
+              onChange={setSearchText}
+              onSearch={() => { }}
+              placeholderText="food"
+              onclick={() => setProduct([])}
+            />
+            <button className="ml-3" onClick={() => handleSearch()}><SearchIcon /></button>
+          </div>
+          recent searches
+          {recents.map((item) => (
+            <FoodItemComponent
+              key={item.id}
+              name={item.product_name}
+              nutriments={item.nutriments}
+              barcode={item.code}
+              brand={item.brands}
+              onClick={() => {
+                if (!recents.includes(item)) {
+                  setRecents([...recents, item]);
+                }
+              }}
+            />
+          ))}
+        </div >
+        :
+        <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
+
+          <div className=" mr-10 ml-7 flex">
+            <SearchBar
+              value={searchText}
+              onChange={setSearchText}
+              onSearch={() => { }}
+              placeholderText="food"
+              onclick={() => setProduct([])}
+            />
+            <button className="ml-3" onClick={() => handleSearch()}><SearchIcon /></button>
+          </div>
+
+          {product.map((item) => (
+            <FoodItemComponent
+              key={item.id}
+              name={item.product_name}
+              nutriments={item.nutriments}
+              barcode={item.code}
+              brand={item.brands}
+              onClick={() => {
+                if (!recents.includes(item)) {
+                  setRecents([...recents, item]);
+                }
+              }}
+            />
+          ))}
+
+        </div>
+      }
     </>
-  );
+  )
 }

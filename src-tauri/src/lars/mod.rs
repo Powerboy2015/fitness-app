@@ -6,6 +6,3 @@ pub use get_product_by_barcode::*;
 
 pub mod get_products_by_search;
 pub use get_products_by_search::*; 
-
-pub mod get_product_detail;
-pub use get_product_detail::*;

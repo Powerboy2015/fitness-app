@@ -93,7 +93,6 @@ pub fn run() {
             lars::get_products,
             interface::tauri_commands::remove_workout,
             lars::get_exercise_by_id,
-            lars::get_product_detail,
             lars::get_product_by_barcode
             
         ])

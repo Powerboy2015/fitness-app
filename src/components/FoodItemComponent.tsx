@@ -15,9 +15,10 @@ interface FoodItemProps {
   nutriments: Nutriments;
   barcode: string
   brand: string
+  onClick: () => void
 }
 
-export default function FoodItemComponent({ name, nutriments, barcode, brand }: FoodItemProps) {
+export default function FoodItemComponent({ name, nutriments, barcode, brand, onClick }: FoodItemProps) {
   const [overlay, setOverlay] = useState<Boolean>(false);
 
   function handleOverlayClick() {
@@ -32,7 +33,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand }: 
   const sodium = nutriments["sodium_100g"] ?? 0;
 
   return overlay ? (
-    <div className="z-10 bg-gray-600 fixed top-0 right-0 left-0 bottom-0 w-full h-full pt-40 mt-10 ">
+    <div className="z-10 bg-gray-600 fixed top-0 right-0 left-0 bottom-0 w-full h-full pt-40 mt-10 " onClick={() => onClick()}>
       <div className="fixed inset-0 top-15 bottom-15 bg-[#161818] z-20 overflow-y-auto px-5 py-5 no-scrollbar">
         <div className="w-full max-w-md mx-auto bg-[#1E1E1E] border border-[#414141] rounded-xl p-5">
           <h1 className="text-white text-xl font-bold mb-4">Product Details per 100g</h1>

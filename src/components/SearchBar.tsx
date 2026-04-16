@@ -5,16 +5,18 @@ interface SearchBarProps {
     onChange: (value: string) => void;
     onSearch: () => void;
     placeholderText: string;
+    onclick: () => void
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeholderText}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeholderText, onclick }) => {
     const showBarcode = placeholderText === "food";
 
     return (
         <div>
-            <div className="input_wrapper relative w-87 justify-center mx-auto mb-3 mt-3">
+            <div className="input_wrapper relative w-87 justify-center mx-auto mb-3 mt-3" onClick={() => onclick()}>
                 <input
-                    type="text" 
+
+                    type="text"
                     placeholder={`Search ${placeholderText}`}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
