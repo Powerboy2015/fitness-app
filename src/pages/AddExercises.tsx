@@ -139,15 +139,3 @@ export default function AddExercises() {
     </>
   );
 }
-
-interface exerciseListItemProps {
-  exerciseList: ExerciseDTO[];
-  dispatch: ActionDispatch<[action: ExerciseAction]>;
-} 
-function exerciseListItem({index, style, dispatch,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
-  const exercise = exerciseList[index];
-
-  return <div style={style} className="p-4">
-    
-  </div>
-}
