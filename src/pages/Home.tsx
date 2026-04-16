@@ -12,7 +12,7 @@ export default function Home() {
     fixed inset-0 
     top-15
     bottom-15
-    bg-[#1E1E1E] 
+    bg-[#161818]
     z-20
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
@@ -29,8 +29,8 @@ export default function Home() {
           </div>
 
           <button
-            onClick={() => navigate("/history")}
-            className="bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] rounded-xl p-6 font-bold cursor-pointer col-span-2"
+            onClick={() => navigate("/product-details")}
+            className="bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] rounded-full p-6 font-bold cursor-pointer col-span-2"
           >
             Workout history
           </button>

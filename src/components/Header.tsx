@@ -16,6 +16,7 @@ const pageTitles: Record<string, string> = {
   "/exercises": "Exercises",
   "/exercise-description": "Exercise Description",
   "/food-list": "Food list"
+  "/product-details": "Product Details",
 };
 
 const routesWithSave = [
@@ -33,27 +34,26 @@ export default function Header() {
   const showSave = routesWithSave.includes(location.pathname);
   const showBack = location.pathname !== "/";
 
-    return (
-      <header className="z-100 pt-6 shrink-0 w-[90%] mx-auto bg-[#161818]">
-        <div className="relative flex items-center">
-          {showBack && (
-            <button
-                onClick={() => navigate(-1)}
-                className="absolute left-0 cursor-pointer"
-            >
-              <ArrowBackIcon sx={{ fontSize: 32 }} />
-            </button>
-          )}
-          <h1 className="text-[24px] font-bold text-[#F2F3F2] mx-auto">
-            {title}
-          </h1>
-          {showSave && (
-            <div className="absolute right-0">
-              <SaveButton />
-            </div>
-          )}
-        </div>
-          <div className="border-b-2 border-[#414141] mt-2"></div>
-      </header>
-    )
+  return (
+    <header className="z-200 pt-6 shrink-0 w-full mx-auto bg-[#161818]">
+      <div className="relative flex items-center border-b-2 border-[#414141] pb-2 w-[90%] mx-auto">
+        {showBack && (
+          <button
+            onClick={() => navigate(-1)}
+            className="absolute left-0 cursor-pointer"
+          >
+            <ArrowBackIcon sx={{ fontSize: 32 }} />
+          </button>
+        )}
+        <h1 className="text-[24px] font-bold text-[#F2F3F2] mx-auto">
+          {title}
+        </h1>
+        {showSave && (
+          <div className="absolute right-0">
+            <SaveButton />
+          </div>
+        )}
+      </div>
+    </header>
+  );
 }

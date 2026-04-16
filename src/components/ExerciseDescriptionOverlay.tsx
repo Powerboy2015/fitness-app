@@ -133,7 +133,7 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
   if (!active) return <></>;
 
   return <div>
-        <div className="flex w-screen fixed top-0 bottom-0 bg-[#1E1E1E] z-10000 overflow-scroll">
+        <div className="flex w-screen fixed top-0 bottom-0 bg-[#1E1E1E] z-200 overflow-scroll">
           <div className="grid grid-cols-2 gap-4 py-4 w-[90%] h-[210%] mx-auto">
             <div className="col-span-2 bg-[#1E1E1E] border border-[#414141] rounded-xl p-6 font-bold flex flex-col ">
               <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto">
