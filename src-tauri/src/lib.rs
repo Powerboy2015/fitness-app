@@ -6,7 +6,7 @@ mod repository;
 mod interface;
 mod application;
 mod domain;
-mod lars;
+pub mod lars;
 
 use infrastructures::sqlite::Db;
 use repository::workout_repository::WorkoutRepository;
@@ -37,7 +37,6 @@ impl Service {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    // Tauri building process
 
     // sets up the default structure of the database.
     tauri::Builder::default()
@@ -92,7 +91,10 @@ pub fn run() {
             interface::tauri_commands::complete_session,
             interface::tauri_commands::workout_history,
             interface::tauri_commands::remove_workout,
-            lars::get_exercise_by_id
+            lars::get_products,
+            lars::get_exercise_by_id,
+            lars::get_product_detail,
+            lars::get_product_by_barcode
             
         ])
         .run(tauri::generate_context!())
