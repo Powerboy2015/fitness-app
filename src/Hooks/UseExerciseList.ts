@@ -3,9 +3,11 @@ import API from "../classes/api.ts";
 
 
 interface ReturnProps{
-    sortedExercises: ExerciseDTO[]
-    setMuscle: (muscle:muscleGroups) => void
-    muscleGroup: muscleGroups
+    exercises: ExerciseDTO[],
+    setMuscle: (muscle:muscleGroups) => void,
+    muscleGroup: muscleGroups,
+    setQuery: (query:string) => void,
+    LoadNextPage: () => void,
 }
 
 // interface UseMuscleFilterProps {
@@ -32,9 +34,11 @@ export type muscleGroups = "pectorals"|
  * @returns muscleGroup -- the currently selected muscle group, is required in order to highlight selected.
  * @returns setMuscle -- a function to change the currently selected muscle. Passing the same muscle twice unsets it.
  */
-export default function UseMuscleFilters(): ReturnProps {
+export default function UseExerciseList(): ReturnProps {
     const [muscleGroup,setMuscleGroup] = useState<muscleGroups>(null);
     const [exercises,setExercises] = useState<ExerciseDTO[]>([]);
+    const [searchQuery,setSearchQuery] = useState<string|undefined>(undefined);
+    const [currentPage,setCurrentPage] = useState<number>(1);
 
     // The default function to update muscles.
     const setMuscle = (muscle: muscleGroups) => {
@@ -43,23 +47,29 @@ export default function UseMuscleFilters(): ReturnProps {
         } else setMuscleGroup(muscle);
     }
 
-    // Fetch exercises once
-    useEffect(() => {
-        API.exercises.list().then(setExercises);
-    }, []);
+    const setQuery = (query: string) => {
+        setSearchQuery(query);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!muscleGroup) {
-                const data = await API.exercises.list();
+                const data = await API.exercises.list({query:searchQuery,filter: muscleGroup,page_size: 50, page: 1});
                 setExercises(data);
-            } else {
-                const data = await API.exercises.filter(muscleGroup);
-                setExercises(data);
-            }
         };
         fetchData();
-    }, [muscleGroup]);
+    }, [muscleGroup,searchQuery]);
 
-    return {sortedExercises: exercises, muscleGroup,setMuscle}
+    const LoadNextPage = () => {
+        setCurrentPage(prev => prev++);
+
+        const fetchData = async () => {
+                const data = await API.exercises.list({query:searchQuery,filter: muscleGroup,page_size: 50, page: 1});
+                setExercises(prev => [...prev,...data]);
+        };
+        fetchData();
+
+
+    }
+
+    return {exercises, muscleGroup,setMuscle,setQuery,LoadNextPage}
 }

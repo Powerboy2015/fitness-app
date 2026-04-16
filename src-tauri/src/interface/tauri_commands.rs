@@ -1,6 +1,6 @@
 use tauri::State;
 use crate::api::{ApiError, ApiErrorResponse, ApiResponse};
-use crate::application::workout_service::CreateWorkoutRequest;
+use crate::application::workout_service::{CreateWorkoutRequest, WorkoutListParams};
 use crate::interface::dto::{CreateWorkoutDTO, ExerciseListDTO, ExerciseRecordDTO, SessionDTO, UpdateSessionSetReq, WorkoutDTO, WorkoutHistoryDTO, WorkoutsDTO};
 use crate::Ctx;
 
@@ -50,23 +50,10 @@ pub fn create_workout_with_exercises(ctx: State<Ctx>, req: CreateWorkoutRequest)
 }
 
 #[tauri::command]
-pub fn get_all_exercises(ctx: State<Ctx>) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
-    let resp = ctx.service.workout.list_exercises()?;
-
-    let data: ExerciseListDTO = resp
-        .into_iter()
-        .map(ExerciseRecordDTO::from)
-        .collect();
-
-    Ok(ApiResponse {
-        ok: true,
-        data
-    })
-}
-
-#[tauri::command]
-pub fn get_exercises_by_muscle(ctx: State<Ctx>, req: String) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
-    let resp = ctx.service.workout.filter_exercises(req)?;
+pub fn get_all_exercises(ctx: State<Ctx>,req: WorkoutListParams) -> Result<ApiResponse<ExerciseListDTO>, ApiErrorResponse> {
+    
+    
+    let resp = ctx.service.workout.list_exercises(req)?;
 
     let data: ExerciseListDTO = resp
         .into_iter()

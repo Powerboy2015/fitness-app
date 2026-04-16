@@ -23,8 +23,7 @@ pub trait WorkoutRepo {
 
 pub trait ExerciseRepo {
     fn new(db : Db) -> Self; // queries database and returns a list of all exercises.
-    fn list(&self) -> Result<Exercises, Error>; // returns a filtered list based on the muscle group given.
-    fn filtered_list(&self, muscle_group: &str) -> Result<Exercises, Error>;
+    fn list(&self, page_size: i32, offset: i32, filter: Option<&str>, query: Option<&str>) -> Result<Exercises, Error>; // returns a filtered list based on the muscle group given.
 }
 
 pub trait WorkoutExerciseRepo {

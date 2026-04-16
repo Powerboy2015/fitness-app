@@ -15,34 +15,28 @@ import lats from "../assets/lats.png";
 import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import Filter from "../components/Filter";
-import UseMuscleFilters from "../Hooks/UseMuscleFilters.ts";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 import { List, RowComponentProps } from "react-window";
+import UseExerciseList from "../Hooks/UseExerciseList.ts";
 
 export default function AddExercises() {
   const [searchText, setSearchText] = useState("");
   const { addExercise } = useWorkout();
 
-  const {sortedExercises, setMuscle,muscleGroup} = UseMuscleFilters();
-
-  const filteredExercises = useMemo(() => {
-    const searchQuery = searchText.toLowerCase();
-    return sortedExercises.filter(exercise =>
-        exercise.name
-            .toLowerCase()
-            .includes(searchQuery)
-    );
-  }, [sortedExercises, searchText]);
+  const {exercises, setMuscle,muscleGroup, setQuery, LoadNextPage} = UseExerciseList();
 
 
   return (
     <>
       <SearchBar
         value={searchText}
-        onChange={setSearchText}
+        onChange={(query) => {
+          setSearchText(query);
+          setQuery(query);
+        }}
         onSearch={() => {}}
       />
-      <div>
+      <div className="">
         <div
           className="overflow-x-scroll flex
                 [&::-webkit-scrollbar-thumb]:bg-neutral-500
@@ -113,10 +107,16 @@ export default function AddExercises() {
 
         <List
           rowComponent={exerciseListItem}
-          rowHeight={112}
-          rowCount={filteredExercises.length}
-          rowProps={{exerciseList: filteredExercises, addExercise}}
+          rowHeight={128}
+          rowCount={exercises.length}
+          rowProps={{exerciseList: exercises, addExercise}}
+          className="pb-4"
         />
+        <div className="px-4">
+        <button 
+        className=" bg-amber-700 w-full rounded mb-25"
+        onClick={() => {LoadNextPage()}}>load more</button>
+        </div>
       </div>
     </>
   );
@@ -126,10 +126,10 @@ interface exerciseListItemProps {
   exerciseList: ExerciseDTO[];
   addExercise: (workout: Iworkout) => void;
 } 
-function exerciseListItem({index, addExercise,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
+function exerciseListItem({index, style, addExercise,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
   const exercise = exerciseList[index];
 
-  return <>
+  return <div style={style} className="p-4">
     <ExerciseDescriptionOverlay
               key={exercise.exercise_id}
               name={exercise.name}
@@ -143,5 +143,5 @@ function exerciseListItem({index, addExercise,exerciseList}: RowComponentProps<e
                 });
               }}
               />
-  </>
+  </div>
 }
