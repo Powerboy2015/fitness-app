@@ -1,11 +1,23 @@
 import { useState } from "react";
 
-interface FoodItemProps {
-  name: string;
-  nutriments: any[];
+interface Nutriments {
+  "energy-kcal_100g"?: number;
+  "carbohydrates_100g"?: number;
+  "proteins_100g"?: number;
+  "fat_100g"?: number;
+  "sugars_100g"?: number;
+  "fiber_100g"?: number;
+  "sodium_100g"?: number;
 }
 
-export default function FoodItemComponent({ name, nutriments }: FoodItemProps) {
+interface FoodItemProps {
+  name: string;
+  nutriments: Nutriments;
+  barcode: string
+  brand: string
+}
+
+export default function FoodItemComponent({ name, nutriments, barcode, brand }: FoodItemProps) {
   const [overlay, setOverlay] = useState<Boolean>(false);
 
   function handleOverlayClick() {
@@ -24,7 +36,6 @@ export default function FoodItemComponent({ name, nutriments }: FoodItemProps) {
       <div className="fixed inset-0 top-15 bottom-15 bg-[#161818] z-20 overflow-y-auto px-5 py-5 no-scrollbar">
         <div className="w-full max-w-md mx-auto bg-[#1E1E1E] border border-[#414141] rounded-xl p-5">
           <h1 className="text-white text-xl font-bold mb-4">Product Details per 100g</h1>
-
 
           <div className="grid grid-cols-3 gap-3 ">
 
@@ -90,8 +101,8 @@ export default function FoodItemComponent({ name, nutriments }: FoodItemProps) {
         <div className="w-full max-w-md mx-auto mt-5 bg-[#1E1E1E] border border-[#414141] rounded-xl p-5">
           <h2 className="text-white text-lg font-bold mb-3">Additional info</h2>
           <p className="text-white text-sm">
-            barcode: 0123456789012 <br />
-            brand: ExampleBrand <br />
+            barcode: {barcode} <br />
+            brand: {brand} <br />
           </p>
         </div>
         <div>

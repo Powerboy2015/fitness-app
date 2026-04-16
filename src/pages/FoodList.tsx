@@ -1,16 +1,27 @@
 import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
-import { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
+
+interface Nutriments {
+  "energy-kcal_100g"?: number;
+  "carbohydrates_100g"?: number;
+  "proteins_100g"?: number;
+  "fat_100g"?: number;
+  "sugars_100g"?: number;
+  "fiber_100g"?: number;
+  "sodium_100g"?: number;
+}
 
 interface searchItem {
   id: string;
   product_name: string;
-  nutriments: any[];
+  nutriments: Nutriments;
+  code: string;
+  brands: string;
 }
 interface searchReturn {
-  count: number;
   page: string;
   page_count: number;
   page_size: number;
@@ -22,11 +33,6 @@ export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
   const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {
-    fetchSearchAPI("pizza", 1);
-  }, []);
-
-
   async function fetchSearchAPI(product: string, page: number) {
     try {
       const result = await invoke<searchReturn>("get_products", {
@@ -35,17 +41,6 @@ export default function FoodList() {
       });
       setProduct(result.products);
 
-      console.log(result);
-    } catch (err) {
-      console.error("Error:", err);
-    }
-  }
-
-  async function fetchProductAPI(barcode: string) {
-    try {
-      const result = await invoke("get_product_by_barcode", {
-        product: barcode,
-      });
       console.log(result);
     } catch (err) {
       console.error("Error:", err);
@@ -76,6 +71,8 @@ export default function FoodList() {
             key={item.id}
             name={item.product_name}
             nutriments={item.nutriments}
+            barcode={item.code}
+            brand={item.brands}
           />
         ))}
       </div>
