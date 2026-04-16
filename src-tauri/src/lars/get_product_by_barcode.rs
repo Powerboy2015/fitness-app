@@ -8,7 +8,7 @@ pub async fn get_product_by_barcode(product: String) -> Result<serde_json::Value
 
 let body = client
     .get(format!(
-        "https://world.openfoodfacts.net/api/v2/product/{}?product_type=all&cc=nl&lc=nl&fields=product_name%2Cnutriments",
+        "https://world.openfoodfacts.net/api/v2/product/{}?product_type=all&cc=nl&lc=nl&fields=product_name%2Cnutriments%2Cbrands_tags",
         product
     )).send()
     .await
