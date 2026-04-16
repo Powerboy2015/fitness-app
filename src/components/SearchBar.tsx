@@ -24,19 +24,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeh
                 />
                     {showBarcode && (
                         <button
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F67631] hover:text-[#ff8c42] active:text-[#ff8c42] transition-colors cursor-pointer"
+                        className="absolute right-3 top-1/2 w-6 -translate-y-1/2 text-[#F67631] hover:text-[#fd8f4a] active:text-[#c86d35] transition-colors cursor-pointer"
                             type="button"
                         >
-                            <BarcodeIcon className="w-6" />
+                            <BarcodeIcon className="text-current" />
                         </button>
                 )}
             </div>
             <button
-                className="h-11 w-11 rounded-lg bg-[#2e2e2e] border border-[#565d5d] flex items-center justify-center text-[#F67631] hover:text-[#ff8c42] active:text-[#ff8c42] transition-colors"
+                className="h-11 w-11 rounded-lg bg-[#2e2e2e] border border-[#565d5d] flex items-center justify-center text-[#F67631] hover:text-[#ff8c42] active:text-[#a24b14] active:bg-[#282727] transition-colors"
                 type="button"
                 onClick={onSearch}
             >
-                <SearchIcon sx={{ color: "#F67631" }} />
+                <SearchIcon sx={{ color: "currentColor" }} />
             </button>
         </div>
     );

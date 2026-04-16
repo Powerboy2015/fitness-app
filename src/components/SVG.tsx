@@ -8,7 +8,7 @@ export const BarcodeIcon = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <path d={BarcodePath} fill="#F67631" />
+    <path d={BarcodePath} fill="currentColor" />
   </svg>
 );
 
