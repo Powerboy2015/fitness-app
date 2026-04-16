@@ -19,16 +19,12 @@ export default function FoodItemComponent({ name, nutriments }: FoodItemProps) {
   const fiber = nutriments["fiber_100g"] ?? 0;
   const sodium = nutriments["sodium_100g"] ?? 0;
 
-  function test() {
-    console.log(calories, carbs, protein, fat, sugar, fiber,)
-  }
-
   return overlay ? (
     <div className="z-10 bg-gray-600 fixed top-0 right-0 left-0 bottom-0 w-full h-full pt-40 mt-10 ">
       <div className="fixed inset-0 top-15 bottom-15 bg-[#161818] z-20 overflow-y-auto px-5 py-5 no-scrollbar">
         <div className="w-full max-w-md mx-auto bg-[#1E1E1E] border border-[#414141] rounded-xl p-5">
           <h1 className="text-white text-xl font-bold mb-4">Product Details per 100g</h1>
-          <button onClick={() => { test() }}>test</button>
+
 
           <div className="grid grid-cols-3 gap-3 ">
 
@@ -118,9 +114,14 @@ export default function FoodItemComponent({ name, nutriments }: FoodItemProps) {
             </select>
           </div>
           <div className="w-full max-w-md mx-auto mt-5">
-            <button className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] flex z-30">
-              Add product
-            </button>
+            <div className=" flex">
+              <button onClick={() => { setOverlay(false) }} className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full bg-[#5c5c5c] hover:bg-[#9b9b9b] active:bg-[#949494] flex z-30">
+                Cancel
+              </button>
+              <button className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] flex z-30">
+                Add product
+              </button>
+            </div>
           </div>
         </div>
       </div>

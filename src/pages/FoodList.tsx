@@ -2,6 +2,7 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState, useMemo, useEffect } from "react";
+import SearchIcon from '@mui/icons-material/Search';
 
 interface searchItem {
   id: string;
@@ -19,12 +20,11 @@ interface searchReturn {
 //pls work github
 export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
-  const [barcode, setBarcode] = useState<String>("");
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     fetchSearchAPI("pizza", 1);
   }, []);
-
 
 
   async function fetchSearchAPI(product: string, page: number) {
@@ -51,18 +51,24 @@ export default function FoodList() {
       console.error("Error:", err);
     }
   }
-  const [searchText, setSearchText] = useState("");
+
+  function handleSearch() {
+    fetchSearchAPI(searchText, 1)
+  }
 
   return (
     <>
       <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
-        <SearchBar
-          value={searchText}
-          onChange={setSearchText}
-          onSearch={() => { }}
-          placeholderText="food"
-        />
-      </div>
+        <div className=" mr-10 ml-7 flex">
+          <SearchBar
+            value={searchText}
+            onChange={setSearchText}
+            onSearch={() => { }}
+            placeholderText="food"
+          />
+          <button className="ml-3" onClick={() => handleSearch()}><SearchIcon /></button>
+        </div>
+      </div >
 
       <div className="pt-15">
         {product.map((item) => (
@@ -70,7 +76,6 @@ export default function FoodList() {
             key={item.id}
             name={item.product_name}
             nutriments={item.nutriments}
-            barcode={barcode}
           />
         ))}
       </div>
