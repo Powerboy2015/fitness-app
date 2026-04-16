@@ -1,6 +1,6 @@
 import WeightLineChart from "../components/WeightLineChart.tsx";
 import AddFoodButton from "../components/AddFoodButton.tsx";
-
+//pls work github
 export default function KcalTracker() {
   return (
   <div className="grid grid-cols-2 gap-4 py-4 w-[90%] mx-auto">

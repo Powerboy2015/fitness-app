@@ -2,7 +2,7 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState, useMemo, useEffect } from "react";
-
+//pls work github
 export default function FoodList() {
     const [product, setProduct] = useState<searchItem[]>([]);
 
