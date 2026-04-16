@@ -22,6 +22,7 @@ import { Toaster } from "react-hot-toast";
 import FloatingWorkoutTimer from "./components/FloatingWorkoutTimer.tsx";
 import API from "./classes/api";
 import { SESSION_STORAGE_KEYS } from "./apis/sessionAPI";
+import ProductDetails from "./pages/ProductDetails.tsx";
 
 function App() {
   useEffect(() => {
@@ -94,10 +95,8 @@ function App() {
               <Route path="/kcal-tracker" element={<KcalTracker />} />
               <Route path="/exercises" element={<Exercises />} />
               <Route path="/add-food" element={<AddFood />} />
-              <Route
-                path="/exercise-description"
-                element={<ExerciseDescription />}
-              />
+              <Route path="/exercise-description"element={<ExerciseDescription />}/>
+              <Route path="/product-details" element={<ProductDetails />} />
             </Routes>
           </main>
           <FloatingWorkoutTimer />
