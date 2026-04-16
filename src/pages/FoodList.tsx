@@ -2,28 +2,30 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState, useMemo, useEffect } from "react";
+
+interface searchItem {
+  id: string;
+  product_name: string;
+  nutriments: any[];
+}
+interface searchReturn {
+  count: number;
+  page: string;
+  page_count: number;
+  page_size: number;
+  products: searchItem[];
+  skip: number;
+}
 //pls work github
 export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
+  const [barcode, setBarcode] = useState<String>("");
 
   useEffect(() => {
-    fetchSearchAPI("kwark", 1);
-    fetchProductAPI("3017620422003");
+    fetchSearchAPI("pizza", 1);
   }, []);
 
-  interface searchItem {
-    id: string;
-    product_name: string;
-    nutriments: any[];
-  }
-  interface searchReturn {
-    count: number;
-    page: string;
-    page_count: number;
-    page_size: number;
-    products: searchItem[];
-    skip: number;
-  }
+
 
   async function fetchSearchAPI(product: string, page: number) {
     try {
@@ -32,6 +34,7 @@ export default function FoodList() {
         page: page,
       });
       setProduct(result.products);
+
       console.log(result);
     } catch (err) {
       console.error("Error:", err);
@@ -67,6 +70,7 @@ export default function FoodList() {
             key={item.id}
             name={item.product_name}
             nutriments={item.nutriments}
+            barcode={barcode}
           />
         ))}
       </div>

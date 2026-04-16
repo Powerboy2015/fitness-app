@@ -1,10 +1,5 @@
 import { useState } from "react";
-type ProductMetric = {
-  label: string;
-  value: number;
-  unit: string;
-  color: string;
-};
+
 interface FoodItemProps {
   name: string;
   nutriments: any[];
@@ -16,29 +11,82 @@ export default function FoodItemComponent({ name, nutriments }: FoodItemProps) {
   function handleOverlayClick() {
     setOverlay(!overlay);
   }
-  const cal = nutriments["energy-kcal_100g"];
+  const calories = nutriments["energy-kcal_100g"] ?? 0;
+  const carbs = nutriments["carbohydrates_100g"] ?? 0
+  const protein = nutriments["proteins_100g"] ?? 0;
+  const fat = nutriments["fat_100g"] ?? 0;
+  const sugar = nutriments["sugars_100g"] ?? 0;
+  const fiber = nutriments["fiber_100g"] ?? 0;
+  const sodium = nutriments["sodium_100g"] ?? 0;
 
+  function test() {
+    console.log(calories, carbs, protein, fat, sugar, fiber,)
+  }
 
   return overlay ? (
     <div className="z-10 bg-gray-600 fixed top-0 right-0 left-0 bottom-0 w-full h-full pt-40 mt-10 ">
       <div className="fixed inset-0 top-15 bottom-15 bg-[#161818] z-20 overflow-y-auto px-5 py-5 no-scrollbar">
         <div className="w-full max-w-md mx-auto bg-[#1E1E1E] border border-[#414141] rounded-xl p-5">
-          <h1 className="text-white text-xl font-bold mb-4">Product Details</h1>
+          <h1 className="text-white text-xl font-bold mb-4">Product Details per 100g</h1>
+          <button onClick={() => { test() }}>test</button>
 
-          <div
-            key={name}
-            className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#F67631]"
-          >
-            <div
-              style={{ color: "#F67631", display: "block" }}
-              className="font-semibold block text-[#F67631]"
-            >
-              Calories
+          <div className="grid grid-cols-3 gap-3 ">
+
+            <div className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#F67631] col-span-3">
+              <div className="font-semibold block text-[#F67631]">
+                Calories
+              </div>
+              <div className="inline-flex items-baseline">
+                {calories.toFixed()}
+              </div>
             </div>
-            <div className="inline-flex items-baseline">
-              <span className="text-white text-lg font-bold">
-                {cal}
-              </span>
+            <div className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#DC143C]">
+              <div className="font-semibold block text-[#DC143C]">
+                Carbs
+              </div>
+              <div className="inline-flex items-baseline">
+                {carbs.toFixed(1)}g
+              </div>
+            </div>
+            <div className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#4DA3FF]">
+              <div className="font-semibold block text-[#4DA3FF]">
+                Proteins
+              </div>
+              <div className="inline-flex items-baseline">
+                {protein.toFixed(1)}g
+              </div>
+            </div>
+            <div className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#32CD32]">
+              <div className="font-semibold block text-[#32CD32]">
+                Fats
+              </div>
+              <div className="inline-flex items-baseline">
+                {fat.toFixed(1)}g
+              </div>
+            </div>
+            <div className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#FFD700]">
+              <div className="font-semibold block text-[#FFD700]">
+                Sugar
+              </div>
+              <div className="inline-flex items-baseline">
+                {sugar.toFixed(1)}g
+              </div>
+            </div>
+            <div className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#9153cc]">
+              <div className="font-semibold block text-[#9153cc]">
+                Fiber
+              </div>
+              <div className="inline-flex items-baseline">
+                {fiber.toFixed(1)}g
+              </div>
+            </div>
+            <div className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#FF4500]">
+              <div className="font-semibold block text-[#FF4500]">
+                Sodium
+              </div>
+              <div className="inline-flex items-baseline">
+                {sodium.toFixed(1)}g
+              </div>
             </div>
           </div>
         </div>
