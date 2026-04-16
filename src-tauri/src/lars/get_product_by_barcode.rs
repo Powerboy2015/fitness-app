@@ -1,14 +1,22 @@
-use serde_json::json;
-use std::collections::HashMap;
-use serde_json::Value;
-use openfoodfacts::{self as off};
+use reqwest::Client;
 
 #[tauri::command]
-pub fn get_product_by_barcode() {
-    let client = off::v0().build().unwrap();
-    let code = "3850102123681";
+pub async fn get_product_by_barcode(product: String) -> Result<serde_json::Value, String> {
+        let client = Client::builder()
+        .user_agent("Fitness app/1.0 (lars200221@gmail.com)")
+        .build().unwrap();
 
-    let response = client.product(code, None).unwrap();
-    let result_json = json!(response.json::<HashMap::<String, Value>>().unwrap());
-    print!("{}", result_json)
+let body = client
+    .get(format!(
+        "https://world.openfoodfacts.net/api/v2/product/{}?product_type=all&cc=nl&lc=nl&fields=product_name%2Cnutriments",
+        product
+    )).send()
+    .await
+    .map_err(|e| e.to_string())?
+    .json::<serde_json::Value>()
+    .await
+    .map_err(|e| e.to_string())?;
+
+    Ok(body)
 }
+

@@ -5,13 +5,14 @@ export default function KcalTracker() {
   const [product, setProduct] = useState();
 
   useEffect(() => {
-    fetchAPI();
+    fetchSearchAPI("kwark");
+    fetchProductAPI("3017620422003");
   }, []);
 
-  async function fetchAPI() {
+  async function fetchSearchAPI(product: String) {
     try {
       const result = await invoke("get_products", {
-        product: "kwark",
+        product: product,
         page: 1,
       });
 
@@ -21,11 +22,23 @@ export default function KcalTracker() {
       console.error("Error:", err);
     }
   }
+
+  async function fetchProductAPI(barcode: String) {
+    try {
+      const result = await invoke("get_product_by_barcode", {
+        product: barcode,
+      });
+      console.log(result.product);
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  }
+
   return (
     <>
       {product ? (
         product.map((item, index) => {
-          return <div>{item.product_name}</div>;
+          return <div key={index}>{item.product_name}</div>;
         })
       ) : (
         <button

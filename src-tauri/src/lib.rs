@@ -92,7 +92,8 @@ pub fn run() {
             interface::tauri_commands::workout_history,
             lars::get_products,
             lars::get_exercise_by_id,
-            lars::get_product_detail
+            lars::get_product_detail,
+            lars::get_product_by_barcode
             
         ])
         .run(tauri::generate_context!())
