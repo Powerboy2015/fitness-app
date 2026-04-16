@@ -79,7 +79,7 @@ export default function AddExercises() {
   return (
     <>
       <div className="h-screen">
-        <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
+        <div className="fixed pl-5 pr-5 top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
           <SearchBar
             value={searchText}
             onChange={setSearchText}
