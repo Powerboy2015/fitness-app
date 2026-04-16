@@ -57,7 +57,7 @@ export default function FoodList() {
     } catch (err) {
       console.error("Error:", err);
 
-      setError("WE GAAN ALLEMAAL DOOD!! ER WERKT IETS NIET AAN DE DATABASE");
+      setError("WE GAAN ALLEMAAL DOOD!! ER WERKT IETS NIET AAN DE DATABASE!!!");
       setProduct([]);
     } finally {
       setLoading(false);
@@ -103,9 +103,9 @@ export default function FoodList() {
               barcode={item.code}
               brand={item.brands}
               onClick={() => {
-                // if (!recents.includes(item)) {
-                //   setRecents([...recents, item]);
-                // }
+                if (!recents.includes(item)) {
+                  setRecents([...recents, item]);
+                }
               }}
             />
           ))}
@@ -129,9 +129,9 @@ export default function FoodList() {
               barcode={item.code}
               brand={item.brands}
               onClick={() => {
-                // if (!recents.includes(item)) {
-                //   setRecents([...recents, item]);
-                // }
+                if (!recents.includes(item)) {
+                  setRecents([...recents, item]);
+                }
               }}
             />
           ))}
