@@ -16,28 +16,29 @@ export default function FoodItemComponent({ name, nutriments }: FoodItemProps) {
   function handleOverlayClick() {
     setOverlay(!overlay);
   }
+  const cal = nutriments["energy-kcal_100g"];
+
 
   return overlay ? (
-    <div className="z-10 bg-gray-600 fixed top-0 right-0 left-0 bottom-0 w-full h-full pt-40 ">
+    <div className="z-10 bg-gray-600 fixed top-0 right-0 left-0 bottom-0 w-full h-full pt-40 mt-10 ">
       <div className="fixed inset-0 top-15 bottom-15 bg-[#161818] z-20 overflow-y-auto px-5 py-5 no-scrollbar">
         <div className="w-full max-w-md mx-auto bg-[#1E1E1E] border border-[#414141] rounded-xl p-5">
           <h1 className="text-white text-xl font-bold mb-4">Product Details</h1>
 
           <div
             key={name}
-            className="border-2 rounded-xl p-5 min-h-[92px] flex flex-col items-center justify-center border-[#F67631]"
+            className="border-2 rounded-xl p-5  flex flex-col items-center justify-center border-[#F67631]"
           >
-            <span
+            <div
               style={{ color: "#F67631", display: "block" }}
-              className="font-semibold"
+              className="font-semibold block text-[#F67631]"
             >
-              {name}
-            </span>
+              Calories
+            </div>
             <div className="inline-flex items-baseline">
               <span className="text-white text-lg font-bold">
-                // prettier-ignore{nutriments.energy - kcal_100g}
+                {cal}
               </span>
-              <span className="text-[15px] text-white">{nutriments.unit}</span>
             </div>
           </div>
         </div>

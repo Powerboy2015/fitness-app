@@ -52,11 +52,11 @@ export default function FoodList() {
 
   return (
     <>
-      <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
+      <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
         <SearchBar
           value={searchText}
           onChange={setSearchText}
-          onSearch={() => {}}
+          onSearch={() => { }}
           placeholderText="food"
         />
       </div>
