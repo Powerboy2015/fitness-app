@@ -1,7 +1,8 @@
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check"
 import { invoke } from "@tauri-apps/api/core";
-import { ReactElement, useState } from "react";
+import { MouseEvent, ReactElement, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ExerciseDescriptionOverlay({
   name,
@@ -20,6 +21,7 @@ export default function ExerciseDescriptionOverlay({
   const [instructions, setInstructions] = useState<string[]>([]);
   const [secondaryMuscles, setSecondaryMuscles] = useState<string[]>([]);
   const [targetMuscle, setTargetMuscle] = useState<string[]>([]);
+  const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const [added,isAdded] = useState<boolean>(false);
 
@@ -77,7 +79,7 @@ export default function ExerciseDescriptionOverlay({
   return (
     <div>
       <li
-        className={`bg-components-color ${selected ? "border-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}
+        className={` border-[#414141] border rounded-xl px-2 flex w-full items-center  hover:bg-[#252525] active:bg-[#252525] transition-transform duration-100 ease-in-out `}
       >
         <div
           className="flex w-full h-full py-4 items-center justify-between"
@@ -87,6 +89,7 @@ export default function ExerciseDescriptionOverlay({
             className="h-20 w-20 contain-content rounded-xl"
             src={gif}
             alt=""
+            loading="lazy"
           />
           <h2 className="text-lg ml-5 font-semibold">{name}</h2>
             <button
@@ -94,7 +97,7 @@ export default function ExerciseDescriptionOverlay({
                 e.stopPropagation();
                 handleClick(e);
               }}
-            className="flex h-12 w-12 rounded-full bg-accent hover:bg-accent-action active:bg-accent-action ml-2 z-50">
+            className="flex h-12 w-12 rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] ml-2 z-50">
             {!added ? <AddIcon sx={{ fontSize: 49 }} /> : <CheckIcon sx={{ fontSize: 49 }} />}
             </button>
         </div>
@@ -131,18 +134,18 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
   if (!active) return <></>;
 
   return <div>
-        <div className="flex w-screen fixed top-0 bottom-0 bg-background z-200 overflow-scroll">
+        <div className="flex w-screen fixed top-0 bottom-0 bg-[#1E1E1E] z-200 overflow-scroll">
           <div className="grid grid-cols-2 gap-4 py-4 w-[90%] h-[210%] mx-auto">
-            <div className="col-span-2 bg-components border border-bordercolor rounded-xl p-6 font-bold flex flex-col text-textcolor">
-              <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto">
+            <div className="col-span-2 bg-[#1E1E1E] border border-[#414141] rounded-xl p-6 font-bold flex flex-col ">
+              <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto">
                 <div>{name.charAt(0).toUpperCase() + name.slice(1)}</div>
               </h2>
-              <img src={gif} alt="" />
+              <img src={gif} alt="" loading="lazy" />
 
-              <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
+              <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
                 Targeted muscles:
               </h2>
-              <div className="bg-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
+              <div className="bg-[#F67631] w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
                 {targetMuscle}
               </div>
               <div className="grid grid-cols-2 text-center">
@@ -150,40 +153,40 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
                   return (
                     <div
                       key={index}
-                      className="border-accent border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 "
+                      className="border-[#F67631] border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 "
                     >
                       {muscle}
                    </div>
                   );
                 })}
               </div>
-              <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
+              <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
                 Equipment
               </h2>
-              <div className="bg-accent w-fit px-9 py-1 rounded-xl mx-2 my-1">
+              <div className="bg-[#F67631] w-fit px-9 py-1 rounded-xl mx-2 my-1">
                 {equipments}
               </div>
-              <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
+              <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
                 Instructions
               </h2>
               {instructions.map((instruct, index) => {
                 return (
                   <div
                     key={index}
-                    className=" self-start w-fit px-3 rounded-xl mx-2 my-1 font-normal text-textcolor"
+                    className=" self-start w-fit px-3 rounded-xl mx-2 my-1 font-normal"
                   >
                     <div className="font-bold">Step {index + 1}</div>
                     {instruct.replace(/^.*Step:\d+\s*/, "")}
                   </div>
                 );
               })}
-              <div className="flex justify-center text-textcolor">
+              <div className="flex  justify-center ">
                 <button className="p-5" onClick={() => disableOverlay()}>
                   close
                 </button>
                 <button
                   onClick={() => handleAddClick()}
-                  className="flex h-12 w-12 rounded-full bg-accent hover:bg-accent-action active:bg-accent-action ml-2"
+                  className="flex h-12 w-12 rounded-full bg-[#F67631] hover:bg-[#FF9962] active:bg-[#FF9962] ml-2"
                 >
                   <AddIcon sx={{ fontSize: 49 }} />
                 </button>

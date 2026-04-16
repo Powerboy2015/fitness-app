@@ -1,4 +1,4 @@
-use rusqlite::{Error};
+use rusqlite::{Error, named_params};
 use crate::domain::{Exercise, ExerciseRepo};
 use crate::domain::Exercises;
 use crate::infrastructures::sqlite::Db;
@@ -14,32 +14,29 @@ impl ExerciseRepo for ExerciseRepository {
         }
     }
 
-    // queries database and returns a list of all exercises.
-    fn list(&self) -> Result<Exercises, Error> {
-        self.db.use_conn(|tx| {
-            let mut stmt = tx.prepare(
-                "SELECT * FROM exercises"
-            )?;
+    fn list(&self, page_size: i32, offset: i32, filter: Option<&str>, query: Option<&str>) -> Result<Exercises, Error> {
+    self.db.use_conn(|tx| {
+        let sql = "
+            SELECT * FROM exercises
+            WHERE (:muscle_group IS NULL OR targetMuscles = '[\"' || :muscle_group || '\"]')
+            AND   (:query        IS NULL OR name LIKE '%' || :query || '%')
+            LIMIT :page_size OFFSET :offset
+        ";
 
-            let rows = stmt.query_map([], map_records)?;
-            rows.collect()
-        })
-    }
+        let mut stmt = tx.prepare(sql)?;
+        let rows = stmt.query_map(
+            named_params! {
+                ":muscle_group": filter,
+                ":query":        query,
+                ":page_size":    page_size,
+                ":offset":       offset,
+            },
+            map_records,
+        )?;
 
-    // returns a filtered list based on the muscle group given.
-    fn filtered_list(&self, muscle_group: &str) -> Result<Exercises, Error> {
-        let query = format!(
-            "SELECT * FROM exercises WHERE targetMuscles = '[\"{}\"]'",
-            muscle_group
-        );
-
-        self.db.use_conn(|tx| {
-            let mut stmt = tx.prepare(&query)?;
-
-            let rows = stmt.query_map([], map_records)?;
-            rows.collect()
-        })
-    }
+        rows.collect()
+    })
+}
 }
 
 

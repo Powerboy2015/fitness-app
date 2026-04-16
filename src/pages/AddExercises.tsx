@@ -1,5 +1,5 @@
-import {  useMemo, useState, useRef, useEffect } from "react";
-import { useWorkout } from "../context/WorkoutContext";
+import {  useMemo, useState, useRef, useEffect, useReducer, ActionDispatch  } from "react";
+import { Iworkout, useWorkout } from "../context/WorkoutContext";
 import SearchBar from "../components/SearchBar";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
@@ -15,10 +15,11 @@ import quads from "../assets/quads.png.jpg";
 import shoulders from "../assets/shoulders.png";
 import cardio from "../assets/cardio.png";
 import Filter from "../components/Filter";
-import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
-import useExerciseSelectReducer, { ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
+import { List, RowComponentProps } from "react-window";
+import UseExerciseList, { muscleGroups } from "../Hooks/UseExerciseList.ts";
+import useExerciseSelectReducer, { ExerciseAction, ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -67,21 +68,18 @@ export default function AddExercises() {
     }
   }, []);
 
-  const { sortedExercises, setMuscle, muscleGroup } = UseMuscleFilters();
-
-  const filteredExercises = useMemo(() => {
-    const searchQuery = searchText.toLowerCase();
-    return sortedExercises.filter((exercise) =>
-      exercise.name.toLowerCase().includes(searchQuery))
-  }, [sortedExercises, searchText]);
+  const {exercises, muscleGroup,setMuscle,setQuery,LoadNextPage} = UseExerciseList()
 
   return (
     <>
       <div className="h-screen">
-        <div className="fixed top-16 left-0 right-0 z-30 overflow-hidden text-textcolor">
+        <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
           <SearchBar
             value={searchText}
-            onChange={setSearchText}
+            onChange={(query) => {
+          setSearchText(query);
+          setQuery(query);
+        }}
             onSearch={() => {}}
           />
           <div
@@ -104,24 +102,21 @@ export default function AddExercises() {
           <div className="fixed top-60 right-10 pointer-events-none z-100">
             <button
               onClick={scrollToTop}
-              className={`w-13 h-13 bg-components hover:bg-components-hover rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-            >
-              ↑
-            </button>
+              className={`w-13 h-13 bg-[#414141] hover:bg-[#353535] rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+            >↑</button>
           </div>
-          <div
-            ref={listRef}
-            className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)]"
-          >
-            {filteredExercises.map((exercise) => {
-              return (
-                <ExerciseDescriptionOverlay
-                  key={exercise.exercise_id}
-                  name={exercise.name}
-                  gif={exercise.gif_url}
-                  id={exercise.exercise_id}
-                  selected={false}
-                  onSelect={() => {
+        <div
+          ref={listRef}
+          className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)] p-8 flex flex-col gap-4"
+        >
+          {exercises.map(exercise => 
+          <ExerciseDescriptionOverlay
+              key={exercise.exercise_id}
+              name={exercise.name}
+              gif={exercise.gif_url}
+              id={exercise.exercise_id}
+              selected={false}
+              onSelect={() => {
                     dispatch({
                       type: ExercisesActionKind.SELECT,
                       payload: {
@@ -131,13 +126,16 @@ export default function AddExercises() {
                       }
                     })
                   }}
-                />
-              );
-            })}
+              />)}
+          <div className="px-4">
+            <button 
+            className=" bg-amber-700 w-full rounded mb-25"
+            onClick={() => {LoadNextPage()}}>load more</button>
           </div>
         </div>
       </div>
       <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
+      </div>
     </>
   );
 }
