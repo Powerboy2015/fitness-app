@@ -79,7 +79,7 @@ export default function ExerciseDescriptionOverlay({
   return (
     <div>
       <li
-        className={`bg-[#1E1E1E] ${selected ? "border-[#F67631]" : "border-[#414141]"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-[#252525] active:bg-[#252525] cursor-pointer mt-2`}
+        className={` border-[#414141] border rounded-xl px-2 flex w-full items-center  hover:bg-[#252525] active:bg-[#252525] transition-transform duration-100 ease-in-out `}
       >
         <div
           className="flex w-full h-full py-4 items-center justify-between"
@@ -89,6 +89,7 @@ export default function ExerciseDescriptionOverlay({
             className="h-20 w-20 contain-content rounded-xl"
             src={gif}
             alt=""
+            loading="lazy"
           />
           <h2 className="text-lg ml-5 font-semibold">{name}</h2>
             <button
@@ -139,7 +140,7 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
               <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto">
                 <div>{name.charAt(0).toUpperCase() + name.slice(1)}</div>
               </h2>
-              <img src={gif} alt="" />
+              <img src={gif} alt="" loading="lazy" />
 
               <h2 className="font-bold text-[#F2F3F2] text-2xl  mb-2 border-b-2 border-[#414141] w-[90%] flex mx-auto mt-5">
                 Targeted muscles:
