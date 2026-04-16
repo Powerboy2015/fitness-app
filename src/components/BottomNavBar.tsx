@@ -6,7 +6,7 @@ import HomeSharpIcon from "@mui/icons-material/HomeSharp";
 
 export default function BottomNavBar() {
     return (
-        <footer className="relative bottom-0 z-100 py-2 w-full bg-[#333737] border-t-2 border-[#565d5d]">
+        <footer className="relative bottom-0 z-200 py-2 w-full bg-[#333737] border-t-2 border-[#565d5d]">
             <nav className="h-full max-w-sm mx-auto justify-evenly flex">
                 <NavLink to="/" className={({ isActive }) => `text-center items-center ${isActive ? 'text-[#F67631]' : 'text-[#ffffff]'}`}>
                     <HomeSharpIcon sx={{ fontSize: 40 }}/>
