@@ -19,6 +19,7 @@ import UseMuscleFilters, { muscleGroups } from "../Hooks/UseMuscleFilters.ts";
 import SelectedExerciseModal from "../components/SelectedExercisesModal.tsx";
 import ExerciseDescriptionOverlay from "../components/ExerciseDescriptionOverlay";
 import { List, RowComponentProps } from "react-window";
+import UseExerciseList from "../Hooks/UseExerciseList.ts";
 import useExerciseSelectReducer, { ExerciseAction, ExercisesActionKind } from "../Hooks/reducers/exerciseSelectReducer.ts";
 import { useNavigate } from "react-router-dom";
 
@@ -83,7 +84,10 @@ export default function AddExercises() {
         <div className="fixed top-16 left-0 right-0 z-30 bg-[#161818] overflow-hidden">
           <SearchBar
             value={searchText}
-            onChange={setSearchText}
+            onChange={(query) => {
+          setSearchText(query);
+          setQuery(query);
+        }}
             onSearch={() => {}}
           />
           <div
@@ -117,12 +121,17 @@ export default function AddExercises() {
           >
                     <List
           rowComponent={exerciseListItem}
-          rowHeight={112}
-          rowCount={filteredExercises.length}
-          rowProps={{exerciseList: filteredExercises, dispatch}}
+          rowHeight={128}
+          rowCount={exercises.length}
+          rowProps={{exerciseList: exercises, addExercise}}
+          className="pb-4"
         />
-          </div>
+        <div className="px-4">
+        <button 
+        className=" bg-amber-700 w-full rounded mb-25"
+        onClick={() => {LoadNextPage()}}>load more</button>
         </div>
+      </div>
       </div>
       <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
     </>
@@ -133,10 +142,10 @@ interface exerciseListItemProps {
   exerciseList: ExerciseDTO[];
   dispatch: ActionDispatch<[action: ExerciseAction]>;
 } 
-function exerciseListItem({index, dispatch,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
+function exerciseListItem({index, style, dispatch,exerciseList}: RowComponentProps<exerciseListItemProps> ) {
   const exercise = exerciseList[index];
 
-  return <>
+  return <div style={style} className="p-4">
     <ExerciseDescriptionOverlay
               key={exercise.exercise_id}
               name={exercise.name}
@@ -154,5 +163,5 @@ function exerciseListItem({index, dispatch,exerciseList}: RowComponentProps<exer
                     })
                   }}
               />
-  </>
+  </div>
 }

@@ -1,16 +1,23 @@
 import { ApiClient } from "../classes/api";
-import {muscleGroups} from "../Hooks/UseMuscleFilters.ts";
+import {muscleGroups} from "../Hooks/UseExerciseList.ts";
+
+type listFilterParams = {
+    page_size?: number;
+    page?: number;
+    filter?: muscleGroups;
+    query?: string;
+}
 
 export default class ExercisesAPI {
-    public async list(): Promise<ExerciseDTO[]> {
-        const result = await ApiClient.send<ExerciseDTO[]>("get_all_exercises");
+    public async list(param: listFilterParams): Promise<ExerciseDTO[]> {
+        const req = {
+            page_size: param.page_size || 99999,
+            page: param.page || 1,
+            filter: param.filter,
+            query: param.query
+        }
+        const result = await ApiClient.send<ExerciseDTO[]>("get_all_exercises",{req});
         return ApiClient.assertOk(result);
-    }
-
-    public async filter(muscle: muscleGroups): Promise<ExerciseDTO[]> {
-        const result = await ApiClient.send<ExerciseDTO[]>("get_exercises_by_muscle",{req: muscle});
-        return ApiClient.assertOk(result);
-
     }
 
     public async get(id: string): Promise<ExerciseDTO> {
