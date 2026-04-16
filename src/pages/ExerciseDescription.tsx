@@ -60,7 +60,7 @@ export default function ExerciseDescription() {
             <h2 className="font-bold text-textcolor text-2xl mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
               Targeted muscles:
             </h2>
-            <div className="bg-orange-accent text-textcolor w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
+            <div className="bg-accent text-textcolor w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
               {targetMuscle}
             </div>
             <div className="grid grid-cols-2 text-center">
@@ -68,7 +68,7 @@ export default function ExerciseDescription() {
                 return (
                   <div
                     key={index}
-                    className="border-orange-accent border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 text-textcolor"
+                    className="border-accent border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 text-textcolor"
                   >
                     {muscle}
                   </div>
@@ -78,7 +78,7 @@ export default function ExerciseDescription() {
             <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
               Equipment
             </h2>
-            <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 text-textcolor">
+            <div className="bg-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 text-textcolor">
               {equipments}
             </div>
             <h2 className="font-bold text-textcolor text-2xl mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">

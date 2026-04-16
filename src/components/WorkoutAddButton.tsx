@@ -14,7 +14,7 @@ export default function GreenAddButton({ to = "/new-workout" }) {
   return (
     <button
       onClick={() => handleClick(to)}
-      className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full bg-orange-accent hover:bg-buttons-action active:bg-buttons-action flex z-30 text-textcolor"
+      className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full bg-accent hover:bg-accent-action active:bg-accent-action flex z-30 text-textcolor"
     >
       New Workout
     </button>

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark";
+type Theme = "light" | "dark" | "ocean";
 
 type ThemeContextType = {
     theme: Theme;
@@ -13,13 +13,11 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 const STORAGE_KEY = "theme";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>("light");
-
-    // load saved theme
-    useEffect(() => {
+    const [theme, setThemeState] = useState<Theme>(() => { //load current saved theme
+        if (typeof window === "undefined") return "light";
         const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
-        if (saved) setThemeState(saved);
-    }, []);
+        return saved ?? "light";
+    });
 
     // apply theme to DOM
     useEffect(() => {

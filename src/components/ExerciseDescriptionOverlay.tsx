@@ -77,7 +77,7 @@ export default function ExerciseDescriptionOverlay({
   return (
     <div>
       <li
-        className={`bg-components-color ${selected ? "border-orange-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}
+        className={`bg-components-color ${selected ? "border-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}
       >
         <div
           className="flex w-full h-full py-4 items-center justify-between"
@@ -94,7 +94,7 @@ export default function ExerciseDescriptionOverlay({
                 e.stopPropagation();
                 handleClick(e);
               }}
-            className="flex h-12 w-12 rounded-full bg-orange-accent hover:bg-buttons-action active:bg-buttons-action ml-2 z-50">
+            className="flex h-12 w-12 rounded-full bg-accent hover:bg-accent-action active:bg-accent-action ml-2 z-50">
             {!added ? <AddIcon sx={{ fontSize: 49 }} /> : <CheckIcon sx={{ fontSize: 49 }} />}
             </button>
         </div>
@@ -142,7 +142,7 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
               <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
                 Targeted muscles:
               </h2>
-              <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
+              <div className="bg-accent w-fit px-9 py-1 rounded-xl mx-2 my-1 self-center">
                 {targetMuscle}
               </div>
               <div className="grid grid-cols-2 text-center">
@@ -150,7 +150,7 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
                   return (
                     <div
                       key={index}
-                      className="border-orange-accent border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 "
+                      className="border-accent border px-5 text-xs py-1 rounded-xl max-w-full mx-2 my-1 "
                     >
                       {muscle}
                    </div>
@@ -160,7 +160,7 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
               <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
                 Equipment
               </h2>
-              <div className="bg-orange-accent w-fit px-9 py-1 rounded-xl mx-2 my-1">
+              <div className="bg-accent w-fit px-9 py-1 rounded-xl mx-2 my-1">
                 {equipments}
               </div>
               <h2 className="font-bold text-textcolor text-2xl  mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto mt-5">
@@ -183,7 +183,7 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
                 </button>
                 <button
                   onClick={() => handleAddClick()}
-                  className="flex h-12 w-12 rounded-full bg-orange-accent hover:bg-buttons-action active:bg-buttons-action ml-2"
+                  className="flex h-12 w-12 rounded-full bg-accent hover:bg-accent-action active:bg-accent-action ml-2"
                 >
                   <AddIcon sx={{ fontSize: 49 }} />
                 </button>

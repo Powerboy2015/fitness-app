@@ -23,8 +23,8 @@ export function CurrentExercise({exerciseData, isCompleted = false, isExpanded =
                 onClick={onToggle}
                 className="w-full flex items-center justify-between cursor-pointer"
             >
-                <h2 className="text-white text-lg font-semibold">{exerciseData.name}</h2>
-                <span className="text-orange-accent">
+                <h2 className="text-textcolor text-lg font-semibold">{exerciseData.name}</h2>
+                <span className="text-accent">
                     {isExpanded ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                 </span>
             </button>

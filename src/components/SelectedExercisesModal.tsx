@@ -25,10 +25,10 @@ export default function SelectedExerciseModal({dispatch,state, saveFunc}:Selecte
     },[state.exercises]);
 
     return <div className="absolute z-30 bottom-20 left-[2dvw] w-[96dvw] text-textcolor">
-        <ul className={`px-2 pt-2 mx-4 bg-buttons-action flex gap-2 flex-col rounded-t-2xl overflow-y-scroll max-h-30 ${exerciseRows.length == 0 || !open ? "hidden":""}`}>
+        <ul className={`px-2 pt-2 mx-4 bg-accent-action flex gap-2 flex-col rounded-t-2xl overflow-y-scroll max-h-30 ${exerciseRows.length == 0 || !open ? "hidden":""}`}>
             {exerciseRows}
         </ul>
-        <div className="bg-orange-accent flex justify-between pr-8 pl-2 rounded-xl items-center border border-orange-accent">
+        <div className="bg-accent flex justify-between pr-8 pl-2 rounded-xl items-center border border-accent">
             <ListOpenButton open={open} onOpen={(opened) => {isOpen(opened)}}/>
             <p className="text-2xl">{exerciseCount} exercise{exerciseCount == 1 ? "" : "s"} added</p>
             <button className="text-4xl" onClick={() => {

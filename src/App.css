@@ -46,44 +46,71 @@ body {
   stroke: transparent !important;
 }
 
-/* 🌞 LIGHT THEME (default) */
+/* Light Theme default */
 @theme {
   --color-background: oklch(0.9631 0.0017 145.56);
   --color-components: oklch(0.9167 0.0017 145.64);
   --color-components-hover: oklch(0.791 0.0017 145.64);
   --color-bordercolor: oklch(0.7507 0.0017 145.64);
   --color-textcolor: oklch(0.1 0 0);
+  --color-muted: oklch(0.5326 0.0017 145.64);
 
-  --color-orange-accent: oklch(0.7064 0.1758 45.51);
-  --color-buttons-action: oklch(0.7783 0.1413 48.09);
+  --color-accent: oklch(0.7064 0.1758 45.51);
+  --color-accent-action: oklch(0.7783 0.1413 48.09);
 
-  --color-button-green: oklch(0.7227 0.192 149.58);
-  --color-button-red: oklch(0.6368 0.2078 25.33);
-  --color-button-yellow: oklch(0.7952 0.1617 86.05);
+  --color-button-start: oklch(0.7227 0.192 149.58);
+  --color-button-stop: oklch(0.6368 0.2078 25.33);
+  --color-button-pause: oklch(0.7952 0.1617 86.05);
+
+  --color-chart: oklch(0.7047 0.1587 252.35);
 
   --color-navbar: oklch(0.7721 0.0017 145.64);
   --color-icons: oklch(0.4401 0.0055 196.89);
 }
 
-/* 🌙 DARK THEME OVERRIDES */
+/* Dark theme */
 :root[data-theme="dark"] {
   --color-background: oklch(0.2069 0.0031 196.92);
   --color-components: oklch(0.235 0 0);
   --color-components-hover: oklch(0.2645 0 0);
   --color-bordercolor: oklch(0.3753 0 0);
   --color-textcolor: oklch(0.9631 0.0017 145.56);
+  --color-muted: oklch(0.791 0.0017 145.64);
 
-  --color-orange-accent: oklch(0.7064 0.1758 45.51);
-  --color-buttons-action: oklch(0.7783 0.1413 48.09);
+  --color-accent: oklch(0.7064 0.1758 45.51);
+  --color-accent-action: oklch(0.7783 0.1413 48.09);
 
-  --color-button-green: oklch(0.7227 0.192 149.58);
-  --color-button-red: oklch(0.6368 0.2078 25.33);
-  --color-button-yellow: oklch(0.7952 0.1617 86.05);
+  --color-button-start: oklch(0.7227 0.192 149.58);
+  --color-button-stop: oklch(0.6368 0.2078 25.33);
+  --color-button-pause: oklch(0.7952 0.1617 86.05);
+
+  --color-chart: oklch(0.7047 0.1587 252.35);
 
   --color-navbar: oklch(0.3329 0.0055 196.89);
   --color-icons: oklch(0.9215 0.0017 145.64);
 }
 
+/* ocean theme */
+:root[data-theme="ocean"] {
+  --color-background: oklch(0.2138 0.0594 249.31);
+  --color-components: oklch(0.3233 0.1025 253.89);
+  --color-components-hover: oklch(0.3763 0.1225 254.68);
+  --color-bordercolor: oklch(0.4742 0.1603 255.73);
+  --color-textcolor: oklch(0.9631 0.0017 145.56);
+  --color-muted: oklch(0.791 0.0017 145.64);
+
+  --color-accent: oklch(0.7792 0.15455 194.769);
+  --color-accent-action: oklch(0.874 0.15455 194.769);
+
+  --color-button-start: oklch(0.7227 0.192 149.58);
+  --color-button-stop: oklch(0.6368 0.2078 25.33);
+  --color-button-pause: oklch(0.7952 0.1617 86.05);
+
+  --color-chart: oklch(0.7952 0.1617 86.05);
+
+  --color-navbar: oklch(0.2694 0.1025 253.89);
+  --color-icons: oklch(0.9215 0.0017 145.64);
+}
 
 
 

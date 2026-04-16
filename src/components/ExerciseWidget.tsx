@@ -34,7 +34,7 @@ export default function ExerciseWidget({
 
 
   return (
-    <div className={`bg-components ${selected ? "border-orange-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}>
+    <div className={`bg-components ${selected ? "border-accent" : "border-bordercolor"} border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover cursor-pointer mt-2`}>
       <button
         className="flex w-full h-full py-4"
         onClick={() =>
@@ -53,7 +53,7 @@ export default function ExerciseWidget({
       </button>
       <button
         onClick={handleClick}
-        className="flex h-12 w-12 rounded-full bg-orange-accent hover:bg-buttons-action active:bg-buttons-action ml-2 z-50"
+        className="flex h-12 w-12 rounded-full bg-accent hover:bg-accent-action active:bg-accent-action ml-2 z-50"
       >
         {!added ? <AddIcon sx={{ fontSize: 49 }} /> : <CheckIcon sx={{ fontSize: 49 }} />}
       </button>

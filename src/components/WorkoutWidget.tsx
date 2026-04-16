@@ -51,7 +51,7 @@ export default function WorkoutWidget({ id, index, name, reloadWorkouts }: Worko
             data-shadow={isDragging || undefined}
         >
             <button ref={handleRef} className="cursor-grab">
-                <DragIndicatorIcon sx={{ fontSize: 40, color: "#F67631" }} />
+                <DragIndicatorIcon sx={{ fontSize: 40}} className="text-accent" />
             </button>
 
             <button className="text-left cursor-pointer w-full h-full py-4" onClick={() => handleNavigation()}>
@@ -65,7 +65,7 @@ export default function WorkoutWidget({ id, index, name, reloadWorkouts }: Worko
                     <button className="w-full hover:bg-components-hover flex items-center gap-2 px-3 py-2 rounded-xl" onClick={() => {setOpen(false); navigate("/edit-workout");}}>
                         <EditIcon className="w-5 h-5" /> Edit
                     </button>
-                    <button className="w-full hover:bg-components-hover text-button-red flex items-center gap-2 px-3 py-2 rounded-xl" onClick={() => {setOpen(false);
+                    <button className="w-full hover:bg-components-hover text-button-stop flex items-center gap-2 px-3 py-2 rounded-xl" onClick={() => {setOpen(false);
                         API.workouts.remove(id);
                         reloadWorkouts();
                     } /*TODO add delete functionality*/ }>

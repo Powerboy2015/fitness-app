@@ -44,7 +44,7 @@ export default function FinishWorkoutButton({
         type="button"
         onClick={handleFinishWorkout}
         disabled={isFinishing}
-        className="bg-components flex w-full items-center justify-between rounded-full border border-bordercolor bg-orange-accent px-6 py-5 text-left text-lg font-bold text-textcolor transition-colors hover:bg-buttons-action disabled:cursor-not-allowed disabled:opacity-70"
+        className="bg-accent flex w-full items-center justify-between rounded-full bg-accent px-6 py-5 text-left text-lg font-bold text-textcolor transition-colors hover:bg-accent-action disabled:cursor-not-allowed disabled:opacity-70"
       >
         <span>{isFinishing ? "Finishing..." : "Finish Workout"}</span>
         <span className="text-lg tabular-nums">

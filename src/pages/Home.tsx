@@ -28,7 +28,7 @@ export default function Home() {
 
           <button
             onClick={() => navigate("/history")}
-            className="bg-orange-accent hover:bg-buttons-action active:bg-buttons-action rounded-full p-6 font-bold cursor-pointer col-span-2 text-textcolor"
+            className="bg-accent hover:bg-accent-action active:bg-accent-action rounded-full p-6 font-bold cursor-pointer col-span-2 text-textcolor"
           >
             Workout history
           </button>

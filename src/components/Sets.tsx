@@ -59,7 +59,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                                 if (parsed !== null) setReps(parsed);
                             }}
                             disabled={isCompleted}
-                            className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-orange-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="0"
                         />
                     </div>
@@ -77,7 +77,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                                 }
                             }}
                             disabled={isCompleted}
-                            className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-orange-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="0.0"
                         />
                     </div>
@@ -114,7 +114,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                             if (parsed !== null) setTime(parsed);
                         }}
                         disabled={isCompleted}
-                        className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="0"
                     />
                 </div>
@@ -130,7 +130,7 @@ export default function Sets({updateFunction, setNumber = 1, onDelete, data }: S
                             if (parsed !== null) setDistance(parsed);
                         }}
                         disabled={isCompleted}
-                        className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-orange-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="0.0"
                     />
                 </div>
@@ -150,14 +150,14 @@ interface outerLayerProps {
 }
 function OuterLayer({children,set_nr,onDelete,isCompleted}:outerLayerProps) {
     return (
-        <div className={`border-t pt-4 mt-3 ${isCompleted ? "border-button-green" : "border-bordercolor"}`}>
+        <div className={`border-t pt-4 mt-3 ${isCompleted ? "border-button-start" : "border-bordercolor"}`}>
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-textcolor text-lg font-semibold">Set {set_nr}</h3>
                 <div className="flex items-center gap-3">
                     {onDelete && set_nr > 3 && (
                         <button
                             onClick={onDelete}
-                            className="text-button-red hover:text-red-400 active:text-red-400 cursor-pointer transition-colors"
+                            className="text-button-stop hover:text-red-400 active:text-red-400 cursor-pointer transition-colors"
                             title="Delete set"
                         >
                             <DeleteIcon sx={{ fontSize: 24 }} />

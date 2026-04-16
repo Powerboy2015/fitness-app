@@ -77,7 +77,7 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
     <>
       <div className="flex flex-col items-center justify-center  w-87 bg-components border-2 border-bordercolor rounded-lg p-6 pt-12">
         <button 
-          className="absolute top-2 right-2 text-orange-accent hover:text-buttons-action active:text-buttons-action transition-colors z-30"
+          className="absolute top-2 right-2 text-accent hover:text-accent-action active:text-accent-action transition-colors z-30"
           onClick={handleMenuClick}
         >
           <MenuIcon style={{ fontSize: '32px' }} />
@@ -145,14 +145,14 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
         <div className="flex flex-row items-center justify-center gap-3">
           {!hasStarted ? (
             <button 
-              className="w-14 h-14 rounded-full border-4 border-button-green bg-components text-button-green hover:bg-button-green hover:text-textcolor transition-colors active:bg-button-green active:text-textcolor flex items-center justify-center"
+              className="w-14 h-14 rounded-full border-4 border-button-start bg-components text-button-start hover:bg-button-start hover:text-textcolor transition-colors active:bg-button-start active:text-textcolor flex items-center justify-center"
               onClick={handleStart}
             >
               <PlayCircleOutlineIcon fontSize="large" />
             </button>
           ) : (
             <button 
-              className="w-14 h-14 rounded-full border-4 border-button-yellow bg-components text-button-yellow hover:bg-button-yellow hover:text-textcolor active:bg-button-yellow active:text-textcolor transition-colors flex items-center justify-center"
+              className="w-14 h-14 rounded-full border-4 border-button-pause bg-components text-button-pause hover:bg-button-pause hover:text-textcolor active:bg-button-pause active:text-textcolor transition-colors flex items-center justify-center"
               onClick={() => setIsActive(!isActive)}
               disabled={timeLeftMs === 0}
             >
@@ -160,7 +160,7 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
             </button>
           )}
           <button 
-            className="w-14 h-14 rounded-full border-4 border-button-red bg-components text-button-red hover:bg-button-red hover:text-textcolor active:bg-button-red active:text-textcolor transition-colors flex items-center justify-center"
+            className="w-14 h-14 rounded-full border-4 border-button-stop bg-components text-button-stop hover:bg-button-stop hover:text-textcolor active:bg-button-stop active:text-textcolor transition-colors flex items-center justify-center"
             onClick={() => { setTimeLeftMs(inputtimeMs); setIsActive(false); setHasStarted(false); }}
           >
             <StopCircleOutlinedIcon fontSize="large" />

@@ -21,7 +21,7 @@ export default function NewWorkout() {
         placeholder="Workout Name"
         value={workoutName}
         onChange={(e) => setWorkoutName(e.target.value)}
-        className="border p-2 rounded text-textcolor bg-components border-bordercolor w-[90%] mx-auto flex mt-5"
+        className="border p-2 rounded text-textcolor bg-components border-accent w-[90%] mx-auto flex mt-5"
       />
       <div className="mt-4">
         <h2 className="font-bold text-textcolor text-center justify-center mb-2 border-b-2 border-bordercolor w-[90%] flex mx-auto">

@@ -16,10 +16,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch }) => {
                     placeholder="Search exercises..."
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="w-full bg-components border border-bordercolor rounded-lg pl-3 pr-12 py-2 text-textcolor focus:outline-none focus:border-orange-accent"
+                    className="w-full bg-components border border-bordercolor rounded-lg pl-3 pr-12 py-2 text-textcolor focus:outline-none focus:border-accent"
                 />
                 <button
-                    className="search__button absolute right-2 top-1/2 -translate-y-1/2 text-orange-accent hover:text-buttons-action active:text-buttons-action transition-colors"
+                    className="search__button absolute right-2 top-1/2 -translate-y-1/2 text-accent hover:text-accent-action active:text-accent-action transition-colors"
                     type="button"
                     onClick={onSearch}
                 >
