@@ -20,11 +20,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeh
                     placeholder={`Search ${placeholderText}`}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="w-full bg-[#2e2e2e] border border-[#565d5d] rounded-lg pl-3 py-2 text-white focus:outline-none focus:border-[#F67631]"
+                    className="w-full bg-components border border-bordercolor rounded-lg pl-3 py-2 text-white focus:outline-none focus:border-accent"
                 />
                     {showBarcode && (
                         <button
-                        className="absolute right-3 top-1/2 w-6 -translate-y-1/2 text-[#F67631] hover:text-[#fd8f4a] active:text-[#c86d35] transition-colors cursor-pointer"
+                        className="absolute right-3 top-1/2 w-6 -translate-y-1/2 text-accent hover:text-accent-action active:text-accent-action transition-colors cursor-pointer"
                             type="button"
                         >
                             <BarcodeIcon className="text-current" />

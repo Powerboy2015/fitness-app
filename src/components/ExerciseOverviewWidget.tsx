@@ -25,7 +25,7 @@ export default function ExerciseOverviewWidget({
   return (
     <li
       ref={setElement}
-      className={`bg-[#1E1E1E] border-[#414141] border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-[#252525] active:bg-[#252525] transition-transform duration-100 ease-in-out ${isDragging ? "opacity-80 scale-[1.05]" : ""} `}
+      className={`bg-components border-bordercolor border rounded-xl px-2 mb-3 flex w-[90%] items-center mx-auto hover:bg-components-hover active:bg-components-hover transition-transform duration-100 ease-in-out ${isDragging ? "opacity-80 scale-[1.05]" : ""} `}
       data-shadow={isDragging || undefined}
     >
       <button
@@ -41,7 +41,7 @@ export default function ExerciseOverviewWidget({
           src={gif}
           alt=""
         />
-        <h2 className="text-lg ml-5 font-semibold">{name}</h2>
+        <h2 className="text-lg ml-5 font-semibold text-textcolor">{name}</h2>
       </button>
     </li>
   );

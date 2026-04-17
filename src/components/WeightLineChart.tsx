@@ -33,34 +33,6 @@ const WeightLineChart: React.FC = () => {
         grid: {
             borderColor: '#414141',
         },
-        tooltip: {
-            enabled: true,
-            fillSeriesColor: false,
-            custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-                const value = series[seriesIndex][dataPointIndex];
-                const color = w.config.colors[seriesIndex];
-                return `
-          <div style="
-            padding: 8px 12px; 
-            background: #1E1E1E; 
-            border-radius: 8px; 
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          ">
-            <span style="
-              display: inline-block;
-              width: 12px;
-              height: 12px;
-              background: ${color};
-              border-radius: 50%;
-            "></span>
-            ${value} kg
-          </div>
-        `;
-            },
-        },
     };
 
     const seriesData = series;

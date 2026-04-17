@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use crate::api::{ApiError, ApiErrorResponse};
-use crate::domain::{WorkoutRepo, Workouts, Workout, WorkoutExerciseRepo, Exercises, ExerciseRepo, CreateWorkoutParams};
+use crate::domain::{CreateWorkoutParams, Exercise, ExerciseRepo, Exercises, Workout, WorkoutExerciseRepo, WorkoutRepo, Workouts};
 use crate::repository::exercise_repository::ExerciseRepository;
 use crate::repository::workout_exercise_repository::WorkoutExerciseRepository;
 use crate::repository::workout_repository::WorkoutRepository;
@@ -20,7 +20,13 @@ pub struct CreateWorkoutRequest {
     pub exercises: Option<Vec<String>>,
 }
 
-
+#[derive(Debug, Serialize, Deserialize,Clone)]
+pub struct WorkoutListParams {
+    pub page_size: Option<i32>,
+    pub page: Option<i32>,
+    pub filter: Option<String>,
+    pub query: Option<String>
+}
 
 impl WorkoutService {
 
@@ -54,21 +60,25 @@ impl WorkoutService {
 
         Ok(workout_records)
     }
-    pub fn list_exercises(&self) -> Result<Exercises, ApiErrorResponse> {
-        let exercise_records = self.exercises.list().map_err(|e| {
-            println!("{:?}", e);
-            ApiError::DatabaseError
-        })?;
 
-        Ok(exercise_records)
+    pub fn list_exercises(&self, list_options: WorkoutListParams) -> Result<Exercises, ApiErrorResponse> {
+        //calls the self filter.
+        let page_size = list_options.page_size.unwrap_or(99999);
+        let page = list_options.page.unwrap_or(1);
+        let start_nr = (page - 1)  * page_size;
+
+        //gets list with either muscle filter or not based on if it's there.
+        let exercises= self
+        .exercises
+        .list(page_size,
+             start_nr, 
+             list_options.filter.as_deref(), 
+             list_options.query.as_deref())
+        .map_err(|_| ApiError::InvalidInput)?;
+
+        Ok(exercises)
     }
 
-    pub fn filter_exercises(&self,muscle_group: String) -> Result<Exercises, ApiErrorResponse> {
-        let filtered_exercises = self.exercises.filtered_list(&muscle_group).map_err(|_| ApiError::DatabaseError)?;
-
-
-        Ok(filtered_exercises)
-    }
 
     pub fn create_workout(&self, dto: CreateWorkoutRequest) -> Result<String, ApiErrorResponse> {
         let uuid = Uuid::new_v4().to_string();
