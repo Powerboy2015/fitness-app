@@ -169,7 +169,7 @@ export default function FoodList() {
 
   return (
     <>
-      <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
+      <div className="fixed top-16 left-0 right-0 z-3 bg-background overflow-hidden">
         <div className="mr-4 ml-4 flex">
           <SearchBar
             value={searchText}
@@ -182,7 +182,7 @@ export default function FoodList() {
 
       {!loading && !Searching && !error && recents.length > 0 ? (
         <div className="pt-15">
-          <div className="text-white text-center my-4 font-semibold">Recent searches</div>
+          <div className="text-textcolor text-center my-4 font-semibold">Recent searches</div>
           {recents.map((item) => (
             <FoodItemComponent
               key={item.id}
@@ -203,7 +203,7 @@ export default function FoodList() {
           {(() => {
             const status = getStatusMessage();
             return status ? (
-              <div className={`${status.css} text-center my-6`}>
+              <div className={`${status.css} text-center text-textcolor my-6`}>
                 {status.text}
               </div>
             ) : null;
