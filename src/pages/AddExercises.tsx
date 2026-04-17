@@ -1,6 +1,6 @@
 import {  useMemo, useState, useRef, useEffect, useReducer, ActionDispatch  } from "react";
 import { Iworkout, useWorkout } from "../context/WorkoutContext";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../components/SearchBar.tsx";
 import bicep from "../assets/biceps.jpg";
 import tricep from "../assets/triceps.jpg";
 import chest from "../assets/chest.jpg";
@@ -81,6 +81,7 @@ export default function AddExercises() {
           setQuery(query);
         }}
             onSearch={() => {}}
+            placeholderText="exercise"
           />
           <div
             className="overflow-x-scroll flex

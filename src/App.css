@@ -52,3 +52,20 @@ body {
 .apexcharts-bar-area.apexcharts-active {
   stroke: transparent !important;
 }
+
+@keyframes shake {
+  0% { transform: translateX(0) translateY(0); }
+  10% { transform: translateX(-4px) translateY(-1px); }
+  20% { transform: translateX(3px) translateY(2px); }
+  30% { transform: translateX(-2px) translateY(-2px); }
+  40% { transform: translateX(5px) translateY(1px); }
+  50% { transform: translateX(-3px) translateY(1px); }
+  60% { transform: translateX(2px) translateY(-2px); }
+  70% { transform: translateX(-4px) translateY(1px); }
+  80% { transform: translateX(3px) translateY(-1px); }
+  90% { transform: translateX(-1px) translateY(2px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+.animate-shake {
+  animation: shake 0.15s ease-in-out infinite;
+}

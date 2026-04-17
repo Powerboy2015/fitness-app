@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function AddFoodButton({ to = "/add-food" }) {
+export default function AddFoodButton({ to = "/food-list" }) {
     const navigate = useNavigate();
 
     return (
