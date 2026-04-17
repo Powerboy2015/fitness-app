@@ -2,6 +2,7 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState } from "react";
+import SearchIcon from '@mui/icons-material/Search';
 
 interface Nutriments {
   "energy-kcal_100g"?: number;
@@ -32,69 +33,41 @@ export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
   const [searchText, setSearchText] = useState("");
   const [recents, setRecents] = useState<searchItem[]>([])
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [hasSearched, setHasSearched] = useState(false);
 
-  const fetchSearchAPI = async (product: string, page: number) => {
-    if (!product.trim()) {
-      setProduct([]);
-      setError(null);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
+  async function fetchSearchAPI(product: string, page: number) {
     try {
       const result = await invoke<searchReturn>("get_products", {
         product: product,
         page: page,
       });
-      setProduct(result.products ?? []);
-      console.log(result);
+      setProduct(result.products);
 
+      console.log(result);
     } catch (err) {
       console.error("Error:", err);
-
-      setError("WE GAAN ALLEMAAL DOOD!! ER WERKT IETS NIET AAN DE DATABASE!!!");
-      setProduct([]);
-    } finally {
-      setLoading(false);
     }
-  };
+  }
 
-  const handleSearch = () => {
-    setHasSearched(true);
-    void fetchSearchAPI(searchText, 1);
-  };
-
-  const getStatusMessage = () => {
-    if (loading) return { text: "Searching..." };
-    if (error) return { text: error, css: "text-red-400 animate-shake font-bold" };
-    if (hasSearched && product.length === 0)
-      return { text: `No products found for "${searchText}".` };
-    if (!hasSearched)
-      return { text: "Type a product name and hit search." };
-    return null;
-  };
+  function handleSearch() {
+    fetchSearchAPI(searchText, 1)
+  }
 
   return (
     <>
-      <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
-        <div className="mr-4 ml-4 flex">
-          <SearchBar
-            value={searchText}
-            onChange={setSearchText}
-            onSearch={handleSearch}
-            placeholderText="food"
-          />
-        </div>
-      </div>
+      {!searchText ?
+        <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
+          <div className=" mr-10 ml-7 flex">
 
-      {!loading && !error && recents.length > 0 ? (
-        <div className="pt-15">
-          <div className="text-white text-center my-4 font-semibold">Recent searches</div>
+            <SearchBar
+              value={searchText}
+              onChange={setSearchText}
+              onSearch={() => { }}
+              placeholderText="food"
+              onclick={() => setProduct([])}
+            />
+            <button className="ml-3" onClick={() => handleSearch()}><SearchIcon /></button>
+          </div>
+          recent searches
           {recents.map((item) => (
             <FoodItemComponent
               key={item.id}
@@ -109,21 +82,24 @@ export default function FoodList() {
               }}
             />
           ))}
-        </div>
-      ) : (
-        <div className="pt-15">
-          {(() => {
-            const status = getStatusMessage();
-            return status ? (
-              <div className={`${status.css} text-center my-6`}>
-                {status.text}
-              </div>
-            ) : null;
-          })()}
+        </div >
+        :
+        <div className="fixed top-16 left-0 right-0 z-3 bg-[#161818] overflow-hidden">
+
+          <div className=" mr-10 ml-7 flex">
+            <SearchBar
+              value={searchText}
+              onChange={setSearchText}
+              onSearch={() => { }}
+              placeholderText="food"
+              onclick={() => {setProduct([]), handleSearch()}}
+            />
+            <button className="ml-3" onClick={() => handleSearch()}><SearchIcon /></button>
+          </div>
 
           {product.map((item) => (
             <FoodItemComponent
-              key={item.id ?? item.code}
+              key={item.id}
               name={item.product_name}
               nutriments={item.nutriments}
               barcode={item.code}
@@ -135,8 +111,9 @@ export default function FoodList() {
               }}
             />
           ))}
+
         </div>
-      )}
+      }
     </>
-  );
+  )
 }
