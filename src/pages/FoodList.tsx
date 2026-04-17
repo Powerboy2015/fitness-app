@@ -210,19 +210,21 @@ export default function FoodList() {
           })()}
 
           {product.map((item) => (
-            <FoodItemComponent
-              key={item.id ?? item.code}
-              name={item.product_name}
-              nutriments={item.nutriments}
-              barcode={item.code}
-              brand={item.brands}
-              onClick={() => {
-                if (!recents.includes(item)) {
-                  setRecents([...recents, item]);
-                }
-              }}
-            />
-          ))}
+            item.nutriments ?
+              <FoodItemComponent
+
+                key={item.id ?? item.code}
+                name={item.product_name}
+                nutriments={item.nutriments}
+                barcode={item.code}
+                brand={item.brands}
+                onClick={() => {
+                  if (!recents.includes(item)) {
+                    setRecents([...recents, item]);
+                  }
+                }}
+              />
+              : null))}
         </div>
       )}
     </>

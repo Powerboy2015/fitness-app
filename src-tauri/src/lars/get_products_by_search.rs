@@ -8,7 +8,7 @@ pub async fn get_products(product: String, page: u64) -> Result<serde_json::Valu
 
 let body = client
     .get(format!(
-        "https://world.openfoodfacts.net/cgi/search.pl?search_terms={}&search_simple=1&action=process&json=1&countries=nl&page={}",
+        "https://world.openfoodfacts.net/cgi/search.pl?search_terms=kwark&search_simple=1&action=process&json=1&countries=nl&page=1",
         product, page
     )).send()
     .await
