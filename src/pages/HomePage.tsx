@@ -1,7 +1,7 @@
 import WeeklyCaloriesChart from "../components/charts/WeeklyCaloriesChart.tsx";
 import {NutritionDonutChart} from "../components/charts/NutritionDonutChart.tsx";
 import LinkButton from "../components/ui/LinkButton.tsx";
-import {ROUTES} from "../router/AppRouter.tsx";
+import {ROUTES} from "../router/routes.ts";
 
 export default function HomePage() {
   return (
@@ -11,7 +11,7 @@ export default function HomePage() {
             <NutritionDonutChart/>
           </WidgetComponent>
 
-          <LinkButton to={ROUTES.WORKOUT_HISTORY}>workout History</LinkButton>
+          <LinkButton to={ROUTES.WOKROUT_HISTORY}>workout History</LinkButton>
 
           <WidgetComponent title={"Weekly Calorie Intake"}>
             <WeeklyCaloriesChart/>

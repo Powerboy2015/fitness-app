@@ -1,16 +1,17 @@
 import { ApiClient } from "../classes/api";
+import logger from "../classes/logger";
 
-interface createWorkoutInput {
+export interface CreateWorkoutInput {
     name:string;
     desc?:string;
-    exercises?: string[];
+    exercises: ExerciseDTO[];
 }
 
 export default class workoutAPI {
-    public async create(dto: createWorkoutInput): Promise<string|{ok: false, msg: string}> {
+    public async create(dto: CreateWorkoutInput): Promise<string|{ok: false, msg: string}> {
         if (!dto.name.trim()) {
             const errMessage = "Workout requires a name"
-            console.error(errMessage);
+            logger.LogError(errMessage);
             return errMessage;
         }
 
@@ -21,7 +22,7 @@ export default class workoutAPI {
             uuid: "",
             name: dto.name,
             desc: dto.desc,
-            exercises: dto.exercises
+            exercises: dto.exercises.map(exercise => exercise.exercise_id)
         };
 
         result = await ApiClient.send<string>("create_workout_with_exercises",{ req });

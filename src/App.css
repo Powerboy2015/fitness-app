@@ -11,6 +11,14 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+.reset {
+  -webkit-appearance: none !important;
+  -moz-appearance: none;
+  appearance: none;
+  all: unset;
+  display: inline-block;
+  box-sizing: border-box;
+}
 
 html, body, #root {
   height: 100%;
@@ -128,3 +136,4 @@ body {
   --color-navbar: oklch(0.2694 0.1025 253.89);
   --color-icons: oklch(0.9215 0.0017 145.64);
 }
+

@@ -12,7 +12,7 @@ export default function WorkoutHistoryList() {
     },[])
 
     const historyElements = useMemo(() => {
-        return historyList.map(workout => <WorkoutHistoryItem workoutData={workout}/>)
+        return historyList.map((workout,idx) => <WorkoutHistoryItem key={idx} workoutData={workout}/>)
     },[historyList])
 
     return <>
@@ -21,6 +21,12 @@ export default function WorkoutHistoryList() {
         </div>
     </>
 }
+
+
+
+
+
+
 
 
 interface WorkoutHistoryItemProps {

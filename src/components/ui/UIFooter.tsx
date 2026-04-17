@@ -3,14 +3,15 @@ import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import HomeSharpIcon from "@mui/icons-material/HomeSharp";
+import {ROUTES} from "../../router/routes.ts";
 
 export default function UIFooter() {
     return <footer className="w-full bg-navbar border-t-2 border-bordercolor">
         <nav className="justify-evenly flex">
-            <FooterLink to={"/"} name={"Home"}>
+            <FooterLink to={ROUTES.HOME} name={"Home"}>
                 <HomeSharpIcon sx={{ fontSize: 40 }}/>
             </FooterLink>
-            <FooterLink to={"/workouts"} name={"Workout"}>
+            <FooterLink to={ROUTES.WORKOUT} name={"Workout"}>
                 <FitnessCenterIcon sx={{ fontSize: 40 }}/>
             </FooterLink>
             <FooterLink to={"/kcal-tracker"} name={"Kcal"}>
