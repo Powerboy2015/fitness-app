@@ -1,0 +1,45 @@
+import { useLocation, useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+// Map of URL paths to page titles
+const pageTitles: Record<string, string> = {
+    "/": "Home",
+    "/workouts": "Workout Overview",
+    "/edit-workout": "Edit Workout",
+    "/add-exercises": "Add Exercises",
+    "/session": "Session",
+    "/new-workout": "New Workout",
+    "/profile": "Profile",
+    "/workout-history": "Workout History",
+    "/session-history": "Session History",
+    "/kcal-tracker": "Calorie Tracker",
+    "/exercises": "Exercises",
+    "/exercise-description": "Exercise Description",
+    "/food-list": "Food list",
+    "/product-details": "Product Details"
+};
+
+export default function UIHeader() {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const title = pageTitles[location.pathname] || "Page";
+    const showBack = location.pathname !== "/";
+
+    return (
+        <header className="z-48 pt-6 pb-6 shrink-0 w-full mx-auto bg-background">
+            <div className="relative flex items-center border-b-2 border-bordercolor pb-2 w-[90%] mx-auto">
+                {showBack && (
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="absolute left-0 cursor-pointer text-textcolor"
+                    >
+                        <ArrowBackIcon sx={{ fontSize: 32 }} />
+                    </button>
+                )}
+                <h1 className="text-[24px] font-bold text-textcolor mx-auto">
+                    {title}
+                </h1>
+            </div>
+        </header>
+    );
+}

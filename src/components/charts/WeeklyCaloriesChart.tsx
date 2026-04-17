@@ -8,9 +8,9 @@ interface WeeklyCaloriesChartProps {
 }
 
 const WeeklyCaloriesChart: React.FC<WeeklyCaloriesChartProps> = ({
-      data = [1800, 2000, 1500, 2200, 1700, 1900, 2100], // default example
-      goal = 2000,
-      }) => {
+                                                                     data = [1800, 2000, 1500, 2200, 1700, 1900, 2100], // default example
+                                                                     goal = 2000,
+                                                                 }) => {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
     const todayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
@@ -86,40 +86,6 @@ const WeeklyCaloriesChart: React.FC<WeeklyCaloriesChartProps> = ({
         },
         legend: {
             show: false,
-        },
-        tooltip: {
-            enabled: true,
-            shared: false,
-            intersect: true,
-            style: {
-                fontSize: "12px",
-            },
-            fillSeriesColor: false, // marker color is custom
-            custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-                const value = series[seriesIndex][dataPointIndex];
-                const color = w.config.colors[dataPointIndex] || '#F67631';
-                const day = w.config.xaxis.categories[dataPointIndex];
-                return `
-          <div style="
-            padding: 8px 12px; 
-            background: #1E1E1E; 
-            border-radius: 8px; 
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          ">
-            <span style="
-              display: inline-block;
-              width: 12px;
-              height: 12px;
-              background: ${color};
-              border-radius: 50%;
-            "></span>
-            <strong>${day}:</strong> ${value} kcal
-          </div>
-        `;
-            },
         },
     };
 
