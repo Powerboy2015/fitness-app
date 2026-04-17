@@ -46,17 +46,17 @@ body {
   stroke: transparent !important;
 }
 
-/* Light Theme default */
+/* Light Theme (default) */
 @theme {
-  --color-background: oklch(0.9631 0.0017 145.56);
-  --color-components: oklch(0.9167 0.0017 145.64);
-  --color-components-hover: oklch(0.791 0.0017 145.64);
-  --color-bordercolor: oklch(0.7507 0.0017 145.64);
+  --color-background: oklch(0.9631 0.0017 145.56); /* background color for background of app can be used by implementing "bg-background" in your className */
+  --color-components: oklch(0.9167 0.0017 145.64); /* background color for components can be used by implementing "bg-components" in your className */
+  --color-components-hover: oklch(0.791 0.0017 145.64); /* hover color for components can be used by implementing "hover:bg-components-hover" in your className */
+  --color-bordercolor: oklch(0.7507 0.0017 145.64); /* border color for components can be used by implementing "border-bordercolor" in your className */
 
-  --color-textcolor: oklch(0.1 0 0);
-  --color-muted: oklch(0.5326 0.0017 145.64);
+  --color-textcolor: oklch(0.1 0 0); /* text color for components can be used by implementing "text-textcolor" in your className */
+  --color-muted: oklch(0.5326 0.0017 145.64); /* muted text color for components can be used by implementing "text-muted" in your className */
 
-  --color-accent: oklch(0.7064 0.1758 45.51);
+  --color-accent: oklch(0.7064 0.1758 45.51); /* accent color can be used by implementing "bg-accent" in your className */
   --color-accent-action: oklch(0.7783 0.1413 48.09);
 
   --color-button-start: oklch(0.7227 0.192 149.58);
