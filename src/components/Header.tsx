@@ -15,7 +15,8 @@ const pageTitles: Record<string, string> = {
   "/kcal-tracker": "Calorie Tracker",
   "/exercises": "Exercises",
   "/exercise-description": "Exercise Description",
-  "/Product details": "Product details",
+  "/food-list": "Food list",
+  "/product-details": "Product Details"
 };
 
 const routesWithSave = [
