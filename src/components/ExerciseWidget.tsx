@@ -53,7 +53,7 @@ export default function ExerciseWidget({
       </button>
       <button
         onClick={handleClick}
-        className="flex h-12 w-12 rounded-full bg-accent hover:bg-accent-action active:bg-accent-action ml-2 z-50"
+        className="flex h-12 w-12 rounded-full bg-accent hover:bg-accent-action active:bg-accent-action ml-2 text-textcolor"
       >
         {!added ? <AddIcon sx={{ fontSize: 49 }} /> : <CheckIcon sx={{ fontSize: 49 }} />}
       </button>

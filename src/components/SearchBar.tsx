@@ -23,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch }) => {
                     type="button"
                     onClick={onSearch}
                 >
-                    <SearchIcon sx={{ color: "#F67631" }} />
+                    <SearchIcon />
                 </button>
             </div>
         </div>
