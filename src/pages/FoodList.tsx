@@ -210,6 +210,7 @@ export default function FoodList() {
           })()}
 
           {product.map((item) => (
+            item.nutriments ?
             <FoodItemComponent
               key={item.id ?? item.code}
               name={item.product_name}
@@ -222,7 +223,7 @@ export default function FoodList() {
                 }
               }}
             />
-          ))}
+            : null))}
         </div>
       )}
     </>
