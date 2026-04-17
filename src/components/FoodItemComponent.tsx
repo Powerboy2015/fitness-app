@@ -35,6 +35,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
   return overlay ? (
     <div className="z-10 bg-gray-600 fixed top-0 right-0 left-0 bottom-0 w-full h-full pt-40 mt-10 " onClick={() => onClick()}>
       <div className="fixed inset-0 top-15 bottom-15 bg-background z-20 overflow-y-auto px-5 py-5 no-scrollbar">
+        <h2 className="text-textcolor text-center text-2xl font-bold mb-3">{name}</h2>
         <div className="w-full max-w-md mx-auto bg-components border border-bordercolor rounded-xl p-5">
           <h1 className="text-textcolor text-xl font-bold mb-4">Product Details per 100g</h1>
 
