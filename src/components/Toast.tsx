@@ -10,11 +10,11 @@ export function AppToaster() {
           "flex items-center gap-3 rounded-lg border px-4 py-3 shadow-lg text-sm",
 
         success: {
-          className: "bg-green-600 text-white border-green-700",
+          className: "bg-green-600 text-textcolor border-green-700",
         },
 
         error: {
-          className: "bg-red-600 text-white border-red-700",
+          className: "bg-red-600 text-textcolor border-red-700",
         },
 
         loading: {

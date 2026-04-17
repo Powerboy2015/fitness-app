@@ -75,9 +75,9 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center  w-87 bg-[#1E1E1E] border-2 border-[#565d5d] rounded-lg p-6 pt-12">
+      <div className="flex flex-col items-center justify-center  w-87 bg-components border-2 border-bordercolor rounded-lg p-6 pt-12">
         <button 
-          className="absolute top-2 right-2 text-orange-500 hover:text-orange-400 active:text-orange-400 transition-colors z-30"
+          className="absolute top-2 right-2 text-accent hover:text-accent-action active:text-accent-action transition-colors z-30"
           onClick={handleMenuClick}
         >
           <MenuIcon style={{ fontSize: '32px' }} />
@@ -98,7 +98,7 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
                 <select 
                   value={hours} 
                   onChange={(e) => handleTimeChange(Number(e.target.value), minutes, seconds)}
-                  className="px-3 py-2 border-2 border-[#565d5d] rounded-lg bg-gray-800 text-white text-xl font-semibold mb-1 cursor-pointer hover:border-gray-500 active:border-gray-500 focus:outline-none focus:border-blue-500"
+                  className="px-3 py-2 border-2 border-bordercolor rounded-lg bg-components text-textcolor text-xl font-semibold mb-1 cursor-pointer hover:border-gray-500 active:border-gray-500 focus:outline-none focus:border-blue-500"
                   disabled={isActive}
                 >
                   {[...Array(24)].map((_, i) => (
@@ -111,7 +111,7 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
                 <select 
                   value={minutes} 
                   onChange={(e) => handleTimeChange(hours, Number(e.target.value), seconds)}
-                  className="px-3 py-2 border-2 border-[#565d5d] rounded-lg bg-gray-800 text-white text-xl font-semibold mb-1 cursor-pointer hover:border-gray-500 active:border-gray-500 focus:outline-none focus:border-blue-500"
+                  className="px-3 py-2 border-2 border-bordercolor rounded-lg bg-components text-textcolor text-xl font-semibold mb-1 cursor-pointer hover:border-gray-500 active:border-gray-500 focus:outline-none focus:border-blue-500"
                   disabled={isActive}
                 >
                   {[...Array(60)].map((_, i) => (
@@ -124,7 +124,7 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
                 <select 
                   value={seconds} 
                   onChange={(e) => handleTimeChange(hours, minutes, Number(e.target.value))}
-                  className="px-3 py-2 border-2 border-[#565d5d] rounded-lg bg-gray-800 text-white text-xl font-semibold mb-1 cursor-pointer hover:border-gray-500 active:border-gray-500 focus:outline-none focus:border-blue-500"
+                  className="px-3 py-2 border-2 border-bordercolor rounded-lg bg-components text-textcolor text-xl font-semibold mb-1 cursor-pointer hover:border-gray-500 active:border-gray-500 focus:outline-none focus:border-blue-500"
                   disabled={isActive}
                 >
                   {[...Array(60)].map((_, i) => (
@@ -137,22 +137,22 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
           </div>
         )}
         
-        <div className="border-2 border-[#565d5d] rounded-lg p-4 mb-4 w-56 text-center">
-          <div className="text-3xl font-bold text-white font-mono">
+        <div className="border-2 border-bordercolor rounded-lg p-4 mb-4 w-56 text-center">
+          <div className="text-3xl font-bold text-textcolor font-mono">
             {formatTime(timeLeftMs)}
           </div>
         </div>
         <div className="flex flex-row items-center justify-center gap-3">
           {!hasStarted ? (
             <button 
-              className="w-14 h-14 rounded-full border-4 border-green-500 bg-gray-900 text-green-500 hover:bg-green-500 hover:text-white transition-colors active:bg-green-500 active:text-white flex items-center justify-center"
+              className="w-14 h-14 rounded-full border-4 border-button-start bg-components text-button-start hover:bg-button-start hover:text-textcolor transition-colors active:bg-button-start active:text-textcolor flex items-center justify-center"
               onClick={handleStart}
             >
               <PlayCircleOutlineIcon fontSize="large" />
             </button>
           ) : (
             <button 
-              className="w-14 h-14 rounded-full border-4 border-yellow-500 bg-gray-900 text-yellow-500 hover:bg-yellow-500 hover:text-white active:bg-yellow-500 active:text-white transition-colors flex items-center justify-center"
+              className="w-14 h-14 rounded-full border-4 border-button-pause bg-components text-button-pause hover:bg-button-pause hover:text-textcolor active:bg-button-pause active:text-textcolor transition-colors flex items-center justify-center"
               onClick={() => setIsActive(!isActive)}
               disabled={timeLeftMs === 0}
             >
@@ -160,7 +160,7 @@ export default function CountDownTimer({ onTimerChange }: CountDownTimerProps) {
             </button>
           )}
           <button 
-            className="w-14 h-14 rounded-full border-4 border-red-500 bg-gray-900 text-red-500 hover:bg-red-500 hover:text-white active:bg-red-500 active:text-white transition-colors flex items-center justify-center"
+            className="w-14 h-14 rounded-full border-4 border-button-stop bg-components text-button-stop hover:bg-button-stop hover:text-textcolor active:bg-button-stop active:text-textcolor transition-colors flex items-center justify-center"
             onClick={() => { setTimeLeftMs(inputtimeMs); setIsActive(false); setHasStarted(false); }}
           >
             <StopCircleOutlinedIcon fontSize="large" />

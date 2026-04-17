@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="stylesheet" href="main.css" />
+
+    <script>
+      const theme = localStorage.getItem("theme");
+      if (theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+      }
+    </script>
+
     <title>Tauri + React + Typescript</title>
     <meta
       name="viewport"
