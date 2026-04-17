@@ -1,6 +1,8 @@
 import WeightLineChart from "../components/WeightLineChart.tsx";
 import AddFoodButton from "../components/AddFoodButton.tsx";
-//pls work github
+import {NutritionDonutChart} from "../components/NutritionDonutChart.tsx";
+import EatenTodayList from "../components/EatenTodayList.tsx";
+
 export default function KcalTracker() {
   return (
       <>

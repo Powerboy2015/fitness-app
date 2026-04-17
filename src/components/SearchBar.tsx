@@ -1,5 +1,6 @@
 import React from "react";
 import { BarcodeIcon } from "./SVG";
+
 interface SearchBarProps {
     value: string;
     onChange: (value: string) => void;
