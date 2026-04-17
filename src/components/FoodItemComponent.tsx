@@ -44,7 +44,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
               <div className="font-semibold block text-accent">
                 Calories
               </div>
-              <div className="inline-flex items-baseline">
+              <div className="text-textcolor inline-flex items-baseline">
                 {calories.toFixed()}
               </div>
             </div>
@@ -52,7 +52,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
               <div className="font-semibold block text-[#DC143C]">
                 Carbs
               </div>
-              <div className="inline-flex items-baseline">
+              <div className="text-textcolor inline-flex items-baseline">
                 {carbs.toFixed(1)}g
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
               <div className="font-semibold block text-[#4DA3FF]">
                 Proteins
               </div>
-              <div className="inline-flex items-baseline">
+              <div className="text-textcolor inline-flex items-baseline">
                 {protein.toFixed(1)}g
               </div>
             </div>
@@ -68,7 +68,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
               <div className="font-semibold block text-[#32CD32]">
                 Fats
               </div>
-              <div className="inline-flex items-baseline">
+              <div className="text-textcolor inline-flex items-baseline">
                 {fat.toFixed(1)}g
               </div>
             </div>
@@ -76,7 +76,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
               <div className="font-semibold block text-[#FFD700]">
                 Sugar
               </div>
-              <div className="inline-flex items-baseline">
+              <div className="text-textcolor inline-flex items-baseline">
                 {sugar.toFixed(1)}g
               </div>
             </div>
@@ -84,7 +84,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
               <div className="font-semibold block text-[#9153cc]">
                 Fiber
               </div>
-              <div className="inline-flex items-baseline">
+              <div className="text-textcolor inline-flex items-baseline">
                 {fiber.toFixed(1)}g
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
               <div className="font-semibold block text-[#FF4500]">
                 Sodium
               </div>
-              <div className="inline-flex items-baseline">
+              <div className="text-textcolor inline-flex items-baseline">
                 {sodium.toFixed(1)}g
               </div>
             </div>
@@ -127,10 +127,10 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
           </div>
           <div className="w-full max-w-md mx-auto mt-5">
             <div className=" flex">
-              <button onClick={() => { setOverlay(false) }} className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full bg-components hover:bg-components-hover active:bg-components-hover flex z-30">
+              <button onClick={() => { setOverlay(false) }} className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full text-textcolor bg-components hover:bg-components-hover active:bg-components-hover flex z-30">
                 Cancel
               </button>
-              <button className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full bg-accent hover:bg-accent-action active:bg-accent-action flex z-30">
+              <button className="cursor-pointer mx-auto sticky bottom-2 h-16 justify-center items-center font-bold w-[90%] rounded-full text-textcolor bg-accent hover:bg-accent-action active:bg-accent-action flex z-30">
                 Add product
               </button>
             </div>
@@ -144,7 +144,7 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
       onClick={() => handleOverlayClick()}
     >
       <div className="pl-3 p-6">
-        <div className="flex-1 text-xl text-left cursor-pointer mb-auto">
+        <div className="flex-1 text-xl text-textcolor text-left cursor-pointer mb-auto">
           {name}
         </div>
       </div>
