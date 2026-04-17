@@ -101,7 +101,7 @@ export default function AddExercises() {
             <div className="fixed top-60 right-10 pointer-events-none z-100">
               <button
                   onClick={scrollToTop}
-                  className={`w-13 h-13 bg-component hover:bg-components-hover rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+                  className={`w-13 h-13 bg-components hover:bg-components-hover rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
               >↑</button>
             </div>
             <div
@@ -128,7 +128,7 @@ export default function AddExercises() {
                   />)}
               <div className="px-4">
                 <button
-                    className=" bg-amber-700 w-full rounded mb-25"
+                    className=" bg-accent w-full rounded mb-25"
                     onClick={() => {LoadNextPage()}}>load more</button>
               </div>
             </div>
