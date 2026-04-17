@@ -2,7 +2,6 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState } from "react";
-import SearchIcon from '@mui/icons-material/Search';
 
 interface Nutriments {
   "energy-kcal_100g"?: number;

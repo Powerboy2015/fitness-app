@@ -77,14 +77,14 @@ export default function ExerciseDescriptionOverlay({
   return (
     <div>
       <li
-        className={`bg-components border-bordercolor border rounded-xl px-2 z-300 flex w-full items-center hover:bg-components-hover active:bg-components-hover transition-transform duration-100 ease-in-out `}
+        className={`bg-components border-bordercolor border rounded-xl px-2 z-300 flex w-full items-center hover:bg-components-hover active:bg-components-hover transition-transform duration-100 ease-in-out`}
       >
         <div
           className="flex w-full h-full py-4 items-center justify-between"
           onClick={() => handleToggleClick()}
         >
           <img
-            className="h-20 w-20 contain-content rounded-xl"
+            className="h-20 w-20 contain-content rounded-xl ml-2"
             src={gif}
             alt=""
             loading="lazy"
@@ -132,8 +132,8 @@ function Overlay({active,name,gif,targetMuscle,secondaryMuscles,equipments,instr
   if (!active) return <></>;
 
     return (
-        <div className="fixed inset-0 z-50 bg-background flex justify-center items-start overflow-y-auto">
-            <div className="w-[90%] max-w-3xl mt-20 mb-35 bg-components border border-bordercolor rounded-xl p-6 font-bold">
+        <div className="fixed inset-0 z-50 bg-background flex justify-center items-start overflow-y-auto no-scrollbar">
+            <div className="w-[90%] max-w-3xl mt-20 mb-30 bg-components border border-bordercolor rounded-xl p-6 font-bold">
 
                 <h2 className="text-textcolor text-2xl mb-2 border-b-2 border-bordercolor">
                     {name.charAt(0).toUpperCase() + name.slice(1)}

@@ -30,8 +30,8 @@ export default function SelectedExerciseModal({dispatch,state, saveFunc}:Selecte
         </ul>
         <div className="bg-accent flex justify-between pr-8 pl-2 rounded-xl items-center border border-accent">
             <ListOpenButton open={open} onOpen={(opened) => {isOpen(opened)}}/>
-            <p className="text-2xl">{exerciseCount} exercise{exerciseCount == 1 ? "" : "s"} added</p>
-            <button className="text-4xl" onClick={() => {
+            <p className="text-2xl text-textcolor">{exerciseCount} exercise{exerciseCount == 1 ? "" : "s"} added</p>
+            <button className="text-xl text-textcolor" onClick={() => {
                 saveFunc();
                 navigate(-1);
             }}>{exerciseCount > 0 ? "Add":"Back"}</button>

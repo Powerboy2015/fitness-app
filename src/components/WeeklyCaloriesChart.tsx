@@ -7,7 +7,7 @@ interface WeeklyCaloriesChartProps {
     goal?: number;
 }
 
-const WeeklyCaloriesChart: React.FC<WeeklyCaloriesChartProps> = ({
+export const WeeklyCaloriesChart: React.FC<WeeklyCaloriesChartProps> = ({
       data = [1800, 2000, 1500, 2200, 1700, 1900, 2100], // default example
       goal = 2000,
       }) => {

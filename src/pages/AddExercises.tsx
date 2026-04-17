@@ -109,7 +109,7 @@ export default function AddExercises() {
             </div>
             <div
                 ref={listRef}
-                className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)] p-8 flex flex-col gap-4"
+                className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)] p-4 flex flex-col gap-4 no-scrollbar"
             >
               {exercises.map(exercise =>
                   <ExerciseDescriptionOverlay
