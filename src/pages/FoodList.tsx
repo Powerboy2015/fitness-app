@@ -71,6 +71,32 @@ export default function FoodList() {
       setLoading(false);
     }
   };
+  const fetchBarcodeAPI = async (product: string) => {
+    if (!product.trim()) {
+      setProduct([]);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await invoke<searchReturn>("get_product_by_barcode", {
+        product: product,
+      });
+      setProduct(result.products ?? []);
+      console.log(result);
+
+    } catch (err) {
+      console.error("Error:", err);
+
+      setError("WE GAAN ALLEMAAL DOOD!! ER WERKT IETS NIET AAN DE DATABASE!!!");
+      setProduct([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSearch = () => {
     setSearching(true);
@@ -106,7 +132,7 @@ const handleBarcodeSearch = async () => {
 
     console.log("Starting scan with formats...");
     const scanned = await scan({
-      formats: [Format.EAN13, Format.EAN8, Format.QRCode],
+      formats: [Format.EAN13, Format.EAN8,Format.QRCode],
     });
 
     console.log("Scan result:", scanned);
@@ -120,7 +146,7 @@ const handleBarcodeSearch = async () => {
     setRememberText(scanned.content);
     setSearching(true);
     setProduct([]);
-    void fetchSearchAPI(scanned.content, 1);
+    void fetchBarcodeAPI(scanned.content);
   } catch (err) {
     console.error("Barcode scan failed:", err);
     
