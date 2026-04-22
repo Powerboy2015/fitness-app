@@ -41,7 +41,7 @@ export default function FoodList() {
   const [rememberText, setRememberText] = useState("");
   const [recents, setRecents] = useState<searchItem[]>([])
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<any>("nothing");
   const [Searching, setSearching] = useState(false);
 
   const fetchSearchAPI = async (product: string, page: number) => {
@@ -84,45 +84,65 @@ export default function FoodList() {
 
   };
 
-  const handleBarcodeSearch = async () => {
-    setError(null);
+const handleBarcodeSearch = async () => {
+  setError(null);
 
-    try {
-      let permission = await checkPermissions();
+  try {
+    console.log("Starting barcode scan...");
+    
+    let permission = await checkPermissions();
+    console.log("Camera permission status:", permission);
 
-      if (permission !== "granted") {
-        permission = await requestPermissions();
-      }
-
-      if (permission !== "granted") {
-        setError("Camera permission is required to scan barcodes.");
-        return;
-      }
-
-      const scanned = await scan({
-        cameraDirection: "back",
-        formats: [Format.EAN13, Format.EAN8, Format.UPC_A, Format.UPC_E, Format.QRCode],
-      });
-
-      if (!scanned?.content) {
-        setError("No barcode was detected.");
-        return;
-      }
-
-      setSearchText(scanned.content);
-      setRememberText(scanned.content);
-      setSearching(true);
-      setProduct([]);
-      void fetchSearchAPI(scanned.content, 1);
-    } catch (err) {
-      console.error("Barcode scan failed:", err);
-      setError("Barcode scanner is unavailable on this platform or failed to start.");
+    if (permission !== "granted") {
+      console.log("Requesting camera permissions...");
+      permission = await requestPermissions();
+      console.log("Permission result:", permission);
     }
-  };
+
+    if (permission !== "granted") {
+      setError("Camera permission is required to scan barcodes.");
+      return;
+    }
+
+    console.log("Starting scan with formats...");
+    const scanned = await scan({
+      formats: [Format.EAN13, Format.EAN8, Format.QRCode],
+    });
+
+    console.log("Scan result:", scanned);
+
+    if (!scanned?.content) {
+      setError("No barcode was detected.");
+      return;
+    }
+
+    setSearchText(scanned.content);
+    setRememberText(scanned.content);
+    setSearching(true);
+    setProduct([]);
+    void fetchSearchAPI(scanned.content, 1);
+  } catch (err) {
+    console.error("Barcode scan failed:", err);
+    
+    // Better error message extraction
+    let errorMessage = "Unknown error occurred during scan";
+    
+    if (err instanceof Error) {
+      errorMessage = err.message;
+    } else if (typeof err === "string") {
+      errorMessage = err;
+    } else if (err && typeof err === "object") {
+      errorMessage = JSON.stringify(err);
+    }
+    
+    console.error("Final error message:", errorMessage);
+    setError(errorMessage);
+  }
+};
 
   const getStatusMessage = () => {
     if (loading) return { text: "Searching..." };
-    if (!loading && error) return { text: error, css: "text-red-400 animate-shake font-bold" };
+    if (!loading && error) return { text: error, css: "text-red-400  font-bold" };
     if (!loading && !error && product.length === 0 && !Searching)
       return { text: "Search a product" };
     if (!loading && !error && product.length === 0 && Searching)
@@ -133,7 +153,7 @@ export default function FoodList() {
   return (
     <>
       <div className="fixed top-16 left-0 right-0 z-3 bg-background overflow-hidden">
-        <div className="mr-4 ml-4 flex">
+        <div className="mr-4 ml-4 flex pt-20">
           <SearchBar
             value={searchText}
             onChange={setSearchText}
