@@ -4,8 +4,6 @@ import { invoke } from "@tauri-apps/api/core";
 import { useState } from "react";
 import {
   Format,
-  checkPermissions,
-  requestPermissions,
   scan,
 } from "@tauri-apps/plugin-barcode-scanner";
 
@@ -31,18 +29,21 @@ interface searchReturn {
   page_count: number;
   page_size: number;
   products: searchItem[];
+  product: searchItem[];
   skip: number;
 }
 //pls work github
 
 export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
+  const [productBarcode, setProductBarcode] = useState<searchItem | null>(null)
   const [searchText, setSearchText] = useState("");
   const [rememberText, setRememberText] = useState("");
   const [recents, setRecents] = useState<searchItem[]>([])
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>("nothing");
   const [Searching, setSearching] = useState(false);
+
 
   const fetchSearchAPI = async (product: string, page: number) => {
     if (!product.trim()) {
@@ -71,6 +72,8 @@ export default function FoodList() {
       setLoading(false);
     }
   };
+
+
   const fetchBarcodeAPI = async (product: string) => {
     if (!product.trim()) {
       setProduct([]);
@@ -80,18 +83,19 @@ export default function FoodList() {
 
     setLoading(true);
     setError(null);
+    setProduct([])
 
     try {
-      const result = await invoke<searchReturn>("get_product_by_barcode", {
+      const result = await invoke<any>("get_product_by_barcode", {
         product: product,
       });
-      setProduct(result.products ?? []);
-      console.log(result);
+      setProductBarcode(result.product);
+      console.log(productBarcode);
 
     } catch (err) {
       console.error("Error:", err);
 
-      setError("WE GAAN ALLEMAAL DOOD!! ER WERKT IETS NIET AAN DE DATABASE!!!");
+      setError("db error");
       setProduct([]);
     } finally {
       setLoading(false);
@@ -102,6 +106,7 @@ export default function FoodList() {
     setSearching(true);
     setRememberText(searchText);
     setProduct([]);
+    setProductBarcode(null)
     void fetchSearchAPI(searchText, 1);
 
     if (searchText.length === 0) {
@@ -114,55 +119,18 @@ const handleBarcodeSearch = async () => {
   setError(null);
 
   try {
-    console.log("Starting barcode scan...");
-    
-    let permission = await checkPermissions();
-    console.log("Camera permission status:", permission);
 
-    if (permission !== "granted") {
-      console.log("Requesting camera permissions...");
-      permission = await requestPermissions();
-      console.log("Permission result:", permission);
-    }
-
-    if (permission !== "granted") {
-      setError("Camera permission is required to scan barcodes.");
-      return;
-    }
-
-    console.log("Starting scan with formats...");
     const scanned = await scan({
       formats: [Format.EAN13, Format.EAN8,Format.QRCode],
     });
 
     console.log("Scan result:", scanned);
 
-    if (!scanned?.content) {
-      setError("No barcode was detected.");
-      return;
-    }
-
-    setSearchText(scanned.content);
-    setRememberText(scanned.content);
     setSearching(true);
     setProduct([]);
     void fetchBarcodeAPI(scanned.content);
   } catch (err) {
     console.error("Barcode scan failed:", err);
-    
-    // Better error message extraction
-    let errorMessage = "Unknown error occurred during scan";
-    
-    if (err instanceof Error) {
-      errorMessage = err.message;
-    } else if (typeof err === "string") {
-      errorMessage = err;
-    } else if (err && typeof err === "object") {
-      errorMessage = JSON.stringify(err);
-    }
-    
-    console.error("Final error message:", errorMessage);
-    setError(errorMessage);
   }
 };
 
@@ -180,6 +148,7 @@ const handleBarcodeSearch = async () => {
     <>
       <div className="fixed top-16 left-0 right-0 z-3 bg-background overflow-hidden">
         <div className="mr-4 ml-4 flex pt-20">
+          <button onClick={()=>{fetchBarcodeAPI("8718452513666")}}>test</button>
           <SearchBar
             value={searchText}
             onChange={setSearchText}
@@ -189,6 +158,7 @@ const handleBarcodeSearch = async () => {
             }}
             placeholderText="food"
           />
+
         </div>
       </div>
 
@@ -235,7 +205,18 @@ const handleBarcodeSearch = async () => {
                 }
               }}
             />
-            : null))}
+            : null
+            
+            ))}
+          {productBarcode ? 
+                      <FoodItemComponent
+              key={1}
+              name={productBarcode.product_name}
+              nutriments={productBarcode.nutriments}
+              barcode={productBarcode.code}
+              brand={productBarcode.brands}
+              onClick={() => null}
+            />: null}
         </div>
       )}
     </>
