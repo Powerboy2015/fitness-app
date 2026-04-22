@@ -6,10 +6,11 @@ interface SearchBarProps {
     value: string;
     onChange: (value: string) => void;
     onSearch: () => void;
+    onBarcodeClick?: () => void;
     placeholderText: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeholderText}) => {
+const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, onBarcodeClick, placeholderText}) => {
     const showBarcode = placeholderText === "food";
 
     return (
@@ -26,6 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeh
                         <button
                         className="absolute right-3 top-1/2 w-6 -translate-y-1/2 text-accent active:text-accent-action transition-colors cursor-pointer"
                             type="button"
+                            onClick={onBarcodeClick}
                         >
                             <BarcodeIcon className="text-current" />
                         </button>

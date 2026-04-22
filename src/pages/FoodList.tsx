@@ -2,7 +2,12 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState } from "react";
-import SearchIcon from '@mui/icons-material/Search';
+import {
+  Format,
+  checkPermissions,
+  requestPermissions,
+  scan,
+} from "@tauri-apps/plugin-barcode-scanner";
 
 interface Nutriments {
   "energy-kcal_100g"?: number;
@@ -29,84 +34,6 @@ interface searchReturn {
   skip: number;
 }
 //pls work github
-
-const MOCK_RECENTS: searchItem[] = [
-  {
-    id: "1",
-    product_name: "Banana",
-    code: "5901234567890",
-    brands: "Generic",
-    nutriments: {
-      "energy-kcal_100g": 89,
-      "carbohydrates_100g": 23,
-      "proteins_100g": 1.1,
-      "fat_100g": 0.3,
-      "sugars_100g": 12,
-      "fiber_100g": 2.6,
-      "sodium_100g": 0.001,
-    },
-  },
-  {
-    id: "2",
-    product_name: "Chicken Breast",
-    code: "1234567890123",
-    brands: "Tyson",
-    nutriments: {
-      "energy-kcal_100g": 165,
-      "carbohydrates_100g": 0,
-      "proteins_100g": 31,
-      "fat_100g": 3.6,
-      "sugars_100g": 0,
-      "fiber_100g": 0,
-      "sodium_100g": 0.074,
-    },
-  },
-  {
-    id: "3",
-    product_name: "Whole Wheat Bread",
-    code: "9876543210987",
-    brands: "Sara Lee",
-    nutriments: {
-      "energy-kcal_100g": 247,
-      "carbohydrates_100g": 43,
-      "proteins_100g": 8.7,
-      "fat_100g": 3.3,
-      "sugars_100g": 4.2,
-      "fiber_100g": 6.8,
-      "sodium_100g": 0.486,
-    },
-  },
-  {
-    id: "4",
-    product_name: "Greek Yogurt",
-    code: "5555555555555",
-    brands: "Fage",
-    nutriments: {
-      "energy-kcal_100g": 59,
-      "carbohydrates_100g": 3.3,
-      "proteins_100g": 10.2,
-      "fat_100g": 0.4,
-      "sugars_100g": 3.3,
-      "fiber_100g": 0,
-      "sodium_100g": 0.056,
-    },
-  },
-  {
-    id: "5",
-    product_name: "Salmon Fillet",
-    code: "4444444444444",
-    brands: "Wild Caught",
-    nutriments: {
-      "energy-kcal_100g": 208,
-      "carbohydrates_100g": 0,
-      "proteins_100g": 20,
-      "fat_100g": 13,
-      "sugars_100g": 0,
-      "fiber_100g": 0,
-      "sodium_100g": 0.075,
-    },
-  },
-];
 
 export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
@@ -157,6 +84,42 @@ export default function FoodList() {
 
   };
 
+  const handleBarcodeSearch = async () => {
+    setError(null);
+
+    try {
+      let permission = await checkPermissions();
+
+      if (permission !== "granted") {
+        permission = await requestPermissions();
+      }
+
+      if (permission !== "granted") {
+        setError("Camera permission is required to scan barcodes.");
+        return;
+      }
+
+      const scanned = await scan({
+        cameraDirection: "back",
+        formats: [Format.EAN13, Format.EAN8, Format.UPC_A, Format.UPC_E, Format.QRCode],
+      });
+
+      if (!scanned?.content) {
+        setError("No barcode was detected.");
+        return;
+      }
+
+      setSearchText(scanned.content);
+      setRememberText(scanned.content);
+      setSearching(true);
+      setProduct([]);
+      void fetchSearchAPI(scanned.content, 1);
+    } catch (err) {
+      console.error("Barcode scan failed:", err);
+      setError("Barcode scanner is unavailable on this platform or failed to start.");
+    }
+  };
+
   const getStatusMessage = () => {
     if (loading) return { text: "Searching..." };
     if (!loading && error) return { text: error, css: "text-red-400 animate-shake font-bold" };
@@ -175,6 +138,9 @@ export default function FoodList() {
             value={searchText}
             onChange={setSearchText}
             onSearch={handleSearch}
+            onBarcodeClick={() => {
+              void handleBarcodeSearch();
+            }}
             placeholderText="food"
           />
         </div>
