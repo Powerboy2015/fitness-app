@@ -2,12 +2,9 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState } from "react";
-import {
-  Format,
-  scan,
-} from "@tauri-apps/plugin-barcode-scanner";
+import BarcodeScanner from "../components/barcodeScanner.tsx";
 
-interface Nutriments {
+export interface Nutriments {
   "energy-kcal_100g"?: number;
   "carbohydrates_100g"?: number;
   "proteins_100g"?: number;
@@ -16,8 +13,7 @@ interface Nutriments {
   "fiber_100g"?: number;
   "sodium_100g"?: number;
 }
-
-interface searchItem {
+export interface searchItem {
   id: string;
   product_name: string;
   nutriments: Nutriments;
@@ -32,26 +28,22 @@ interface searchReturn {
   product: searchItem[];
   skip: number;
 }
-//pls work github
-
 export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
-  const [productBarcode, setProductBarcode] = useState<searchItem | null>(null)
+  const [productBarcode, setProductBarcode] = useState<any>()
   const [searchText, setSearchText] = useState("");
   const [rememberText, setRememberText] = useState("");
   const [recents, setRecents] = useState<searchItem[]>([])
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>("nothing");
   const [Searching, setSearching] = useState(false);
-
-
+  
   const fetchSearchAPI = async (product: string, page: number) => {
     if (!product.trim()) {
       setProduct([]);
       setError(null);
       return;
     }
-
     setLoading(true);
     setError(null);
 
@@ -61,36 +53,6 @@ export default function FoodList() {
         page: page,
       });
       setProduct(result.products ?? []);
-      console.log(result);
-
-    } catch (err) {
-      console.error("Error:", err);
-
-      setError("WE GAAN ALLEMAAL DOOD!! ER WERKT IETS NIET AAN DE DATABASE!!!");
-      setProduct([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-  const fetchBarcodeAPI = async (product: string) => {
-    if (!product.trim()) {
-      setProduct([]);
-      setError(null);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setProduct([])
-
-    try {
-      const result = await invoke<any>("get_product_by_barcode", {
-        product: product,
-      });
-      setProductBarcode(result.product);
-      console.log(productBarcode);
 
     } catch (err) {
       console.error("Error:", err);
@@ -115,24 +77,6 @@ export default function FoodList() {
 
   };
 
-const handleBarcodeSearch = async () => {
-  setError(null);
-
-  try {
-
-    const scanned = await scan({
-      formats: [Format.EAN13, Format.EAN8,Format.QRCode],
-    });
-
-    console.log("Scan result:", scanned);
-
-    setSearching(true);
-    setProduct([]);
-    void fetchBarcodeAPI(scanned.content);
-  } catch (err) {
-    console.error("Barcode scan failed:", err);
-  }
-};
 
   const getStatusMessage = () => {
     if (loading) return { text: "Searching..." };
@@ -144,25 +88,35 @@ const handleBarcodeSearch = async () => {
     return null;
   };
 
+  function handleProductFromChild(data: any){
+    setProductBarcode(data)
+  }
+  function handleErrorFromChild(data: any){
+    setError(data)
+  }
+  function handleLoadingFromChild(data: any){
+    setLoading(data)
+  }
+  function handleSearchingFromChild(data: any){
+    setSearching(data)
+  }
+
   return (
     <>
       <div className="fixed top-16 left-0 right-0 z-3 bg-background overflow-hidden">
         <div className="mr-4 ml-4 flex pt-20">
-          <button onClick={()=>{fetchBarcodeAPI("8718452513666")}}>test</button>
           <SearchBar
             value={searchText}
             onChange={setSearchText}
             onSearch={handleSearch}
-            onBarcodeClick={() => {
-              void handleBarcodeSearch();
-            }}
             placeholderText="food"
           />
-
+            <BarcodeScanner  onProductScan={handleProductFromChild} onError={handleErrorFromChild} onLoading={handleLoadingFromChild} onSearching={handleSearchingFromChild}/>
         </div>
       </div>
 
-      {!loading && !Searching && !error && recents.length > 0 ? (
+
+      {!loading && !Searching && !error && recents.length > 0 && !productBarcode ? (
         <div className="pt-15">
           <div className="text-textcolor text-center my-4 font-semibold">Recent searches</div>
           {recents.map((item) => (
@@ -206,18 +160,15 @@ const handleBarcodeSearch = async () => {
               }}
             />
             : null
-            
             ))}
-          {productBarcode ? 
-                      <FoodItemComponent
-              key={1}
-              name={productBarcode.product_name}
-              nutriments={productBarcode.nutriments}
-              barcode={productBarcode.code}
-              brand={productBarcode.brands}
-              onClick={() => null}
-            />: null}
+            
+            {productBarcode ? 
+            <FoodItemComponent key={1} name={productBarcode.product_name} nutriments={productBarcode.nutriments} barcode="1" brand={productBarcode.brands_tags[0]} onClick={()=> null}/>
+          : null  
+          }
         </div>
+
+        
       )}
     </>
   );
