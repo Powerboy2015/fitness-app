@@ -1,4 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
+import { BarcodeIcon } from "./SVG";
+
 import {
   Format,
   scan,
@@ -51,5 +53,5 @@ const fetchBarcodeAPI = async (product: string) => {
   }
 };
 
-return <div><button onClick={()=>fetchBarcodeAPI("8718796113935")}>barcodeScan</button></div>
+return <button className="w-11 h-11 p-2 mt-3 mx-2 border-bordercolor border-1 rounded-md text-accent active:text-accent-action bg-components " onClick={()=>fetchBarcodeAPI("8718796113935")}><BarcodeIcon className="text-current" /></button>
 }

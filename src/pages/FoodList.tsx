@@ -81,15 +81,16 @@ export default function FoodList() {
   const getStatusMessage = () => {
     if (loading) return { text: "Searching..." };
     if (!loading && error) return { text: error, css: "text-red-400  font-bold" };
-    if (!loading && !error && product.length === 0 && !Searching)
+    if (!loading && !error && product.length === 0 && !Searching && !productBarcode)
       return { text: "Search a product" };
-    if (!loading && !error && product.length === 0 && Searching)
+    if (!loading && !error && product.length === 0 && Searching && !productBarcode )
       return { text: `No products found for "${rememberText}".` };
     return null;
   };
 
   function handleProductFromChild(data: any){
     setProductBarcode(data)
+    setProduct([])
   }
   function handleErrorFromChild(data: any){
     setError(data)
@@ -103,8 +104,8 @@ export default function FoodList() {
 
   return (
     <>
-      <div className="fixed top-16 left-0 right-0 z-3 bg-background overflow-hidden">
-        <div className="mr-4 ml-4 flex pt-20">
+      <div className="z-3 bg-background overflow-hidden">
+        <div className="mr-4 ml-4 flex pt-2 pb-1">
           <SearchBar
             value={searchText}
             onChange={setSearchText}
@@ -117,7 +118,7 @@ export default function FoodList() {
 
 
       {!loading && !Searching && !error && recents.length > 0 && !productBarcode ? (
-        <div className="pt-15">
+        <div className="">
           <div className="text-textcolor text-center my-4 font-semibold">Recent searches</div>
           {recents.map((item) => (
             <FoodItemComponent
@@ -135,7 +136,7 @@ export default function FoodList() {
           ))}
         </div>
       ) : (
-        <div className="pt-15">
+        <div className="">
           {(() => {
             const status = getStatusMessage();
             return status ? (

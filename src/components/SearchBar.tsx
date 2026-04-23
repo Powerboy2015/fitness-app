@@ -1,5 +1,4 @@
 import React from "react";
-import { BarcodeIcon } from "./SVG";
 import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchBarProps {
@@ -10,8 +9,8 @@ interface SearchBarProps {
     placeholderText: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, onBarcodeClick, placeholderText}) => {
-    const showBarcode = placeholderText === "food";
+const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, placeholderText}) => {
+
 
     return (
         <div className="flex items-center gap-2 w-full justify-between mt-3 mb-2">
@@ -23,15 +22,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearch, onBarc
                     onChange={(e) => onChange(e.target.value)}
                     className="w-full bg-components border border-bordercolor rounded-lg pl-3 py-2 text-textcolor focus:outline-none focus:border-accent"
                 />
-                    {showBarcode && (
-                        <button
-                        className="absolute right-3 top-1/2 w-6 -translate-y-1/2 text-accent active:text-accent-action transition-colors cursor-pointer"
-                            type="button"
-                            onClick={onBarcodeClick}
-                        >
-                            <BarcodeIcon className="text-current" />
-                        </button>
-                )}
             </div>
             <button
                 className="h-11 w-11 rounded-lg bg-components border border-bordercolor flex items-center justify-center text-accent active:text-accent-action active:bg-components-hover transition-colors"
