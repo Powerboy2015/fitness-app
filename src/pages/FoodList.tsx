@@ -35,7 +35,7 @@ export default function FoodList() {
   const [rememberText, setRememberText] = useState("");
   const [recents, setRecents] = useState<searchItem[]>([])
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>("nothing");
+  const [error, setError] = useState<any>("");
   const [Searching, setSearching] = useState(false);
   
   const fetchSearchAPI = async (product: string, page: number) => {
@@ -76,7 +76,6 @@ export default function FoodList() {
     }
 
   };
-
 
   const getStatusMessage = () => {
     if (loading) return { text: "Searching..." };
