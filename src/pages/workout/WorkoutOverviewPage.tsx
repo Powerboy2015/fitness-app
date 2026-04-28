@@ -1,10 +1,10 @@
 import WorkoutWidget from "../../components/WorkoutWidget.tsx";
 import WorkoutAddButton from "../../components/WorkoutAddButton.tsx";
 import { useState, useEffect, useMemo } from "react";
-import API from "../../classes/api.ts";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { DndManagerdelay } from "../../components/DndManager.tsx";
+import useWorkouts from "../../Hooks/useWorkouts.ts";
 
 // I quite genuinely have to remap my UUID to id because of muks lib. I hate libs.
 type dndLibModifier = {
@@ -15,29 +15,32 @@ type dndLibModifier = {
 
 export default function WorkoutOverviewPage() {
   const manager = useMemo(() => DndManagerdelay(), []);
-
+  const workoutList = useWorkouts();
   const [workouts, setWorkouts] = useState<dndLibModifier[]>([]);
 
-  const getWorkouts = async () => {
-      //beautifully wrapped API call.
-      const workoutList = await API.workouts.list();
-      // I have to remap the response because muks lib requires an ID
-      const remappedWorkout: dndLibModifier[] = workoutList.map((workout) => {
-        return {
-          id: workout.uuid,
-          name: workout.name,
-          desc: workout.desc,
-        };
-      });
-        setWorkouts(remappedWorkout);
-    };
-
+  //sets the data according to what dndLibModifier needs.
   useEffect(() => {
-    // just calls this above ^
-    getWorkouts();
-  }, []);
+    if (!workoutList.data) return;
+    setWorkouts(workoutList.data.map(workout => ({
+      id: workout.uuid,
+      ...workout,
+    } satisfies dndLibModifier)));
+  }, [workoutList.data]);
 
-  if (!workouts) return <h1>Loading....</h1>;
+  //holds the list components
+  const workoutItemList = useMemo(() => {
+    return workouts.map((workout, index) => (
+      <WorkoutWidget
+        key={workout.id}
+        id={workout.id}
+        index={index}
+        name={workout.name}
+        reloadWorkouts={() => workoutList.refetch()}
+      />
+    ));
+  }, [workouts, workoutList.refetch]);
+
+  if (workoutList.isError || workoutList.isLoading || !workoutList.data) return <h1>Loading....</h1>;
 
   // if the list is still empty, return a incentive to create an workout.
   if (Object.keys(workouts).length < 1)
@@ -82,15 +85,7 @@ export default function WorkoutOverviewPage() {
           }}
         >
           <ul className="pt-5 pb-17">
-            {workouts.map((workout, index) => (
-              <WorkoutWidget
-                key={workout.id}
-                id={workout.id}
-                index={index}
-                name={workout.name}
-                reloadWorkouts={getWorkouts}
-              />
-            ))}
+            {workoutItemList}
           </ul>
         </DragDropProvider>
       </div>

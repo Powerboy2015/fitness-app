@@ -54,13 +54,7 @@ export default class workoutAPI {
      * @param _workoutUuid The Uuid provided from the backend list.
      * @returns a detailed list of workout information and connected exercises.
      */
-    public async detailed(_workoutUuid: string): Promise<IdetailedWorkoutDTO | string> {
-        if (!_workoutUuid) {
-            const err = "workout requires username";
-            console.error(err);
-            return err;
-        }
-
+    public async detailed(_workoutUuid: string): Promise<IdetailedWorkoutDTO> {
         const resp = await ApiClient.send<IdetailedWorkoutDTO>("get_workout", { req: _workoutUuid });
         return ApiClient.assertOk(resp);
     }

@@ -13,7 +13,7 @@ interface WorkoutWidgetProps {
     id: string;
     index: number;
     name: string;
-    reloadWorkouts: () => Promise<void>;
+    reloadWorkouts: () => void;
 }
 
 export default function WorkoutWidget({ id, index, name, reloadWorkouts }: WorkoutWidgetProps) {
