@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useSortable } from "@dnd-kit/react/sortable";
 import { useWorkout } from "../context/WorkoutContext";
 import API from "../classes/api";
+import {ROUTES} from "../types/consts.ts";
 
 interface WorkoutWidgetProps {
     id: string;
@@ -41,7 +42,7 @@ export default function WorkoutWidget({ id, index, name, reloadWorkouts }: Worko
 
     const handleNavigation = () => {
         setSelectedWorkout(id);
-        navigate("/exercises");
+        navigate(`${ROUTES.WORKOUTS}/${id}`);
     };
 
     return (

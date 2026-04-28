@@ -1,10 +1,10 @@
-import WorkoutWidget from "../components/WorkoutWidget.tsx";
-import WorkoutAddButton from "../components/WorkoutAddButton.tsx";
+import WorkoutWidget from "../../components/WorkoutWidget.tsx";
+import WorkoutAddButton from "../../components/WorkoutAddButton.tsx";
 import { useState, useEffect, useMemo } from "react";
-import API from "../classes/api.ts";
+import API from "../../classes/api.ts";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
-import { DndManagerdelay } from "../components/DndManager.tsx";
+import { DndManagerdelay } from "../../components/DndManager.tsx";
 
 // I quite genuinely have to remap my UUID to id because of muks lib. I hate libs.
 type dndLibModifier = {
@@ -13,7 +13,7 @@ type dndLibModifier = {
   desc?: string;
 };
 
-export default function WorkoutOverview() {
+export default function WorkoutOverviewPage() {
   const manager = useMemo(() => DndManagerdelay(), []);
 
   const [workouts, setWorkouts] = useState<dndLibModifier[]>([]);
