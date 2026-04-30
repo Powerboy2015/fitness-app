@@ -38,7 +38,7 @@ export default function SaveButton() {
     }
 
     return (
-        <div className="relative">
+        <div className="relative text-textcolor">
             <button onClick={handleSave} className="cursor-pointer">
                 <SaveIcon sx={{ fontSize: 40 }} />
             </button>

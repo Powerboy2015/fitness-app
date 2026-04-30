@@ -18,18 +18,18 @@ export function CurrentExercise({exerciseData, isCompleted = false, isExpanded =
 
 
     return (
-        <div className={`w-87 bg-[#1E1E1E] border-2 rounded-xl p-4 mb-4 ${isCompleted ? "border-[#2e8b57]" : "border-[#565d5d]"}`}>
+        <div className={`w-87 bg-components border-2 rounded-xl p-4 mb-4 ${isCompleted ? "border-[#2e8b57]" : "border-bordercolor"}`}>
             <button
                 onClick={onToggle}
                 className="w-full flex items-center justify-between cursor-pointer"
             >
-                <h2 className="text-white text-lg font-semibold">{exerciseData.name}</h2>
-                <span className="text-[#F67631]">
+                <h2 className="text-textcolor text-lg font-semibold">{exerciseData.name}</h2>
+                <span className="text-accent">
                     {isExpanded ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                 </span>
             </button>
 
-            <div className={isExpanded ? "border-t border-[#565d5d] pt-3 mt-3" : "hidden"}>
+            <div className={isExpanded ? "border-t border-bordercolor pt-3 mt-3" : "hidden"}>
                 {exerciseData.gif_url && (
                     <div className="bg-white rounded-lg p-2 w-fit mb-3">
                         <img

@@ -34,7 +34,7 @@ function App() {
           <div className="h-dvh flex flex-col overflow-hidden">
             <Header />
 
-            <main className="flex-1 overflow-y-auto no-scrollbar">
+            <main className="flex-1 overflow-y-auto no-scrollbar bg-background">
               <Toaster position="top-center" reverseOrder={false} />
               {/*<Routes>*/}
               {/*  <Route path="/edit-workout" element={<EditWorkout />} />*/}

@@ -49,7 +49,6 @@ export default function WorkoutOverviewPage() {
         className="
     fixed inset-0 
     top-15
-    bg-[#1E1E1E] 
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
     pb-[env(safe-area-inset-bottom)]
@@ -71,7 +70,6 @@ export default function WorkoutOverviewPage() {
     fixed inset-0 
     top-15
     bottom-15
-    bg-[#1E1E1E] 
     overflow-y-auto
     pt-[env(safe-area-inset-top)]
  pb-20
