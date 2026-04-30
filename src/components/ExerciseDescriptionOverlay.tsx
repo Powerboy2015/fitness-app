@@ -3,7 +3,6 @@ import CheckIcon from "@mui/icons-material/Check"
 import { invoke } from "@tauri-apps/api/core";
 import { ReactElement, useState } from "react";
 
-
 export default function ExerciseDescriptionOverlay({
   name,
   id,
@@ -14,7 +13,6 @@ export default function ExerciseDescriptionOverlay({
   id: string;
   gif: string;
   onSelect: () => void;
-  selected: boolean
 }) {
   const [equipments, setEquipments] = useState<string[]>([]);
   const [instructions, setInstructions] = useState<string[]>([]);

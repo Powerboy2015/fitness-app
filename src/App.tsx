@@ -9,7 +9,7 @@ import { WorkoutProvider } from "./context/WorkoutContext";
 // import EditWorkout from "./pages/EditWorkout.tsx";
 // import AddExercises from "./pages/AddExercises.tsx";
 // import Session from "./pages/Session.tsx";
-// import NewWorkout from "./pages/NewWorkout.tsx";
+// import CreateWorkoutPage from "./pages/CreateWorkoutPage.tsx";
 // import Profile from "./pages/Profile.tsx";
 // import WorkoutHistory from "./pages/WorkoutHistory.tsx";
 // import SessionHistory from "./pages/SessionHistory.tsx";
@@ -40,7 +40,7 @@ function App() {
               {/*  <Route path="/edit-workout" element={<EditWorkout />} />*/}
               {/*  <Route path="/add-exercises" element={<AddExercises />} />*/}
               {/*  <Route path="/session" element={<Session />} />*/}
-              {/*  <Route path="/new-workout" element={<NewWorkout />} />*/}
+              {/*  <Route path="/new-workout" element={<CreateWorkoutPage />} />*/}
               {/*  <Route path="/history" element={<WorkoutHistory />} />*/}
               {/*  <Route path="/session-history" element={<SessionHistory />} />*/}
               {/*  <Route path="/exercises" element={<WorkoutDetailPage />} />*/}

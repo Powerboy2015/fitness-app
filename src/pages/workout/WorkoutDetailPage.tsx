@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ExerciseOverviewWidget from "../../components/ExerciseOverviewWidget.tsx";
-import { DragDropProvider, DragEndEvent } from "@dnd-kit/react";
+import { DragDropProvider,} from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import StartSessionButton from "../../components/StartSessionButton.tsx";
 import { DndManagerdelay } from "../../components/DndManager.tsx";
@@ -33,7 +33,7 @@ export function WorkoutDetailPage() {
     });
   }, [data]);
 
-  //Only reloads the list of draggable exercises elemnents if the the list of those exercises chagne. 
+  //Only reloads the list of draggable exercises elements if the list of those exercises change.
   const overviewList = useMemo(() => {
     return draggableExercise.map((exercise, index) => (
       <ExerciseOverviewWidget

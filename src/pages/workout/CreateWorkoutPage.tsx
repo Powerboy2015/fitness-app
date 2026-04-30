@@ -1,8 +1,9 @@
-import { useWorkout } from "../context/WorkoutContext";
-import AddExerciseButton from "../components/AddExerciseButton.tsx";
-import ExerciseOverviewWidget from "../components/ExerciseOverviewWidget.tsx";
+import { useWorkout } from "../../context/WorkoutContext.tsx";
+import ExerciseOverviewWidget from "../../components/ExerciseOverviewWidget.tsx";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
+import {Link} from "react-router-dom";
 
-export default function NewWorkout() {
+export default function CreateWorkoutPage() {
   const { workoutName, setWorkoutName, exercises } = useWorkout();
 
   return (
@@ -41,7 +42,10 @@ export default function NewWorkout() {
             );
           })}
         </ul>
-        <AddExerciseButton to="/add-exercises" />
+        <PrimaryButton>
+          {/*TODO remove temp route.*/}
+          <Link className={"w-full h-full py-4"} to={"/exercises"}>Select Exercises</Link>
+        </PrimaryButton>
       </div>
     </div>
   );

@@ -3,4 +3,5 @@ export const ROUTES = {
     WORKOUTS: "/workout",
     PROFILE: "/profile",
     CAL_TRACKER: "/kcal-tracker",
+    WORKOUT_CREATE: "/workout/create"
 }

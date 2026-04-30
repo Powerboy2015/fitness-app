@@ -57,6 +57,8 @@ body {
   --color-muted: oklch(0.5326 0.0017 145.64); /* muted text color for components can be used by implementing "text-muted" in your className */
 
   --color-accent: oklch(0.7064 0.1758 45.51); /* accent color can be used by implementing "bg-accent" in your className */
+  --color-accent-hover: color-mix(in oklab, var(--color-accent) 95%, black);
+  --color-accent-pressed: color-mix(in oklab, var(--color-accent) 90%, black);
   --color-accent-action: oklch(0.7783 0.1413 48.09);
 
   --color-button-start: oklch(0.7227 0.192 149.58);
@@ -103,6 +105,7 @@ body {
   --color-muted: oklch(0.791 0.0017 145.64);
 
   --color-accent: oklch(0.7792 0.15455 194.769);
+  --color-accent-hover: color-mix(in oklab, var(--color-accent) 30%, gray);
   --color-accent-action: oklch(0.874 0.15455 194.769);
 
   --color-button-start: oklch(0.7227 0.192 149.58);
@@ -134,3 +137,31 @@ body {
 .animate-shake {
   animation: shake 0.15s ease-in-out infinite;
 }
+
+
+/*Reused variables in every theme*/
+@theme{
+  --shadow-button: 0px 4px 0px color-mix(in oklab, var(--color-accent) 30%, transparent);
+  --animate-shimmer: shimmer 3s linear infinite;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+}
+
+.component-skeleton {
+  background: linear-gradient(
+          90deg,
+          color-mix(in oklab, var(--color-components-hover) 90%, gray),
+          var(--color-components-hover) 50%,
+          color-mix(in oklab, var(--color-components-hover) 90%, gray)
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
