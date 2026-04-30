@@ -7,7 +7,7 @@ import { WorkoutProvider } from "./context/WorkoutContext";
 // import Home from "./pages/Home.tsx";
 // import WorkoutOverviewPage from "./pages/WorkoutOverviewPage.tsx";
 // import EditWorkout from "./pages/EditWorkout.tsx";
-// import AddExercises from "./pages/AddExercises.tsx";
+// import ExerciseOverviewPage from "./pages/ExerciseOverviewPage.tsx";
 // import Session from "./pages/Session.tsx";
 // import CreateWorkoutPage from "./pages/CreateWorkoutPage.tsx";
 // import Profile from "./pages/Profile.tsx";
@@ -33,12 +33,12 @@ function App() {
         <BrowserRouter>
           <div className="h-dvh flex flex-col overflow-hidden">
             <Header />
-
-            <main className="flex-1 overflow-y-auto no-scrollbar bg-background">
+            <main className="flex-1 overflow-y-auto relative no-scrollbar bg-background">
               <Toaster position="top-center" reverseOrder={false} />
+
               {/*<Routes>*/}
               {/*  <Route path="/edit-workout" element={<EditWorkout />} />*/}
-              {/*  <Route path="/add-exercises" element={<AddExercises />} />*/}
+              {/*  <Route path="/add-exercises" element={<ExerciseOverviewPage />} />*/}
               {/*  <Route path="/session" element={<Session />} />*/}
               {/*  <Route path="/new-workout" element={<CreateWorkoutPage />} />*/}
               {/*  <Route path="/history" element={<WorkoutHistory />} />*/}
