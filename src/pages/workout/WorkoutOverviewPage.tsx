@@ -1,10 +1,12 @@
 import WorkoutWidget from "../../components/WorkoutWidget.tsx";
-import WorkoutAddButton from "../../components/WorkoutAddButton.tsx";
 import { useState, useEffect, useMemo } from "react";
 import { DragDropProvider } from "@dnd-kit/react";
 import { move } from "@dnd-kit/helpers";
 import { DndManagerdelay } from "../../components/DndManager.tsx";
 import useWorkouts from "../../Hooks/useWorkouts.ts";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
+import {Link} from "react-router-dom";
+import {ROUTES} from "../../types/consts.ts";
 
 // I quite genuinely have to remap my UUID to id because of muks lib. I hate libs.
 type dndLibModifier = {
@@ -40,56 +42,24 @@ export default function WorkoutOverviewPage() {
     ));
   }, [workouts, workoutList.refetch]);
 
-  if (workoutList.isError || workoutList.isLoading || !workoutList.data) return <h1>Loading....</h1>;
-
-  // if the list is still empty, return a incentive to create an workout.
-  if (Object.keys(workouts).length < 1)
-    return (
-      <div
-        className="
-    fixed inset-0 
-    top-15
-    overflow-y-auto
-    pt-[env(safe-area-inset-top)]
-    pb-[env(safe-area-inset-bottom)]
-  "
-      >
-        <ul className="pt-2 text-center text-gray-400">
-          <li>No workouts yet. Create a new one!</li>
-        </ul>
-        <div className="fixed bottom-30 left-0 right-0 flex justify-center z-20">
-          <WorkoutAddButton to="/new-workout" />
-        </div>
-      </div>
-    );
-
   return (
-    <>
-      <div
-        className="
-    fixed inset-0 
-    top-15
-    bottom-15
-    overflow-y-auto
-    pt-[env(safe-area-inset-top)]
- pb-20
-  "
-      >
+      <div className="overflow-y-auto min-h-full flex flex-col p-4">
         <DragDropProvider
           manager={manager}
           onDragEnd={(event) => {
             // #TODO add local backend ordering.
             setWorkouts((workout) => move(workout, event));
-          }}
-        >
-          <ul className="pt-5 pb-17">
-            {workoutItemList}
+          }}>
+          <ul className="w-full h-full flex-1 flex flex-col gap-4">
+            {/*one-line if statement*/}
+            {workoutList.isLoading ? <></> :null}
+            {workoutItemList.length < 0 && !workoutList.isLoading && !workoutList.isError ? <li className={"text-center"}>No workouts yet. Create a new one!</li> : workoutItemList}
           </ul>
         </DragDropProvider>
+
+        <PrimaryButton>
+          <Link className={"w-full h-full text-center p-4"} to={ROUTES.WORKOUT_CREATE}>Create workout</Link>
+        </PrimaryButton>
       </div>
-      <div className="fixed bottom-30 left-0 right-0 flex justify-center z-20">
-        <WorkoutAddButton to="/new-workout" />
-      </div>
-    </>
   );
 }
