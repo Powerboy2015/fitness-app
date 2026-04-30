@@ -25,14 +25,14 @@ const shadowCSS: CSSProperties = {
 
 export default function WorkoutItem({id, index, name, reloadWorkouts}:WorkoutItemProps) {
     // easy drag n drop.
-    const {ref,handleRef} = useSortable({id, index});
+    const {ref,handleRef,isDragging} = useSortable({id, index});
     const navigate = useNavigate();
 
     const handleClick = () => {
         navigate(`${ROUTES.WORKOUTS}/${id}`);
     }
 
-    return<li onClick={handleClick} ref={ref} style={shadowCSS} className={"w-full flex flex-row bg-components h-16 items-center justify-between gap-4 rounded"}>
+    return<li onClick={handleClick} data-shadow={isDragging || undefined} ref={ref} style={shadowCSS} className={"w-full flex flex-row bg-components h-16 items-center justify-between gap-4 rounded"}>
         <div ref={handleRef} className={"bg-components-hover h-full flex items-center rounded-l"} ><DragIndicatorIcon className={"text-accent"}/></div>
         <span className={"flex-1 rounded-full w-full h-6 text-textcolor font-semibold text-xl"}>{name}</span>
         <DropDownOptions reloadWorkouts={reloadWorkouts} id={id}/>

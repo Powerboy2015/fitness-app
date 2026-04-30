@@ -1,5 +1,5 @@
 import { useWorkout } from "../../context/WorkoutContext.tsx";
-import ExerciseOverviewWidget from "../../components/ExerciseOverviewWidget.tsx";
+import WorkoutExerciseItem from "../../components/listItems/WorkoutExerciseItem.tsx";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
 import {Link} from "react-router-dom";
 
@@ -31,7 +31,7 @@ export default function CreateWorkoutPage() {
         <ul className="text-center">
           {exercises.map((exercise) => {
             return (
-              <ExerciseOverviewWidget
+              <WorkoutExerciseItem
                 id={exercise.id}
                 key={exercise.id}
                 name={exercise.name}
