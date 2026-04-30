@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import {useState, useRef, useEffect, useMemo} from "react";
 import { useWorkout } from "../../context/WorkoutContext.tsx";
 import SearchBar from "../../components/SearchBar.tsx";
 import bicep from "../../assets/biceps.jpg";
@@ -16,9 +16,13 @@ import shoulders from "../../assets/shoulders.png";
 import cardio from "../../assets/cardio.png";
 import Filter from "../../components/Filter.tsx";
 import SelectedExerciseModal from "../../components/SelectedExercisesModal.tsx";
-import ExerciseDescriptionOverlay from "../../components/ExerciseDescriptionOverlay.tsx";
+import ExerciseItem from "../../components/listItems/ExerciseItem.tsx";
 import UseExerciseList, { muscleGroups } from "../../Hooks/UseExerciseList.ts";
 import useExerciseSelectReducer, { ExercisesActionKind } from "../../Hooks/reducers/exerciseSelectReducer.ts";
+import useExercises from "../../Hooks/useExercises.ts";
+import ExerciseItemSkeleton from "../../components/skeletons/ExerciseItemSkeleton.tsx";
+import {useOutletContext} from "react-router-dom";
+import {WorkoutOutletContext} from "../../components/routers/WorkoutRoutes.tsx";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -112,7 +116,7 @@ const muscleFilters: { gif: string; name: muscleGroups }[] = [
 //                 className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)] p-8 flex flex-col gap-4"
 //             >
 //               {exercises.map(exercise =>
-//                   <ExerciseDescriptionOverlay
+//                   <ExerciseItem
 //                       key={exercise.exercise_id}
 //                       name={exercise.name}
 //                       gif={exercise.gif_url}
@@ -143,7 +147,45 @@ const muscleFilters: { gif: string; name: muscleGroups }[] = [
 // }
 
 export default function ExerciseOverviewPage() {
+  const exercises = useExercises(1);
+
+  const {tempWorkout} = useOutletContext<WorkoutOutletContext>();
+  const tempList = useMemo(() => {
+      return tempWorkout.exercises.map(exercises => exercises.id);
+  },[tempWorkout]);
+
+
+  /**
+   * Handles the list loading
+   *
+   * If it's still loading, show skeletons
+   *
+   * if an error, or no data, return an error
+   *
+   * otherwise return a list of ExerciseItem Components.
+   */
+  const exerciseItemList = () => {
+    if (exercises.isLoading)
+      return <><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/></>;
+    else if(exercises.isError || !exercises.data) return <h1>Error: {exercises?.error?.message || "no data"}</h1>
+    else {
+      return exercises.data.map((exercise) => (
+        <ExerciseItem
+            key={exercise.exercise_id}
+            id={exercise.exercise_id}
+            name={exercise.name}
+            gif={exercise.gif_url} selected={tempList.find(exId => exId === exercise.exercise_id) != undefined}/>
+      ));
+    }
+  } ;
+
+
   return <div className={"overflow-y-auto min-h-full flex flex-col p-4 bg-background"}>
-      test
+
+    <section id={"exercise-list"}>
+      <ul className={"flex flex-col gap-4"}>
+        {exerciseItemList()}
+      </ul>
+    </section>
   </div>
 }

@@ -25,6 +25,7 @@ export interface WorkoutOutletContext {
 }
 // here we store the data for the create-workout stuff.
 // By doing it here, it allows us to keep the data only relevant for the pages that makes use of it.
+// Think of it as useContext, but without having it accessible everywhere.
 // https://reactrouter.com/api/hooks/useOutletContext
 function CreateWorkoutDataHolder() {
     const [tempWorkout,setTempWorkout] = useState<createWorkoutObj>({name:"",desc:"",exercises:[]});

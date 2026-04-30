@@ -1,5 +1,6 @@
 import { ApiClient } from "../classes/api";
 import {muscleGroups} from "../Hooks/UseExerciseList.ts";
+import FakeDelay from "../types/Helpers.ts";
 
 type listFilterParams = {
     page_size?: number;
@@ -17,6 +18,9 @@ export default class ExercisesAPI {
             query: param.query
         }
         const result = await ApiClient.send<ExerciseDTO[]>("get_all_exercises",{req});
+
+        await FakeDelay(3000);
+
         return ApiClient.assertOk(result);
     }
 
