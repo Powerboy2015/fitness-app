@@ -58,6 +58,7 @@ export default function ExerciseOverviewPage() {
     void exercises.fetchNextPage();
   }
 
+
   useEffect(() => {
     scrollFunc();
   },[debouncedQuery]);
@@ -80,8 +81,6 @@ export default function ExerciseOverviewPage() {
         />
     ));
   }
-
-
 
   return <div className={"h-full flex flex-col p-4 bg-background"}>
       <SearchBar onSearch={()=>{}} placeholderText={"Search exercises"} value={query} onChange={e => {

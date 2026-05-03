@@ -2,9 +2,9 @@ import {Routes, Route, Outlet} from "react-router-dom";
 import WorkoutOverviewPage from "../../pages/workout/WorkoutOverviewPage.tsx";
 import {WorkoutDetailPage} from "../../pages/workout/WorkoutDetailPage.tsx";
 import CreateWorkoutPage from "../../pages/workout/CreateWorkoutPage.tsx";
-import ExerciseOverviewPage from "../../pages/workout/ExerciseOverviewPage.tsx";
 import {useEffect, useState} from "react";
 import {Iworkout} from "../../context/WorkoutContext.tsx";
+import ExerciseOverviewPage from "../../pages/exercises/ExerciseOverviewPage.tsx";
 
 const ROUTES = {
     LIST: "/",
