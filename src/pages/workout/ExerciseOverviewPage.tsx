@@ -23,6 +23,8 @@ import useExercises from "../../Hooks/useExercises.ts";
 import ExerciseItemSkeleton from "../../components/skeletons/ExerciseItemSkeleton.tsx";
 import {useOutletContext} from "react-router-dom";
 import {WorkoutOutletContext} from "../../components/routers/WorkoutRoutes.tsx";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
+import {InfiniteData, UseInfiniteQueryResult} from "@tanstack/react-query";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -147,45 +149,67 @@ const muscleFilters: { gif: string; name: muscleGroups }[] = [
 // }
 
 export default function ExerciseOverviewPage() {
-  const exercises = useExercises(1);
-
+  const exercises = useExercises({});
   const {tempWorkout} = useOutletContext<WorkoutOutletContext>();
-  const tempList = useMemo(() => {
+  const addedExerciseIds = useMemo(() => {
       return tempWorkout.exercises.map(exercises => exercises.id);
   },[tempWorkout]);
 
-
-  /**
-   * Handles the list loading
-   *
-   * If it's still loading, show skeletons
-   *
-   * if an error, or no data, return an error
-   *
-   * otherwise return a list of ExerciseItem Components.
-   */
-  const exerciseItemList = () => {
-    if (exercises.isLoading)
-      return <><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/><ExerciseItemSkeleton/></>;
-    else if(exercises.isError || !exercises.data) return <h1>Error: {exercises?.error?.message || "no data"}</h1>
-    else {
-      return exercises.data.map((exercise) => (
-        <ExerciseItem
-            key={exercise.exercise_id}
-            id={exercise.exercise_id}
-            name={exercise.name}
-            gif={exercise.gif_url} selected={tempList.find(exId => exId === exercise.exercise_id) != undefined}/>
-      ));
-    }
-  } ;
-
+  const nextPage = () => {
+    void exercises.fetchNextPage();
+  }
 
   return <div className={"overflow-y-auto min-h-full flex flex-col p-4 bg-background"}>
-
     <section id={"exercise-list"}>
       <ul className={"flex flex-col gap-4"}>
-        {exerciseItemList()}
+        {/*The list of all exercises.*/}
+        <ExerciseItemList exercises={exercises} tempList={addedExerciseIds}/>
+
+        {/*Shows the load more button, if there are more pages.*/}
+        {exercises.hasNextPage ?
+          <PrimaryButton onClick={nextPage}><p className={"w-full h-full text-center p-4"}>Load more</p></PrimaryButton>
+        :null}
       </ul>
     </section>
   </div>
 }
+
+
+
+interface ExerciseItemListProps {
+  exercises: UseInfiniteQueryResult<InfiniteData<ExerciseDTO[], unknown>, Error>
+  tempList: string[]
+}
+
+/**
+ * Generates the itemList based on the current state of the queries and the tempList of id's given.
+ * Handles the list loading
+ *
+ * If it's still loading, show skeletons
+ *
+ * if an error, or no data, return an error
+ *
+ * otherwise return a list of ExerciseItem Components.
+ * @param param0.exercises the useExercises query
+ * @param param0.tempList a list of id's from each exercise that are already added to the placehold workout.
+ * @constructor
+ */
+function ExerciseItemList({exercises,tempList}:ExerciseItemListProps) {
+  if (exercises.isLoading)
+    return Array.from({ length: 6 }, (_, i) => <ExerciseItemSkeleton key={i} />);
+
+  if (exercises.isError || !exercises.data)
+    return <h1>Error: {exercises?.error?.message ?? "no data"}</h1>;
+
+  return exercises.data.pages.flatMap((exercisePage) =>
+      exercisePage.map((exercise) => (
+          <ExerciseItem
+              key={exercise.exercise_id}
+              id={exercise.exercise_id}
+              name={exercise.name}
+              gif={exercise.gif_url}
+              selected={tempList.includes(exercise.exercise_id)}
+          />
+      ))
+  );
+};
