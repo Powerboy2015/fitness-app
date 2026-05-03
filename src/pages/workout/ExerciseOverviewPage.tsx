@@ -1,5 +1,4 @@
-import {useState, useRef, useEffect, useMemo} from "react";
-import { useWorkout } from "../../context/WorkoutContext.tsx";
+import {useState, useEffect, useMemo} from "react";
 import SearchBar from "../../components/SearchBar.tsx";
 import bicep from "../../assets/biceps.jpg";
 import tricep from "../../assets/triceps.jpg";
@@ -15,16 +14,16 @@ import quads from "../../assets/quads.png.jpg";
 import shoulders from "../../assets/shoulders.png";
 import cardio from "../../assets/cardio.png";
 import Filter from "../../components/Filter.tsx";
-import SelectedExerciseModal from "../../components/SelectedExercisesModal.tsx";
 import ExerciseItem from "../../components/listItems/ExerciseItem.tsx";
-import UseExerciseList, { muscleGroups } from "../../Hooks/UseExerciseList.ts";
-import useExerciseSelectReducer, { ExercisesActionKind } from "../../Hooks/reducers/exerciseSelectReducer.ts";
+import {ExerciseDTO, muscleGroups} from "../../types/types.ts";
 import useExercises from "../../Hooks/useExercises.ts";
 import ExerciseItemSkeleton from "../../components/skeletons/ExerciseItemSkeleton.tsx";
 import {useOutletContext} from "react-router-dom";
 import {WorkoutOutletContext} from "../../components/routers/WorkoutRoutes.tsx";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
 import {InfiniteData, UseInfiniteQueryResult} from "@tanstack/react-query";
+import {useDebounce} from "../../Hooks/useDebounce.ts";
+import useScrollTop from "../../Hooks/useScrollTop.ts";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -42,114 +41,14 @@ const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: cardio, name: "cardiovascular system"}
 ];
 
-// export default function ExerciseOverviewPage() {
-//   const [searchText, setSearchText] = useState("");
-//   const { addExercise } = useWorkout();
-//   const listRef = useRef<HTMLDivElement>(null);
-//   const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
-//   const {state,dispatch} = useExerciseSelectReducer();
-//
-//   const onSave = () => {
-//     state.exercises.forEach(exercise => addExercise(exercise));
-//   }
-//
-//   const scrollToTop = () => {
-//     if (listRef.current) {
-//       listRef.current.scrollTo({ top: 0, behavior: "smooth" });
-//       return;
-//     }
-//   };
-//
-//   useEffect(() => {
-//     const listElement = listRef.current;
-//     const handleScroll = () => {
-//       if (listElement) {
-//         setIsScrollTopVisible(listElement.scrollTop > 0);
-//       }
-//     };
-//
-//     if (listElement) {
-//       listElement.addEventListener("scroll", handleScroll);
-//     }
-//   }, []);
-//
-//   const {exercises, muscleGroup,setMuscle,setQuery,LoadNextPage} = UseExerciseList()
-//
-//   return (
-//       <>
-//         <div className="h-screen">
-//           <div className="fixed top-16 left-0 right-0 z-30 bg-background overflow-hidden">
-//             <div className="pl-4 pr-4">
-//               <SearchBar
-//                   value={searchText}
-//                   onChange={(query) => {
-//                     setSearchText(query);
-//                     setQuery(query);
-//                   }}
-//                   onSearch={() => {}}
-//                   placeholderText="exercise"
-//               />
-//             </div>
-//             <div
-//                 className="overflow-x-scroll flex
-//                   [&::-webkit-scrollbar-thumb]:bg-neutral-500
-//                   [&::-webkit-scrollbar]:bg-neutral-700"
-//             >
-//               {muscleFilters.map(({ gif, name }) => (
-//                   <Filter
-//                       key={name}
-//                       gif={gif}
-//                       isSelected={muscleGroup === name}
-//                       onClick={() => {
-//                         scrollToTop();
-//                         setMuscle(name);
-//                       }}
-//                   />
-//               ))}
-//             </div>
-//             <div className="fixed top-60 right-10 pointer-events-none z-49">
-//               <button
-//                   onClick={scrollToTop}
-//                   className={`text-textcolor w-13 h-13 border border-bordercolor bg-components hover:bg-components-hover rounded-full transition-all duration-100 ease-in-out ${isScrollTopVisible ? "opacity-95 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-//               >↑</button>
-//             </div>
-//             <div
-//                 ref={listRef}
-//                 className="overflow-y-auto overscroll-behavior-y-auto h-[calc(100vh-18rem)] p-8 flex flex-col gap-4"
-//             >
-//               {exercises.map(exercise =>
-//                   <ExerciseItem
-//                       key={exercise.exercise_id}
-//                       name={exercise.name}
-//                       gif={exercise.gif_url}
-//                       id={exercise.exercise_id}
-//                       selected={false}
-//                       onSelect={() => {
-//                         dispatch({
-//                           type: ExercisesActionKind.SELECT,
-//                           payload: {
-//                             id: exercise.exercise_id,
-//                             gif: exercise.gif_url,
-//                             name: exercise.name
-//                           }
-//                         })
-//                       }}
-//                   />)}
-//               <div className="px-4">
-//                 <button
-//                     className=" bg-accent hover:bg-accent-action active:bg-accent-action w-full rounded mb-25 text-textcolor"
-//                     onClick={() => {LoadNextPage()}}>load more</button>
-//               </div>
-//             </div>
-//           </div>
-//           <SelectedExerciseModal dispatch={dispatch} state={state} saveFunc={onSave}/>
-//         </div>
-//       </>
-//   );
-// }
-
 export default function ExerciseOverviewPage() {
-  const exercises = useExercises({});
+  const {scrollFunc,scrollRef} = useScrollTop();
+
+  const [query,setQuery] = useState<string>("");
+  const [filter,setFilter] = useState<muscleGroups>(null);
+  const debouncedQuery = useDebounce(query);
+
+  const exercises = useExercises({query:debouncedQuery,filter});
   const {tempWorkout} = useOutletContext<WorkoutOutletContext>();
   const addedExerciseIds = useMemo(() => {
       return tempWorkout.exercises.map(exercises => exercises.id);
@@ -159,18 +58,49 @@ export default function ExerciseOverviewPage() {
     void exercises.fetchNextPage();
   }
 
-  return <div className={"overflow-y-auto min-h-full flex flex-col p-4 bg-background"}>
-    <section id={"exercise-list"}>
-      <ul className={"flex flex-col gap-4"}>
+  useEffect(() => {
+    scrollFunc();
+  },[debouncedQuery]);
+
+
+    /**
+     * an list of the filter elements.
+     * @constructor
+     */
+  const MuscleFilterRow = () => {
+    return muscleFilters.map(({ gif, name }) => (
+        <Filter
+            key={name}
+            gif={gif}
+            isSelected={filter==name}
+            onClick={() => {
+              if(filter==name) return setFilter(null);
+              return setFilter(name);
+            }}
+        />
+    ));
+  }
+
+
+
+  return <div className={"h-full flex flex-col p-4 bg-background"}>
+      <SearchBar onSearch={()=>{}} placeholderText={"Search exercises"} value={query} onChange={e => {
+        setQuery(e);
+      }}/>
+      <div className={"flex shrink-0 overflow-y-hidden overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar]:bg-neutral-700 mb-4"}>
+        <MuscleFilterRow/>
+      </div>
+      {/*Some bullshit workaround yippie.*/}
+      <ul ref={scrollRef as React.RefObject<HTMLUListElement>} className={"h-full overflow-y-scroll flex flex-col gap-4 no-scrollbar pb-4"}>
+
         {/*The list of all exercises.*/}
         <ExerciseItemList exercises={exercises} tempList={addedExerciseIds}/>
 
         {/*Shows the load more button, if there are more pages.*/}
         {exercises.hasNextPage ?
-          <PrimaryButton onClick={nextPage}><p className={"w-full h-full text-center p-4"}>Load more</p></PrimaryButton>
+          <PrimaryButton onClick={nextPage}><p className={"w-full h-full text-center p-4 block"}>Load more</p></PrimaryButton>
         :null}
       </ul>
-    </section>
   </div>
 }
 

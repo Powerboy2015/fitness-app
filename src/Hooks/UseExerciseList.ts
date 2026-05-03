@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../classes/api.ts";
+import {ExerciseDTO} from "../types/types.ts";
 
 
 interface ReturnProps{

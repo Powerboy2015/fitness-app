@@ -2,6 +2,7 @@ import { invoke, InvokeArgs } from "@tauri-apps/api/core";
 import workoutAPI from "../apis/workoutAPI";
 import ExercisesAPI from "../apis/exercisesAPI";
 import sessionAPI from "../apis/sessionAPI";
+import {ApiError, ApiSucess, backendFunctions} from "../types/types.ts";
 
 export default class API {
     public static workouts: workoutAPI = new workoutAPI();

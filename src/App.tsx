@@ -33,7 +33,7 @@ function App() {
         <BrowserRouter>
           <div className="h-dvh flex flex-col overflow-hidden">
             <Header />
-            <main className="flex-1 overflow-y-auto relative no-scrollbar bg-background">
+            <main className="flex flex-col flex-1 min-h-0 relative no-scrollbar bg-background">
               <Toaster position="top-center" reverseOrder={false} />
 
               {/*<Routes>*/}

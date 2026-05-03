@@ -1,4 +1,5 @@
 import { ApiClient } from "../classes/api";
+import {ISessionState, ITimedSetUpdate, IWeightedSetUpdate} from "../types/types.ts";
 
 export const SESSION_STORAGE_KEYS = {
     id: "workoutSessionId",
@@ -6,7 +7,7 @@ export const SESSION_STORAGE_KEYS = {
     workoutName: "workoutSessionName",
 } as const;
 
-export default  class sessionAPI {j
+export default class sessionAPI {
 
     /**
      * Starts a session for a workout.

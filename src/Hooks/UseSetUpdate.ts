@@ -1,4 +1,5 @@
 import API from "../classes/api.ts";
+import {ITimedSetUpdate, IWeightedSetUpdate} from "../types/types.ts";
 
 type UseSetUpdateProps = (set_nr: number, data: WeightedSet|TimedSet) => Promise<void>;
 

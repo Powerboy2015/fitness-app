@@ -28,7 +28,10 @@ export default function CreateWorkoutPage() {
       name: tempWorkout.name,
       desc: tempWorkout.desc,
       exercises: tempWorkout.exercises.map(exercise => exercise.id)
-    }).then(() => {
+    })
+    .then((resp) => {
+      if (typeof resp == "string") return toast.error(resp);
+
       // Ensures we remove the previously made query and re-request the workouts.
       void queryClient.invalidateQueries({queryKey: ["workouts"]});
 
@@ -36,8 +39,8 @@ export default function CreateWorkoutPage() {
 
       setTimeout(() => {
       navigate(ROUTES.WORKOUTS);
-      },3000)
-    })
+      },1000)
+    });
   }
 
   return (
@@ -49,7 +52,6 @@ export default function CreateWorkoutPage() {
         defaultValue={tempWorkout.name}
         onChange={handleNameChange}
         autoComplete={"false"}
-
         className="border p-2 rounded text-textcolor bg-components border-accent w-full flex"
       />
 

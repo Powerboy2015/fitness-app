@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-type backendFunctions =
+export type backendFunctions =
   | "create_workout"
   | "list_workouts"
   | "link_exercise"
@@ -16,13 +16,13 @@ type backendFunctions =
   | "get_exercise_by_id"
   | "remove_workout";
 
-interface WorkoutDTO {
+export interface WorkoutDTO {
   uuid: string;
   name: string;
   desc?: string;
 }
 
-interface ExerciseDTO {
+export interface ExerciseDTO {
     exercise_id: string;
     name: string;
     gif_url: string;
@@ -33,34 +33,34 @@ interface ExerciseDTO {
     instructions: string;
 }
 
-interface linkExerciseDTO {
+export interface linkExerciseDTO {
   workout_uuid: string;
   exercise_uuid: string;
 }
 
-interface ApiError extends ApiReponse {
+export interface ApiError extends ApiReponse {
   ok: false;
   error_type: string;
   message: string;
 }
 
-interface ApiReponse {
+export interface ApiReponse {
   ok: boolean;
 }
 
-interface ApiSucess<T> extends ApiReponse {
+export interface ApiSucess<T> extends ApiReponse {
   ok: true;
   data: T;
 }
 
-interface IdetailedWorkoutDTO {
+export interface IdetailedWorkoutDTO {
   uuid: string;
   name: string;
   desc: string;
   exercises: ExerciseDTO[];
 }
 
-interface ISessionState {
+export interface ISessionState {
   workout_name: string;
   workout_uuid: string;
   session_uuid: string;
@@ -69,31 +69,31 @@ interface ISessionState {
   exercises: ISessionExercises[];
 }
 
-interface ISessionExercises {
+export interface ISessionExercises {
   exercise_id: string;
   gif_url: string;
   name: string;
   sets: IWeightedSet[] | ITimedSet[];
 }
-interface IBaseSet {
+export interface IBaseSet {
   time_completed: string;
 }
-interface IWeightedSet extends IBaseSet {
+export interface IWeightedSet extends IBaseSet {
   type: "Weighted";
   weight: number;
   reps: number;
 }
-interface ITimedSet extends IBaseSet {
+export interface ITimedSet extends IBaseSet {
   type: "Timed";
   time: number;
   distance: number;
 }
 
-interface IBaseSetUpdate {
+export interface IBaseSetUpdate {
   exercise_id: string;
 }
 
-interface IWeightedSetUpdate extends IBaseSetUpdate {
+export interface IWeightedSetUpdate extends IBaseSetUpdate {
   type: "Weighted";
   exercise_id: string;
   set_nr: number;
@@ -101,7 +101,7 @@ interface IWeightedSetUpdate extends IBaseSetUpdate {
   reps: number;
 }
 
-interface ITimedSetUpdate extends IBaseSetUpdate {
+export interface ITimedSetUpdate extends IBaseSetUpdate {
   type: "Timed";
   exercise_id: string;
   set_nr: number;
@@ -109,16 +109,32 @@ interface ITimedSetUpdate extends IBaseSetUpdate {
   distance: number;
 }
 
-interface workoutHistoryDTO {
+export interface workoutHistoryDTO {
   workout_name: string;
   session_uuid: string;
   start_date: string;
   end_date: string;
 }
 
-interface IworkoutHistory {
+export interface IworkoutHistory {
   workoutName: string;
   sessionUuid: string;
   startDate: Date;
   endDate: Date;
 }
+
+export type muscleGroups =
+    | "pectorals"
+    | "biceps"
+    | "triceps"
+    | "lats"
+    | "upper back"
+    | "delts"
+    | "forearms"
+    | "abs"
+    | "quads"
+    | "hamstrings"
+    | "glutes"
+    | "calves"
+    | "cardiovascular system"
+    | null;

@@ -3,6 +3,7 @@ import WorkoutExerciseItem from "../../components/listItems/WorkoutExerciseItem.
 import {Link, useParams} from "react-router-dom";
 import useDetailedWorkout from "../../Hooks/useDetailedWorkout.ts";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
+import {ExerciseDTO} from "../../types/types.ts";
 
 // FIXME Do we want DND in the workoutDetail page?
 // import { DragDropProvider,} from "@dnd-kit/react";

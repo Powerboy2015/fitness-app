@@ -1,5 +1,12 @@
 import { ApiClient } from "../classes/api";
-import FakeDelay from "../types/Helpers.ts";
+import {
+    ApiError,
+    ApiSucess,
+    IdetailedWorkoutDTO,
+    IworkoutHistory,
+    linkExerciseDTO,
+    WorkoutDTO, workoutHistoryDTO
+} from "../types/types.ts";
 
 interface createWorkoutInput {
     name:string;
@@ -37,10 +44,6 @@ export default class workoutAPI {
 
     public async list(): Promise<Array<WorkoutDTO>> {
         const result = await ApiClient.send<WorkoutDTO[]>("list_workouts");
-
-
-        //TODO remove fake delay
-        await FakeDelay(3000);
 
         return ApiClient.assertOk(result);
     }

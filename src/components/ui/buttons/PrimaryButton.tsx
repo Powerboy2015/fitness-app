@@ -12,9 +12,7 @@ export default function PrimaryButton({children, onClick, ...props}:PrimaryButto
     // Usage of mt-1 (4px) here is for the space the button requires when pressing.
     // By adding mt-1, the 4px that the button is outside the box,
     // We have a clearer overview of what space, in total, the button uses.
-    return <button {...props} onClick={onClick} className={"w-full relative h-16 mt-1"} >
-        <div className={twMerge(["w-full h-full absolute -top-1 active:top-0 rounded-xl bg-accent text-textcolor font-semibold text-xl shadow-button active:shadow-none active:bg-accent-pressed hover:bg-accent-hover flex",props.className||""])}>
+    return <button {...props} onClick={onClick} className={twMerge(["w-full h-16 mt-1 rounded-xl bg-accent text-textcolor font-semibold text-xl shadow-button hover:bg-accent-hover active:shadow-none active:bg-accent-pressed active:translate-y-1 transition-transform",props.className||""])} >
         {children}
-        </div>
     </button>
 }

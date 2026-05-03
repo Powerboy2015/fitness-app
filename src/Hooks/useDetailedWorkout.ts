@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import API from "../classes/api.ts";
-import {useEffect, useState} from "react";
+import {IdetailedWorkoutDTO} from "../types/types.ts";
 
 /**
  * Requests the details from a workout from the backend, based on the uuid of a workout.

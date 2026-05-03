@@ -1,5 +1,6 @@
 import { ApiClient } from "../classes/api";
 import {muscleGroups} from "../Hooks/UseExerciseList.ts";
+import {ExerciseDTO} from "../types/types.ts";
 
 type listFilterParams = {
     page_size?: number;
