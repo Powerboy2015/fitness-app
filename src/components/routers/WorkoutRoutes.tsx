@@ -5,12 +5,15 @@ import CreateWorkoutPage from "../../pages/workout/CreateWorkoutPage.tsx";
 import {useEffect, useState} from "react";
 import {Iworkout} from "../../context/WorkoutContext.tsx";
 import ExerciseOverviewPage from "../../pages/exercises/ExerciseOverviewPage.tsx";
+import ExerciseDescription from "../../pages/exercises/ExerciseDescription.tsx";
+import useScroll from "../../Hooks/useScroll.ts";
 
 const ROUTES = {
     LIST: "/",
     DETAILED: "/:id", //<------------- by using :id, we can get the param using useParams()
     CREATE: "/create",
-    EXERCISES: "/create/exercises"
+    EXERCISES: "/create/exercises",
+    EXERCISE_DETAILS: "/create/exercises/:id"
 }
 
 interface createWorkoutObj {
@@ -29,10 +32,17 @@ export interface WorkoutOutletContext {
 // https://reactrouter.com/api/hooks/useOutletContext
 function CreateWorkoutDataHolder() {
     const [tempWorkout,setTempWorkout] = useState<createWorkoutObj>({name:"",desc:"",exercises:[]});
+
+    //Really hacky way to reset the scroll whenever you leave the whole workout create routes.
+    const {resetScroll} = useScroll("exerciseScrollSaver");
+
     useEffect(() => {
         console.log("MOUNT CreateWorkoutDataHolder");
 
-        return () => console.log("UNMOUNT CreateWorkoutDataHolder");
+        return () => {
+            console.log("UNMOUNT CreateWorkoutDataHolder");
+            resetScroll();
+        }
     }, []);
 
     return<>
@@ -45,9 +55,12 @@ export default function WorkoutRoutes() {
         <Route path={ROUTES.LIST} element={<WorkoutOverviewPage/>} />
         <Route path={ROUTES.DETAILED} element={<WorkoutDetailPage/>} />
 
+
+        {/*TODO I might want to find a way to refactor this and bring back overlays. This is functional, and might not need a refactor.*/}
         <Route path={ROUTES.CREATE} element={<CreateWorkoutDataHolder/>}>
             <Route index element={<CreateWorkoutPage/>} />
             <Route path={ROUTES.EXERCISES} element={<ExerciseOverviewPage/>} />
+            <Route path={ROUTES.EXERCISE_DETAILS} element={<ExerciseDescription/>} />
         </Route>
 
     </Routes>

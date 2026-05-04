@@ -23,7 +23,7 @@ import {WorkoutOutletContext} from "../../components/routers/WorkoutRoutes.tsx";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
 import {InfiniteData, UseInfiniteQueryResult} from "@tanstack/react-query";
 import {useDebounce} from "../../Hooks/useDebounce.ts";
-import useScrollTop from "../../Hooks/useScrollTop.ts";
+import useScroll from "../../Hooks/useScroll.ts";
 
 const muscleFilters: { gif: string; name: muscleGroups }[] = [
   { gif: chest, name: "pectorals" },
@@ -42,7 +42,9 @@ const muscleFilters: { gif: string; name: muscleGroups }[] = [
 ];
 
 export default function ExerciseOverviewPage() {
-  const {scrollFunc,scrollRef} = useScrollTop();
+  //   NOTE, we reset the scroll in WorkoutRoutes.tsx.
+  //   So that the next time you make a workout, it doesn't start halfway instantly.
+  const {scrollFunc,scrollRef,saveScroll,restoreScroll} = useScroll("exerciseScrollSaver");
 
   const [query,setQuery] = useState<string>("");
   const [filter,setFilter] = useState<muscleGroups>(null);
@@ -54,14 +56,24 @@ export default function ExerciseOverviewPage() {
       return tempWorkout.exercises.map(exercises => exercises.id);
   },[tempWorkout]);
 
-  const nextPage = () => {
-    void exercises.fetchNextPage();
-  }
+    // Loads the next page with exercises.
+    const nextPage = () => {
+        void exercises.fetchNextPage();
+    }
 
+    // This useEffect restores the scroll when coming back from any page
+    useEffect(() => {
+        if (exercises.isSuccess) {
+            // if we don't use it, it don't work.
+            // it waits until the next render before firing function.
+            requestAnimationFrame(() => restoreScroll());
+        }
+    }, []);
 
-  useEffect(() => {
+    // Scrolls back to top whenever we search or filter.
+    useEffect(() => {
     scrollFunc();
-  },[debouncedQuery]);
+    },[debouncedQuery,filter]);
 
 
     /**
@@ -93,7 +105,7 @@ export default function ExerciseOverviewPage() {
       <ul ref={scrollRef as React.RefObject<HTMLUListElement>} className={"h-full overflow-y-scroll flex flex-col gap-4 no-scrollbar pb-4"}>
 
         {/*The list of all exercises.*/}
-        <ExerciseItemList exercises={exercises} tempList={addedExerciseIds}/>
+        <ExerciseItemList exercises={exercises} tempList={addedExerciseIds} onItemNavigate={saveScroll}/>
 
         {/*Shows the load more button, if there are more pages.*/}
         {exercises.hasNextPage ?
@@ -108,6 +120,7 @@ export default function ExerciseOverviewPage() {
 interface ExerciseItemListProps {
   exercises: UseInfiniteQueryResult<InfiniteData<ExerciseDTO[], unknown>, Error>
   tempList: string[]
+  onItemNavigate: () => void
 }
 
 /**
@@ -121,9 +134,10 @@ interface ExerciseItemListProps {
  * otherwise return a list of ExerciseItem Components.
  * @param param0.exercises the useExercises query
  * @param param0.tempList a list of id's from each exercise that are already added to the placehold workout.
+ * @param param0.onItemNavigate a function we drill down for when the item navigates
  * @constructor
  */
-function ExerciseItemList({exercises,tempList}:ExerciseItemListProps) {
+function ExerciseItemList({exercises,tempList,onItemNavigate}:ExerciseItemListProps) {
   if (exercises.isLoading)
     return Array.from({ length: 6 }, (_, i) => <ExerciseItemSkeleton key={i} />);
 
@@ -138,6 +152,7 @@ function ExerciseItemList({exercises,tempList}:ExerciseItemListProps) {
               name={exercise.name}
               gif={exercise.gif_url}
               selected={tempList.includes(exercise.exercise_id)}
+              onNavigate={onItemNavigate}
           />
       ))
   );

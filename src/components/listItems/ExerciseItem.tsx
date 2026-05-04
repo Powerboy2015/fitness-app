@@ -11,12 +11,16 @@ export default function ExerciseItem({
   name,
   gif,
   id,
-  selected
+  selected,
+  addable = true,
+  onNavigate
 }: {
   name: string;
   id : string;
   gif: string;
   selected: boolean;
+  addable?: boolean;
+  onNavigate?: () => void;
 }) {
   const {setTempWorkout} = useOutletContext<WorkoutOutletContext>();
   const navigate = useNavigate();
@@ -41,6 +45,7 @@ export default function ExerciseItem({
 
 
     return <li className={"w-full h-fit bg-components flex flex-row rounded cursor-pointer"} onClick={(_e) => {
+      onNavigate?.();
       navigate(`${ROUTES.EXERCISES}/${id}`);
     }}>
         <div className={"w-24 h-24"}>
@@ -49,7 +54,7 @@ export default function ExerciseItem({
         <div className={"flex-col flex flex-1 py-4 px-2"}>
             <h3 className={"text-textcolor text-l font-medium"}>{name}</h3>
         </div>
-        <AddButton enabled={true} state={selected ? "added":"notAdded"}
+        <AddButton enabled={addable} state={selected ? "added":"notAdded"}
                    onAddClick={() => {onAdd()}}
                    onRemoveClick={() => {onRemove()}}
         />

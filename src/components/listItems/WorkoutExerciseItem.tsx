@@ -22,29 +22,14 @@ export default function WorkoutExerciseItem({
   // const { isDragging } = useSortable({ id, index, element, handle: handleRef });
 
 
-  return (
-    <li
-      // ref={setElement}
-      className={`bg-components border-bordercolor border rounded-xl px-2 flex w-full items-center hover:bg-components-hover active:bg-components-hover transition-transform duration-100 ease-in-out ${null/*isDragging ? "opacity-80 scale-[1.05]" : ""*/} `}
-      // data-shadow={isDragging || undefined}
-    >
-      <button
-        className="flex w-full h-full py-2"
-        onClick={() =>
-          navigate(ROUTES.EXERCISES, { // TODO add dynamic route.
-            state: { id: exerciseId },
-          })
-        }
-      >
-        <img
-          className="h-20 w-20 contain-content rounded-lg"
-          src={gif}
-          loading="lazy"
-          decoding="async"
-          alt=""
-        />
-        <h2 className="text-lg ml-5 font-semibold text-textcolor">{name}</h2>
-      </button>
-    </li>
-  );
+  return <li className={"w-full h-fit bg-components flex flex-row rounded cursor-pointer"} onClick={(_e) => {
+    navigate(`${ROUTES.EXERCISES}/${exerciseId}`,{state: {addable:false}});
+  }}>
+    <div className={"w-24 h-24"}>
+      <img src={gif} alt={name} loading={"lazy"} decoding={"async"} className={"rounded-l"}/>
+    </div>
+    <div className={"flex-col flex flex-1 py-4 px-2"}>
+      <h3 className={"text-textcolor text-l font-medium"}>{name}</h3>
+    </div>
+  </li>
 }

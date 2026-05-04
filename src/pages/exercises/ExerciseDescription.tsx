@@ -1,4 +1,4 @@
-import {useNavigate, useOutletContext, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useOutletContext, useParams} from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../../classes/api.ts";
 import AddIcon from "@mui/icons-material/Add";
@@ -9,6 +9,11 @@ export default function ExerciseDescription() {
   // Gets params from the route workouts/create/exercises/:id <-
   const params = useParams();
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const addable:boolean|undefined = location.state?.addable;
+
 
   const {setTempWorkout} = useOutletContext<WorkoutOutletContext>();
   const [id] = useState<string>(params.id || "");
@@ -110,14 +115,15 @@ export default function ExerciseDescription() {
             >
               Close
             </button>
-            <button
+            {addable ? <button
                 onClick={() => {
                   addExercise()
                 }}
                 className="flex items-center justify-center h-12 w-12 rounded-full bg-accent hover:bg-accent-action text-textcolor"
             >
               <AddIcon sx={{fontSize: 40}}/>
-            </button>
+            </button> : null}
+
           </div>
         </div>
       </div>
