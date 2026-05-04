@@ -11,7 +11,7 @@ import { WorkoutProvider } from "./context/WorkoutContext";
 // import SessionPage from "./pages/SessionPage.tsx";
 // import CreateWorkoutPage from "./pages/CreateWorkoutPage.tsx";
 // import Profile from "./pages/Profile.tsx";
-// import WorkoutHistory from "./pages/WorkoutHistory.tsx";
+// import WorkoutHistoryPage from "./pages/WorkoutHistoryPage.tsx";
 // import SessionHistory from "./pages/SessionHistory.tsx";
 // import KcalTracker from "./pages/KcalTracker.tsx";
 // import WorkoutDetailPage from "./pages/WorkoutDetailPage.tsx";
@@ -41,7 +41,7 @@ function App() {
               {/*  <Route path="/add-exercises" element={<ExerciseOverviewPage />} />*/}
               {/*  <Route path="/session" element={<SessionPage />} />*/}
               {/*  <Route path="/new-workout" element={<CreateWorkoutPage />} />*/}
-              {/*  <Route path="/history" element={<WorkoutHistory />} />*/}
+              {/*  <Route path="/history" element={<WorkoutHistoryPage />} />*/}
               {/*  <Route path="/session-history" element={<SessionHistory />} />*/}
               {/*  <Route path="/exercises" element={<WorkoutDetailPage />} />*/}
               {/*  <Route path="/food-list" element={<FoodList />} />*/}

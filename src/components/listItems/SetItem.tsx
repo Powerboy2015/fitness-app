@@ -17,9 +17,9 @@ interface SetItemProps{
  * @constructor
  */
 export default function SetItem({ set, onChange,exerciseId,setNr}: SetItemProps) {
-
     if (set.type === "Weighted") {
-        return <div className={"set flex flex-col gap-1"}>
+        return <div className={"set flex flex-col gap-0"}>
+            <strong className={"text-textcolor"}>Set {setNr+1}</strong>
             <WeightedSet weight={set.weight.toString()}
                          reps={set.reps}
                          onChange={
@@ -37,6 +37,7 @@ export default function SetItem({ set, onChange,exerciseId,setNr}: SetItemProps)
 
     if (set.type ==="Timed")
         return <div className={"set flex flex-col gap-1"}>
+            <strong className={"text-textcolor"}>Set {setNr+1}</strong>
             <TimedSet time={set.time}
                       distance={set.distance}
                       onChange={
@@ -101,7 +102,6 @@ interface TimedSetProps {
     onChange: (time:number,distance:number) => void
 }
 function TimedSet({time,distance,onChange}:TimedSetProps) {
-    // TODO FINISH, just an example
     return <div className="flex flex-col gap-2">
                 
                 <div className="flex items-center justify-between">

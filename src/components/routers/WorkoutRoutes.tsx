@@ -7,13 +7,17 @@ import {Iworkout} from "../../context/WorkoutContext.tsx";
 import ExerciseOverviewPage from "../../pages/exercises/ExerciseOverviewPage.tsx";
 import ExerciseDescription from "../../pages/exercises/ExerciseDescription.tsx";
 import useScroll from "../../Hooks/useScroll.ts";
+import WorkoutHistoryPage from "../../pages/workout/WorkoutHistoryPage.tsx";
+import DetailedWorkoutHistoryPage from "../../pages/workout/DetailedWorkoutHistoryPage.tsx";
 
 const ROUTES = {
     LIST: "/",
     DETAILED: "/:id", //<------------- by using :id, we can get the param using useParams()
     CREATE: "/create",
     EXERCISES: "/create/exercises",
-    EXERCISE_DETAILS: "/create/exercises/:id"
+    EXERCISE_DETAILS: "/create/exercises/:id",
+    HISTORY: "/history",
+    HISTORY_DETAILED: "/history/:id"
 }
 
 interface createWorkoutObj {
@@ -55,8 +59,14 @@ export default function WorkoutRoutes() {
         <Route path={ROUTES.LIST} element={<WorkoutOverviewPage/>} />
         <Route path={ROUTES.DETAILED} element={<WorkoutDetailPage/>} />
 
+        {/*Workout history Routes*/}
+        <Route path={ROUTES.HISTORY} element={<Outlet/>}>
+            <Route index element={<WorkoutHistoryPage/>} />
+            <Route path={ROUTES.HISTORY_DETAILED} element={<DetailedWorkoutHistoryPage/>} />
+        </Route>
 
-        {/*TODO I might want to find a way to refactor this and bring back overlays. This is functional, and might not need a refactor.*/}
+
+        {/*Create workout routes*/}
         <Route path={ROUTES.CREATE} element={<CreateWorkoutDataHolder/>}>
             <Route index element={<CreateWorkoutPage/>} />
             <Route path={ROUTES.EXERCISES} element={<ExerciseOverviewPage/>} />

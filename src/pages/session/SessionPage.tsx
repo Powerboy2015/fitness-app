@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import {ExerciseSetUpdate, ITimedSet, IWeightedSet} from "../../types/types.ts";
+import { useState } from "react";
+import {ExerciseSetUpdate} from "../../types/types.ts";
 import WorkoutTimer from "../../components/timers/WorkoutTimer.tsx";
 import useSession from "../../Hooks/useSession.ts";
 import SessionExerciseItem from "../../components/listItems/SessionExerciseItem.tsx";
@@ -17,11 +17,12 @@ export default function SessionPage() {
   const session = useSession();
   const setUpdater = useUpdateSet();
   const navigate = useNavigate();
+
   const updateSet = (update: ExerciseSetUpdate) => {
     setUpdater.mutate(update);
   }
 
-  const handleOpen = (setNr:number) => {
+  const handleExerciseOpen = (setNr:number) => {
     setOpenExercise(prev => prev === setNr ? null : setNr)
   }
 
@@ -33,7 +34,7 @@ export default function SessionPage() {
   }
 
   const elapsedSeconds = useElapsedTime(session.data?.start_time ?? "");
-  
+
   if (session.isLoading) return <h1>Loading....</h1>;
   if (session.isError || !session.data) return <h1>Loading....</h1>;
 
@@ -43,7 +44,7 @@ export default function SessionPage() {
         <WorkoutTimer/>
 
         <section id={"session-exercise-list"} className={"w-full h-full flex flex-col gap-2"}>
-        {session.data.exercises.map((exercise,idx) => <SessionExerciseItem onSetUpdate={updateSet} exercise={exercise} onClick={() => handleOpen(idx)} isOpen={openExercise === idx}/>)}
+        {session.data.exercises.map((exercise,idx) => <SessionExerciseItem onSetUpdate={updateSet} exercise={exercise} onClick={() => handleExerciseOpen(idx)} isOpen={openExercise === idx}/>)}
         </section>
 
         <PrimaryButton className={"flex flex-col p-2 w-full h-fit"} onClick={handleSave}>

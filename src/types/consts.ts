@@ -5,5 +5,6 @@ export const ROUTES = {
     CAL_TRACKER: "/kcal-tracker",
     WORKOUT_CREATE: "/workout/create",
     EXERCISES: "/workout/create/exercises",
-    SESSION: "/session"
+    SESSION: "/session",
+    WORKOUT_HISTORY: "/workout/history"
 }
