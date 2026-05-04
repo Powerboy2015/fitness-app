@@ -51,6 +51,7 @@ export default class sessionAPI {
 
         const error = validator(setUpdate as any);
         if (error) {
+            console.log("goofy ahh shit",error);
             return { success: false, resp: error };
         }
 
@@ -87,9 +88,7 @@ const validators = {
 function validateWeighted(set: IWeightedSetUpdate): string | null {
     if (
         set.set_nr < 0 ||
-        !set.exercise_id ||
-        !set.reps ||
-        !set.weight
+        !set.exercise_id
     ) return "Not everything has been filled in.";
 
     return null;
@@ -98,9 +97,7 @@ function validateWeighted(set: IWeightedSetUpdate): string | null {
 function validateTimed(set: ITimedSetUpdate): string | null {
     if (
         set.set_nr < 0 ||
-        !set.exercise_id ||
-        !set.distance ||
-        !set.time
+        !set.exercise_id
     ) return "Not everything has been filled in.";
 
     return null;

@@ -1,10 +1,12 @@
+import { parseNumberInput } from "../../types/Helpers.ts";
 import {ExerciseSet, ExerciseSetUpdate} from "../../types/types.ts";
 import {useEffect, useState} from "react";
-import {parseNumberInput} from "../../types/Helpers.ts";
 
 interface SetItemProps{
     set: ExerciseSet;
     onChange: (updated: ExerciseSetUpdate) => void;
+    exerciseId: string,
+    setNr: number
 }
 
 /**
@@ -15,24 +17,40 @@ interface SetItemProps{
  * @param param0.set
  * @constructor
  */
-export default function SetItem({  set, onChange}: SetItemProps) {
+export default function SetItem({ set, onChange,exerciseId,setNr}: SetItemProps) {
 
     if (set.type === "Weighted") {
         return <div className={"set flex flex-col gap-1"}>
             <WeightedSet weight={set.weight.toString()}
                          reps={set.reps}
                          onChange={
-                    (reps,weight) => onChange({...set,reps,weight: Number(weight)})
-                }
+                            (reps,weight) => onChange({
+                                type: set.type,
+                                weight: Number(weight),
+                                reps,
+                                exercise_id: exerciseId,
+                                set_nr: setNr
+                            })
+                         }
             />
         </div>
     }
 
-
-    const setType = (set.type == "Weighted") ?  : <TimedSet/>
-    return <div className={"set flex flex-col gap-1"}>
-        {setType}
-    </div>
+    if (set.type ==="Timed")
+        return <div className={"set flex flex-col gap-1"}>
+            <TimedSet time={set.time}
+                      distance={set.distance}
+                      onChange={
+                            (time,distance) => onChange({
+                                type: set.type,
+                                time,
+                                distance,
+                                exercise_id: exerciseId,
+                                set_nr: setNr
+                            })
+                       }
+            />
+        </div>
 }
 
 interface WeightedSetProps {
@@ -46,10 +64,11 @@ function WeightedSet({reps, weight, onChange}:WeightedSetProps) {
         <div className="flex flex-col gap-2">
 
             <div className="flex items-center justify-between">
-                <label>reps:</label>
+                <label className="text-textcolor text-base">reps:</label>
                 <input
                     type="number"
                     value={reps}
+                    className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
                     onChange={(e) => {
                         const val = Number(e.target.value);
                         onChange(val, weight);
@@ -58,10 +77,11 @@ function WeightedSet({reps, weight, onChange}:WeightedSetProps) {
             </div>
 
             <div className="flex items-center justify-between">
-                <label>weight:</label>
+                <label className="text-textcolor text-base">weight:</label>
                 <input
                     type="text"
                     value={weight}
+                    className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
                     onChange={(e) => {
                         const val = e.target.value;
                         if (/^\d*\.?\d*$/.test(val)) {
@@ -75,7 +95,44 @@ function WeightedSet({reps, weight, onChange}:WeightedSetProps) {
     );
 }
 
-function TimedSet() {
+
+interface TimedSetProps {
+    time: number;
+    distance:number;
+    onChange: (time:number,distance:number) => void
+}
+function TimedSet({time,distance,onChange}:TimedSetProps) {
     // TODO FINISH, just an example
-    return <div>Timed</div>
+    return <div className="flex flex-col gap-2">
+                
+                <div className="flex items-center justify-between">
+                    <label className="text-textcolor text-base">Time in minutes:</label>
+                    <input
+                        type="text"
+                        inputMode="numeric"
+                        value={time === 0 ? "" : time}
+                        onChange={(e) => {
+                            const parsed = parseNumberInput(e.target.value);
+                            if (parsed !== null) onChange(parsed,distance);
+                        }}
+                        className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="0"
+                    />
+                </div>
+
+                <div className="flex items-center justify-between">
+                    <label className="text-textcolor text-base">Distance</label>
+                    <input
+                        type="text"
+                        inputMode="decimal"
+                        value={distance === 0 ? "" : distance}
+                        onChange={(e) => {
+                            const parsed = parseNumberInput(e.target.value);
+                            if (parsed !== null) onChange(time,parsed)
+                        }}
+                        className="w-32 bg-components border border-bordercolor rounded-lg px-3 py-2 text-textcolor focus:outline-none focus:border-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                        placeholder="0.0"
+                    />
+                </div>
+            </div>
 }

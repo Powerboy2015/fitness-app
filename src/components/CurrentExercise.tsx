@@ -1,7 +1,7 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Sets from "./listItems/Sets.tsx";
-import UseSetUpdate from "../Hooks/UseSetUpdate.ts";
+import UseSetUpdate from "../Hooks/useSetUpdate.ts";
 import {ISessionExercises} from "../types/types.ts";
 
 interface CurrentExerciseProps {

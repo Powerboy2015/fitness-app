@@ -3,7 +3,7 @@ import Home from "../../pages/Home.tsx";
 import Profile from "../../pages/Profile.tsx";
 import KcalTracker from "../../pages/KcalTracker.tsx";
 import WorkoutRoutes from "./WorkoutRoutes.tsx";
-import SessionPage from "../../pages/SessionPage.tsx";
+import SessionPage from "../../pages/session/SessionPage.tsx";
 
 const APP_ROUTES = {
     HOME: "/",

@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import { CurrentExercise } from "../components/CurrentExercise.tsx";
-import Plusknop from "../components/AddSetButton.tsx";
-import CompleteSetButton from "../components/CompleteSetButton";
-import FinishWorkoutButton from "../components/FinishWorkoutButton";
-import { ITimedSet, IWeightedSet} from "../types/types.ts";
-import WorkoutTimer from "../components/timers/WorkoutTimer.tsx";
-import useSession from "../Hooks/useSession.ts";
-import SessionExerciseItem from "../components/listItems/SessionExerciseItem.tsx";
+import { ITimedSet, IWeightedSet} from "../../types/types.ts";
+import WorkoutTimer from "../../components/timers/WorkoutTimer.tsx";
+import useSession from "../../Hooks/useSession.ts";
+import SessionExerciseItem from "../../components/listItems/SessionExerciseItem.tsx";
 
 export default function SessionPage() {
   const [expandedByExercise, setExpandedByExercise] = useState<boolean[]>([]);
