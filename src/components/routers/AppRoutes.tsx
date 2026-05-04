@@ -3,12 +3,14 @@ import Home from "../../pages/Home.tsx";
 import Profile from "../../pages/Profile.tsx";
 import KcalTracker from "../../pages/KcalTracker.tsx";
 import WorkoutRoutes from "./WorkoutRoutes.tsx";
+import SessionPage from "../../pages/SessionPage.tsx";
 
 const APP_ROUTES = {
     HOME: "/",
     PROFILE: "/profile",
     CAL_TRACKER: "/kcal-tracker",
-    WORKOUTS: "/workout/*"
+    WORKOUTS: "/workout/*",
+    SESSION: "/session"
 }
 
 
@@ -23,5 +25,6 @@ export default function AppRoutes() {
         <Route path={APP_ROUTES.PROFILE} element={<Profile />} />
         <Route path={APP_ROUTES.CAL_TRACKER} element={<KcalTracker />} />
         <Route path={APP_ROUTES.WORKOUTS} element={<WorkoutRoutes/>} />
+        <Route path={APP_ROUTES.SESSION} element={<SessionPage/>} />
     </Routes>
 }

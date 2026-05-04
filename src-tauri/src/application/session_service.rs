@@ -206,7 +206,7 @@ impl SessionService {
             exercises: session_exercises
         };
 
-        // set new Session Object
+        // set new SessionPage Object
         self.current_session = Some(session);
 
         // return session_uuid

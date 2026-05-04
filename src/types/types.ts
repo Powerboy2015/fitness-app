@@ -89,6 +89,8 @@ export interface ITimedSet extends IBaseSet {
   distance: number;
 }
 
+export type ExerciseSet = ITimedSet | IWeightedSet
+
 export interface IBaseSetUpdate {
   exercise_id: string;
 }
@@ -108,6 +110,8 @@ export interface ITimedSetUpdate extends IBaseSetUpdate {
   time: number;
   distance: number;
 }
+
+export type ExerciseSetUpdate = ITimedSetUpdate | IWeightedSetUpdate;
 
 export interface workoutHistoryDTO {
   workout_name: string;

@@ -171,7 +171,7 @@ export default function FloatingWorkoutTimer() {
     }
   };
 
-  // Prevent opening Session after drag-release; only navigate on true click.
+  // Prevent opening SessionPage after drag-release; only navigate on true click.
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (didDragRef.current) {
       event.preventDefault();

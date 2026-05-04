@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {IUseSetUpdateFunction, TimedSet, WeightedSet} from "../Hooks/UseSetUpdate.ts";
+import {IUseSetUpdateFunction, TimedSet, WeightedSet} from "../../Hooks/UseSetUpdate.ts";
+import {ITimedSet, IWeightedSet} from "../../types/types.ts";
 
 interface SetsProps {
     setNumber?: number;

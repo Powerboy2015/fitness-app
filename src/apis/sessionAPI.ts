@@ -31,9 +31,9 @@ export default class sessionAPI {
     /** Uses stored sessionId in localstorage to get the workout session data.
      * @returns ISessionState | error string
      */
-    public async get(): Promise<ISessionState|string> {
+    public async get(): Promise<ISessionState> {
         const session_id = localStorage.getItem(SESSION_STORAGE_KEYS.id);
-        if (!session_id) return "session not found";
+        if (!session_id) throw new Error("session not found");
 
         // LOL this sessionID is absolutely useless.....
         const resp = await ApiClient.send<ISessionState>("get_session",{sessionId: session_id});

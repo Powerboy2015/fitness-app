@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import WorkoutExerciseItem from "../../components/listItems/WorkoutExerciseItem.tsx";
-import {Link, useParams} from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import useDetailedWorkout from "../../Hooks/useDetailedWorkout.ts";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
 import {ExerciseDTO} from "../../types/types.ts";
+import API from "../../classes/api.ts";
+import {ROUTES} from "../../types/consts.ts";
 
 // FIXME Do we want DND in the workoutDetail page?
 // import { DragDropProvider,} from "@dnd-kit/react";
@@ -20,10 +22,21 @@ export function WorkoutDetailPage() {
 
   // Gets param from the route /workout/:id <-------
   const params = useParams();
+  const navigate = useNavigate();
   const workoutId = params.id ?? "";
   const { data, isError, isLoading } = useDetailedWorkout(workoutId);
   const detailedWorkout = data;
 
+
+  // starts a session, and then routes to the page.
+  const onStart = () => {
+    API.session.start(workoutId)
+        .then(() => {
+          navigate(ROUTES.SESSION);
+    });
+  }
+
+  // create draggable exercises, if we have the exercises gathered.
   useEffect(() => {
     setDraggableExercise((prev) => {
       if (!detailedWorkout?.exercises) {
@@ -66,8 +79,8 @@ export function WorkoutDetailPage() {
         <h2 className={"text-2xl text-textcolor"}>Exercises: </h2>
         {overviewList}
       </div>
-      <PrimaryButton>
-        <Link className={"w-full h-full text-center p-4"} to={"/start"}>Start Workout</Link>
+      <PrimaryButton onClick={onStart}>
+        <p className={"w-full h-full text-center p-4"}>Start Workout</p>
       </PrimaryButton>
     </div>
   );
