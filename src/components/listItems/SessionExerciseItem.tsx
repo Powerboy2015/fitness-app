@@ -16,6 +16,7 @@ interface SessionExerciseItemProps {
  * @param options.exercise - Data of the exercise.
  * @param options.isOpen - tells us if the Item should be fully expanded.
  * @param options.onClick - functionality to happen once we click on the element.
+ * @param options.onSetUpdate - the function which should fire once the set updates.
  * @constructor
  */
 export default function SessionExerciseItem({exercise, onClick, isOpen,onSetUpdate}:SessionExerciseItemProps) {

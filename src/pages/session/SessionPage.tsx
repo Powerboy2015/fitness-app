@@ -4,15 +4,19 @@ import WorkoutTimer from "../../components/timers/WorkoutTimer.tsx";
 import useSession from "../../Hooks/useSession.ts";
 import SessionExerciseItem from "../../components/listItems/SessionExerciseItem.tsx";
 import useUpdateSet from "../../Hooks/useUpdateSet.ts";
+import useElapsedTime from "../../Hooks/useElapsedTime.ts";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton.tsx";
+import {formatSecondsToHMS} from "../../types/Helpers.ts";
+import API from "../../classes/api.ts";
+import {useNavigate} from "react-router-dom";
+import {ROUTES} from "../../types/consts.ts";
+import toast from "react-hot-toast";
 
 export default function SessionPage() {
   const [openExercise,setOpenExercise] = useState<number|null>(null);
-
-  const [expandedByExercise, setExpandedByExercise] = useState<boolean[]>([]);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const session = useSession();
-
   const setUpdater = useUpdateSet();
+  const navigate = useNavigate();
   const updateSet = (update: ExerciseSetUpdate) => {
     setUpdater.mutate(update);
   }
@@ -21,22 +25,15 @@ export default function SessionPage() {
     setOpenExercise(prev => prev === setNr ? null : setNr)
   }
 
-  useEffect(() => {
-    if (!session.isError || session.isLoading || !session.data) return;
+  const handleSave = () => {
+    API.session.complete().then(() => {
+      toast.success("You have completed your workout!");
+      navigate(ROUTES.WORKOUTS);
+    });
+  }
 
-    const startTime = new Date(session.data.start_time).getTime();
-    const now = new Date().getTime();
-    setElapsedSeconds(Math.floor((now - startTime) / 1000));
-
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const elapsed = Math.floor((now - startTime) / 1000);
-      setElapsedSeconds(elapsed);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [session]);
-
+  const elapsedSeconds = useElapsedTime(session.data?.start_time ?? "");
+  
   if (session.isLoading) return <h1>Loading....</h1>;
   if (session.isError || !session.data) return <h1>Loading....</h1>;
 
@@ -48,6 +45,12 @@ export default function SessionPage() {
         <section id={"session-exercise-list"} className={"w-full h-full flex flex-col gap-2"}>
         {session.data.exercises.map((exercise,idx) => <SessionExerciseItem onSetUpdate={updateSet} exercise={exercise} onClick={() => handleOpen(idx)} isOpen={openExercise === idx}/>)}
         </section>
+
+        <PrimaryButton className={"flex flex-col p-2 w-full h-fit"} onClick={handleSave}>
+          <p className={"text-2xl"}>Complete workout</p>
+          <p>{formatSecondsToHMS(elapsedSeconds)}</p>
+        </PrimaryButton>
+
       </div>
     </>
   );
