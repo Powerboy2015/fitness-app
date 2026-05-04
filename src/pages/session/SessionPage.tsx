@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react";
-import { ITimedSet, IWeightedSet} from "../../types/types.ts";
+import {ExerciseSetUpdate, ITimedSet, IWeightedSet} from "../../types/types.ts";
 import WorkoutTimer from "../../components/timers/WorkoutTimer.tsx";
 import useSession from "../../Hooks/useSession.ts";
 import SessionExerciseItem from "../../components/listItems/SessionExerciseItem.tsx";
+import useUpdateSet from "../../Hooks/useUpdateSet.ts";
 
 export default function SessionPage() {
+  const [openExercise,setOpenExercise] = useState<number|null>(null);
+
   const [expandedByExercise, setExpandedByExercise] = useState<boolean[]>([]);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const session = useSession();
+
+  const setUpdater = useUpdateSet();
+  const updateSet = (update: ExerciseSetUpdate) => {
+    setUpdater.mutate(update);
+  }
+
+  const handleOpen = (setNr:number) => {
+    setOpenExercise(prev => prev === setNr ? null : setNr)
+  }
 
   useEffect(() => {
     if (!session.isError || session.isLoading || !session.data) return;
@@ -25,49 +37,6 @@ export default function SessionPage() {
     return () => clearInterval(interval);
   }, [session]);
 
-
-  const handleCompleteSet = (exerciseIndex: number) => {
-    setSession((prevSession) => {
-      if (!prevSession) return prevSession;
-
-      const exercise = prevSession.exercises[exerciseIndex];
-      if (!exercise || exercise.sets.length === 0) return prevSession;
-
-      const areAllCompleted = exercise.sets.every((set) => Boolean(set.time_completed));
-      const completionTime = areAllCompleted ? "" : new Date().toISOString();
-      const isTimedExercise = exercise.sets[0].type === "Timed";
-
-      const nextSets = isTimedExercise
-        ? (exercise.sets as ITimedSet[]).map((set) => ({
-            ...set,
-            time_completed: completionTime,
-          }))
-        : (exercise.sets as IWeightedSet[]).map((set) => ({
-            ...set,
-            time_completed: completionTime,
-          }));
-
-      if (!areAllCompleted) {
-        setExpandedByExercise((prevExpanded) => {
-          const nextExpanded = [...prevExpanded];
-          nextExpanded[exerciseIndex] = false;
-          return nextExpanded;
-        });
-      }
-
-      const nextExercises = [...prevSession.exercises];
-      nextExercises[exerciseIndex] = {
-        ...exercise,
-        sets: nextSets,
-      };
-
-      return {
-        ...prevSession,
-        exercises: nextExercises,
-      };
-    });
-  };
-
   if (session.isLoading) return <h1>Loading....</h1>;
   if (session.isError || !session.data) return <h1>Loading....</h1>;
 
@@ -77,7 +46,7 @@ export default function SessionPage() {
         <WorkoutTimer/>
 
         <section id={"session-exercise-list"} className={"w-full h-full flex flex-col gap-2"}>
-        {session.data.exercises.map(exercise => <SessionExerciseItem exercise={exercise}/>)}
+        {session.data.exercises.map((exercise,idx) => <SessionExerciseItem onSetUpdate={updateSet} exercise={exercise} onClick={() => handleOpen(idx)} isOpen={openExercise === idx}/>)}
         </section>
       </div>
     </>

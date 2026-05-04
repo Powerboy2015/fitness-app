@@ -1,6 +1,5 @@
 import { parseNumberInput } from "../../types/Helpers.ts";
 import {ExerciseSet, ExerciseSetUpdate} from "../../types/types.ts";
-import {useEffect, useState} from "react";
 
 interface SetItemProps{
     set: ExerciseSet;
