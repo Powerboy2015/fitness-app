@@ -24,6 +24,14 @@ export default function FoodItemComponent({ name, nutriments, barcode, brand, on
   function handleOverlayClick() {
     setOverlay(!overlay);
   }
+
+    if (!nutriments) {
+    return (
+      <div>
+      </div>
+    );
+  }
+
   const calories = nutriments["energy-kcal_100g"] ?? 0;
   const carbs = nutriments["carbohydrates_100g"] ?? 0
   const protein = nutriments["proteins_100g"] ?? 0;

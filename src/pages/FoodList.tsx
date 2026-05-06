@@ -2,9 +2,9 @@ import FoodItemComponent from "../components/FoodItemComponent.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import { invoke } from "@tauri-apps/api/core";
 import { useState } from "react";
-import SearchIcon from '@mui/icons-material/Search';
+import BarcodeScanner from "../components/barcodeScanner.tsx";
 
-interface Nutriments {
+export interface Nutriments {
   "energy-kcal_100g"?: number;
   "carbohydrates_100g"?: number;
   "proteins_100g"?: number;
@@ -13,8 +13,7 @@ interface Nutriments {
   "fiber_100g"?: number;
   "sodium_100g"?: number;
 }
-
-interface searchItem {
+export interface searchItem {
   id: string;
   product_name: string;
   nutriments: Nutriments;
@@ -26,104 +25,25 @@ interface searchReturn {
   page_count: number;
   page_size: number;
   products: searchItem[];
+  product: searchItem[];
   skip: number;
 }
-//pls work github
-
-const MOCK_RECENTS: searchItem[] = [
-  {
-    id: "1",
-    product_name: "Banana",
-    code: "5901234567890",
-    brands: "Generic",
-    nutriments: {
-      "energy-kcal_100g": 89,
-      "carbohydrates_100g": 23,
-      "proteins_100g": 1.1,
-      "fat_100g": 0.3,
-      "sugars_100g": 12,
-      "fiber_100g": 2.6,
-      "sodium_100g": 0.001,
-    },
-  },
-  {
-    id: "2",
-    product_name: "Chicken Breast",
-    code: "1234567890123",
-    brands: "Tyson",
-    nutriments: {
-      "energy-kcal_100g": 165,
-      "carbohydrates_100g": 0,
-      "proteins_100g": 31,
-      "fat_100g": 3.6,
-      "sugars_100g": 0,
-      "fiber_100g": 0,
-      "sodium_100g": 0.074,
-    },
-  },
-  {
-    id: "3",
-    product_name: "Whole Wheat Bread",
-    code: "9876543210987",
-    brands: "Sara Lee",
-    nutriments: {
-      "energy-kcal_100g": 247,
-      "carbohydrates_100g": 43,
-      "proteins_100g": 8.7,
-      "fat_100g": 3.3,
-      "sugars_100g": 4.2,
-      "fiber_100g": 6.8,
-      "sodium_100g": 0.486,
-    },
-  },
-  {
-    id: "4",
-    product_name: "Greek Yogurt",
-    code: "5555555555555",
-    brands: "Fage",
-    nutriments: {
-      "energy-kcal_100g": 59,
-      "carbohydrates_100g": 3.3,
-      "proteins_100g": 10.2,
-      "fat_100g": 0.4,
-      "sugars_100g": 3.3,
-      "fiber_100g": 0,
-      "sodium_100g": 0.056,
-    },
-  },
-  {
-    id: "5",
-    product_name: "Salmon Fillet",
-    code: "4444444444444",
-    brands: "Wild Caught",
-    nutriments: {
-      "energy-kcal_100g": 208,
-      "carbohydrates_100g": 0,
-      "proteins_100g": 20,
-      "fat_100g": 13,
-      "sugars_100g": 0,
-      "fiber_100g": 0,
-      "sodium_100g": 0.075,
-    },
-  },
-];
-
 export default function FoodList() {
   const [product, setProduct] = useState<searchItem[]>([]);
+  const [productBarcode, setProductBarcode] = useState<any>()
   const [searchText, setSearchText] = useState("");
   const [rememberText, setRememberText] = useState("");
   const [recents, setRecents] = useState<searchItem[]>([])
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<any>("");
   const [Searching, setSearching] = useState(false);
-
+  
   const fetchSearchAPI = async (product: string, page: number) => {
     if (!product.trim()) {
       setProduct([]);
       setError(null);
       return;
     }
-
     setLoading(true);
     setError(null);
 
@@ -133,12 +53,11 @@ export default function FoodList() {
         page: page,
       });
       setProduct(result.products ?? []);
-      console.log(result);
 
     } catch (err) {
       console.error("Error:", err);
 
-      setError("WE GAAN ALLEMAAL DOOD!! ER WERKT IETS NIET AAN DE DATABASE!!!");
+      setError("db error");
       setProduct([]);
     } finally {
       setLoading(false);
@@ -149,6 +68,7 @@ export default function FoodList() {
     setSearching(true);
     setRememberText(searchText);
     setProduct([]);
+    setProductBarcode(null)
     void fetchSearchAPI(searchText, 1);
 
     if (searchText.length === 0) {
@@ -159,29 +79,45 @@ export default function FoodList() {
 
   const getStatusMessage = () => {
     if (loading) return { text: "Searching..." };
-    if (!loading && error) return { text: error, css: "text-red-400 animate-shake font-bold" };
-    if (!loading && !error && product.length === 0 && !Searching)
+    if (!loading && error) return { text: error, css: "text-red-400  font-bold" };
+    if (!loading && !error && product.length === 0 && !Searching && !productBarcode)
       return { text: "Search a product" };
-    if (!loading && !error && product.length === 0 && Searching)
+    if (!loading && !error && product.length === 0 && Searching && !productBarcode )
       return { text: `No products found for "${rememberText}".` };
     return null;
   };
 
+  function handleProductFromChild(data: any){
+    setProductBarcode(data)
+    setProduct([])
+  }
+  function handleErrorFromChild(data: any){
+    setError(data)
+  }
+  function handleLoadingFromChild(data: any){
+    setLoading(data)
+  }
+  function handleSearchingFromChild(data: any){
+    setSearching(data)
+  }
+
   return (
     <>
-      <div className="fixed top-16 left-0 right-0 z-3 bg-background overflow-hidden">
-        <div className="mr-4 ml-4 flex">
+      <div className="z-3 bg-background overflow-hidden">
+        <div className="mr-4 ml-4 flex pt-2 pb-1">
           <SearchBar
             value={searchText}
             onChange={setSearchText}
             onSearch={handleSearch}
             placeholderText="food"
           />
+            <BarcodeScanner  onProductScan={handleProductFromChild} onError={handleErrorFromChild} onLoading={handleLoadingFromChild} onSearching={handleSearchingFromChild}/>
         </div>
       </div>
 
-      {!loading && !Searching && !error && recents.length > 0 ? (
-        <div className="pt-15">
+
+      {!loading && !Searching && !error && recents.length > 0 && !productBarcode ? (
+        <div className="">
           <div className="text-textcolor text-center my-4 font-semibold">Recent searches</div>
           {recents.map((item) => (
             <FoodItemComponent
@@ -199,7 +135,7 @@ export default function FoodList() {
           ))}
         </div>
       ) : (
-        <div className="pt-15">
+        <div className="">
           {(() => {
             const status = getStatusMessage();
             return status ? (
@@ -223,8 +159,16 @@ export default function FoodList() {
                 }
               }}
             />
-            : null))}
+            : null
+            ))}
+            
+            {productBarcode ? 
+            <FoodItemComponent key={1} name={productBarcode.product_name} nutriments={productBarcode.nutriments} barcode="1" brand={productBarcode.brands_tags[0]} onClick={()=> null}/>
+          : null  
+          }
         </div>
+
+        
       )}
     </>
   );
