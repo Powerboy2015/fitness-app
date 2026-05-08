@@ -37,6 +37,7 @@ export default function FoodList() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>("");
   const [Searching, setSearching] = useState(false);
+  const [barcode, setBarcode] = useState(0)
   
   const fetchSearchAPI = async (product: string, page: number) => {
     if (!product.trim()) {
@@ -65,7 +66,6 @@ export default function FoodList() {
   };
 
   const handleSearch = () => {
-    setSearching(true);
     setRememberText(searchText);
     setProduct([]);
     setProductBarcode(null)
@@ -97,8 +97,8 @@ export default function FoodList() {
   function handleLoadingFromChild(data: any){
     setLoading(data)
   }
-  function handleSearchingFromChild(data: any){
-    setSearching(data)
+  function handleSetBarcode(data: any){
+    setBarcode(data)
   }
 
   return (
@@ -111,7 +111,16 @@ export default function FoodList() {
             onSearch={handleSearch}
             placeholderText="food"
           />
-            <BarcodeScanner  onProductScan={handleProductFromChild} onError={handleErrorFromChild} onLoading={handleLoadingFromChild} onSearching={handleSearchingFromChild}/>
+          <div className="h-11 w-13">
+            <BarcodeScanner
+                onProductScan={handleProductFromChild}
+                onError={handleErrorFromChild}
+                onLoading={handleLoadingFromChild}
+                searching={Searching}
+                setSearching={setSearching}
+                setBarcode={handleSetBarcode}
+            />
+          </div>
         </div>
       </div>
 
@@ -163,7 +172,7 @@ export default function FoodList() {
             ))}
             
             {productBarcode ? 
-            <FoodItemComponent key={1} name={productBarcode.product_name} nutriments={productBarcode.nutriments} barcode="1" brand={productBarcode.brands_tags[0]} onClick={()=> null}/>
+            <FoodItemComponent key={1} name={productBarcode.product_name} nutriments={productBarcode.nutriments} barcode={barcode.toString()} brand={productBarcode.brands_tags[0]} onClick={()=> null}/>
           : null  
           }
         </div>
