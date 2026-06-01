@@ -39,7 +39,13 @@ function totalCalories(items: DatabaseFoodItem[]) {
     return items.reduce((total, item) => total + item.calories, 0);
 }
 
-function FoodComp({ item }: { item: DatabaseFoodItem }) {
+
+export default function EatenTodayList() {
+    function FoodComp({ item }: { item: DatabaseFoodItem }) {
+
+
+
+
     return (
         <div className="w-full rounded-xl pl-4 flex items-stretch justify-between bg-background overflow-hidden">
             <div className="flex items-center justify-between flex-1 pr-4 py-3">
@@ -48,12 +54,13 @@ function FoodComp({ item }: { item: DatabaseFoodItem }) {
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="text-sm text-muted text-right">
-                        {item.amount}g
+                        {Math.round(item.amount)}g
                     </div>
                     <div className="text-sm text-muted text-right">
                         {Math.round(item.calories)} kcal
                     </div>
                 </div>
+                <button onClick={()=>removeItem(item.id)}>delete</button>
             </div>
             {/* <button className="flex items-center px-2 bg-accent hover:bg-accent-action text-textcolor">
                 <ArrowForwardIcon sx={{ fontSize: 18 }} />
@@ -62,7 +69,19 @@ function FoodComp({ item }: { item: DatabaseFoodItem }) {
     );
 }
 
-export default function EatenTodayList() {
+    async function removeItem(id:number){
+    try{
+    await invoke("delete_food_by_id", {id})
+        fetchFoodByDate()
+}
+    
+    catch(e){
+        console.log(e)
+    }
+
+
+}
+
     const [open, setOpen] = useState<Record<MealCategoryKey, boolean>>(
         Object.fromEntries(
             Categories.map((cat) => [cat.key, false])
