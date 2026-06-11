@@ -16,7 +16,10 @@ const pageTitles: Record<string, string> = {
   "/kcal-tracker": "Calorie Tracker",
   "/exercises": "Exercises",
   "/exercise-description": "Exercise Description",
-  "/food-list": "Food list",
+  "/food-page": "Food",
+  "/food-page/food-list": "Food",
+  "/food-page/custom-food": "Food",
+  "/food-page/custom-food/create-meal": "Food",
   "/product-details": "Product Details"
 };
 
